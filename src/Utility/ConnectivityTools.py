@@ -2,7 +2,10 @@ import numpy as np
 import src.Utility.Tools as tl
 from time import process_time
 import util
-from openbabel import openbabel, pybel
+try:
+    from openbabel import openbabel, pybel
+except:
+    import openbabel, pybel
 
 
 def center_of_mass_separation(mol, frag):

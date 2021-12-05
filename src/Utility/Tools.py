@@ -1,6 +1,9 @@
 from ase import Atoms
 import numpy as np
-from openbabel import openbabel, pybel
+try:
+    from openbabel import openbabel, pybel
+except:
+    import openbabel, pybel
 from ase.optimize import BFGS
 
 
