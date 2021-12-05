@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<me:mesmer xmlns="http://www.xml-cml.org/schema" xmlns:me="http://www.chem.leeds.ac.uk/mesmer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<title> methoxyMethyl isomerisation</title>
+<moleculeList>
+<molecule id="R">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="2.276328" y3="0.156793" z3="-0.799782"/>
+  <atom id="a2" elementType="H" x3="2.372335" y3="1.196978" z3="-1.196753"/>
+  <atom id="a3" elementType="O" x3="1.257705" y3="0.083539" z3="0.190561"/>
+  <atom id="a4" elementType="H" x3="3.205601" y3="-0.145985" z3="-0.255985"/>
+  <atom id="a5" elementType="C" x3="0.007446" y3="0.507433" z3="-0.294712"/>
+  <atom id="a6" elementType="H" x3="-0.516562" y3="-0.294173" z3="-0.867602"/>
+  <atom id="a7" elementType="H" x3="0.046943" y3="1.488357" z3="-0.827329"/>
+  <atom id="a8" elementType="O" x3="-0.674794" y3="0.708767" z3="1.014596"/>
+  <atom id="a9" elementType="O" x3="-1.826088" y3="0.880370" z3="0.949502"/>
+  <atom id="a10" elementType="H" x3="2.056143" y3="-0.554849" z3="-1.633071"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a10 a1" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a6 a5" order="1"/>
+  <bond atomRefs2="a7 a5" order="1"/>
+  <bond atomRefs2="a1 a4" order="1"/>
+  <bond atomRefs2="a1 a3" order="1"/>
+  <bond atomRefs2="a5 a3" order="1"/>
+  <bond atomRefs2="a5 a8" order="1"/>
+  <bond atomRefs2="a9 a8" order="1"/>
+ </bondArray>
+     <propertyList>
+        <property title="Energy" dictRef="me:ZPE">
+          <scalar units="kJ/mol">0</scalar>
+        </property>
+     </propertyList>
+</molecule>
+<molecule id="TS">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="1.567119" y3="-1.064886" z3="0.446474"/>
+  <atom id="a2" elementType="H" x3="1.311825" y3="-1.797885" z3="-0.299402"/>
+  <atom id="a3" elementType="O" x3="1.383897" y3="0.275475" z3="0.152941"/>
+  <atom id="a4" elementType="H" x3="2.587611" y3="-1.130184" z3="0.830850"/>
+  <atom id="a5" elementType="C" x3="0.052485" y3="0.613883" z3="-0.255978"/>
+  <atom id="a6" elementType="H" x3="-0.352664" y3="-0.105681" z3="-0.978608"/>
+  <atom id="a7" elementType="H" x3="0.100174" y3="1.665751" z3="-0.548936"/>
+  <atom id="a8" elementType="O" x3="-0.742084" y3="0.578163" z3="0.977446"/>
+  <atom id="a9" elementType="O" x3="-1.005540" y3="-0.693756" z3="1.251098"/>
+  <atom id="a10" elementType="H" x3="0.273856" y3="-1.206429" z3="1.265543"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a10 a1" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a6 a5" order="1"/>
+  <bond atomRefs2="a7 a5" order="1"/>
+  <bond atomRefs2="a1 a4" order="1"/>
+  <bond atomRefs2="a1 a3" order="1"/>
+  <bond atomRefs2="a5 a3" order="1"/>
+  <bond atomRefs2="a5 a8" order="1"/>
+  <bond atomRefs2="a9 a8" order="1"/>
+ </bondArray>
+     <propertyList>
+        <property title="Energy" dictRef="me:ZPE">
+          <scalar units="kJ/mol">0</scalar>
+        </property>
+     </propertyList>
+</molecule>
+<molecule id="P">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="1.903828" y3="-0.958083" z3="0.142313"/>
+  <atom id="a2" elementType="H" x3="1.234729" y3="-1.767205" z3="-0.009145"/>
+  <atom id="a3" elementType="O" x3="1.516737" y3="0.329598" z3="0.080668"/>
+  <atom id="a4" elementType="H" x3="2.943009" y3="-1.046868" z3="0.363962"/>
+  <atom id="a5" elementType="C" x3="0.122241" y3="0.579146" z3="-0.218057"/>
+  <atom id="a6" elementType="H" x3="-0.250474" y3="-0.075287" z3="-1.016508"/>
+  <atom id="a7" elementType="H" x3="0.104016" y3="1.665081" z3="-0.429391"/>
+  <atom id="a8" elementType="O" x3="-0.627808" y3="0.462648" z3="0.987777"/>
+  <atom id="a9" elementType="O" x3="-1.126534" y3="-0.869526" z3="1.058345"/>
+  <atom id="a10" elementType="H" x3="-0.643066" y3="-1.185051" z3="1.881465"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a10 a1" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a6 a5" order="1"/>
+  <bond atomRefs2="a7 a5" order="1"/>
+  <bond atomRefs2="a1 a4" order="1"/>
+  <bond atomRefs2="a1 a3" order="1"/>
+  <bond atomRefs2="a5 a3" order="1"/>
+  <bond atomRefs2="a5 a8" order="1"/>
+  <bond atomRefs2="a9 a8" order="1"/>
+ </bondArray>
+     <propertyList>
+        <property title="Energy" dictRef="me:ZPE">
+          <scalar units="kJ/mol">0</scalar>
+        </property>
+     </propertyList>
+</molecule>
+
+</moleculeList>
+<reactionList>
+<reaction active="true" id="R_P">
+<reactant>
+<molecule role="modelled" ref="R"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="P"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS"/>
+</me:transitionState>
+</reaction>
+</reactionList>
+<me:conditions>
+<me:bathGas>N2</me:bathGas>
+<me:PTs>
+<me:PTpair me:P="5000" me:T="2000" me:precision="d" me:units="Torr" refReactionExcess="R2">            </me:PTpair>
+</me:PTs>
+<me:modelParameters>
+<me:grainSize units="cm-1">100</me:grainSize>
+<me:energyAboveTheTopHill>10.0</me:energyAboveTheTopHill>
+</me:modelParameters>
+<me:InitialPopulation>
+<me:molecule grain="251.0" population="1.0" ref="[O]OCOC=O"/>
+</me:InitialPopulation>
+</me:conditions>
+<me:modelParameters>
+<me:numberStochasticTrials>1</me:numberStochasticTrials>
+<me:stochasticStartTime>1E-11</me:stochasticStartTime>
+<me:stochasticEndTime>1E60</me:stochasticEndTime>
+<me:StochasticThermalThreshold>5000</me:StochasticThermalThreshold>
+<me:StochasticEqilThreshold>100000000</me:StochasticEqilThreshold>
+<me:StochasticAxdLimit>-500</me:StochasticAxdLimit>
+<me:grainSize units="cm-1">100</me:grainSize>
+<me:energyAboveTheTopHill>10.0</me:energyAboveTheTopHill>
+</me:modelParameters>
+<me:control>
+<me:printSpeciesProfile/>
+<me:stochasticOnePass/>
+<me:stochasticSimulation/>
+</me:control>
+</me:mesmer>

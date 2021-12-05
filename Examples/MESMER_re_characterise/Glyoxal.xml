@@ -1,0 +1,1526 @@
+<?xml version="1.0" ?>
+<me:mesmer xmlns="http://www.xml-cml.org/schema" xmlns:me="http://www.chem.leeds.ac.uk/mesmer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<title> Glyoxal</title>
+<moleculeList>
+    <molecule id="CH_pre_comp">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="-0.766880" y3="-1.157190" z3="0.314390"/>
+  <atom id="a2" elementType="O" x3="-0.280310" y3="0.205880" z3="0.201950"/>
+  <atom id="a3" elementType="H" x3="-0.033920" y3="-1.855940" z3="-0.104140"/>
+  <atom id="a4" elementType="H" x3="-1.719940" y3="-1.229880" z3="-0.218360"/>
+  <atom id="a5" elementType="H" x3="-0.891730" y3="-1.293210" z3="1.392930"/>
+  <atom id="a6" elementType="C" x3="0.292630" y3="0.589350" z3="-0.990310"/>
+  <atom id="a7" elementType="H" x3="0.574520" y3="1.659470" z3="-0.858530"/>
+  <atom id="a8" elementType="O" x3="0.419170" y3="-0.149890" z3="-1.928210"/>
+  <atom id="a9" elementType="O" x3="1.470530" y3="1.770310" z3="0.711330"/>
+  <atom id="a10" elementType="H" x3="0.935920" y3="1.461100" z3="1.478950"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a8 a6" order="2"/>
+  <bond atomRefs2="a6 a7" order="1"/>
+  <bond atomRefs2="a6 a2" order="1"/>
+  <bond atomRefs2="a4 a1" order="1"/>
+  <bond atomRefs2="a3 a1" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a1 a5" order="1"/>
+  <bond atomRefs2="a9 a10" order="1"/>
+ </bondArray>
+        <propertyList>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">21.527751977519895</scalar>
+</property>
+</propertyList>
+</molecule>
+    <molecule id="CH_post_comp">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="-0.849930" y3="-1.306480" z3="0.338790"/>
+  <atom id="a2" elementType="O" x3="-0.350730" y3="0.032600" z3="-0.009120"/>
+  <atom id="a3" elementType="H" x3="-0.109860" y3="-2.064440" z3="0.075900"/>
+  <atom id="a4" elementType="H" x3="-1.801000" y3="-1.465140" z3="-0.173780"/>
+  <atom id="a5" elementType="H" x3="-0.981490" y3="-1.231070" z3="1.423680"/>
+  <atom id="a6" elementType="C" x3="0.150600" y3="0.265550" z3="-1.192650"/>
+  <atom id="a7" elementType="H" x3="1.055580" y3="2.353640" z3="-0.089960"/>
+  <atom id="a8" elementType="O" x3="0.403180" y3="-0.180290" z3="-2.241910"/>
+  <atom id="a9" elementType="O" x3="1.542950" y3="2.064160" z3="0.676160"/>
+  <atom id="a10" elementType="H" x3="0.940700" y3="1.531480" z3="1.192900"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a8 a6" order="2"/>
+  <bond atomRefs2="a6 a7" order="1"/>
+  <bond atomRefs2="a6 a2" order="1"/>
+  <bond atomRefs2="a4 a1" order="1"/>
+  <bond atomRefs2="a3 a1" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a1 a5" order="1"/>
+  <bond atomRefs2="a9 a10" order="1"/>
+ </bondArray>
+                <propertyList>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">21.527751977519895</scalar>
+</property>
+</propertyList>
+</molecule>
+    <molecule id="CH3_pre_comp">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="0.206721" y3="2.900060" z3="-3.007546"/>
+  <atom id="a2" elementType="O" x3="1.412256" y3="2.577213" z3="-3.644175"/>
+  <atom id="a3" elementType="H" x3="-0.399853" y3="2.414625" z3="-3.912587"/>
+  <atom id="a4" elementType="H" x3="0.031069" y3="3.964077" z3="-2.937702"/>
+  <atom id="a5" elementType="H" x3="-0.084221" y3="2.264366" z3="-2.186764"/>
+  <atom id="a6" elementType="C" x3="2.527130" y3="2.201087" z3="-2.905961"/>
+  <atom id="a7" elementType="H" x3="3.264407" y3="1.869938" z3="-3.640846"/>
+  <atom id="a8" elementType="O" x3="2.570246" y3="2.288387" z3="-1.713104"/>
+  <atom id="a9" elementType="O" x3="-1.510535" y3="2.954108" z3="-4.602994"/>
+  <atom id="a10" elementType="H" x3="-1.061928" y3="3.391878" z3="-5.337289"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a10 a9" order="1"/>
+  <bond atomRefs2="a9 a3" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a2 a6" order="1"/>
+  <bond atomRefs2="a7 a6" order="1"/>
+  <bond atomRefs2="a1 a4" order="1"/>
+  <bond atomRefs2="a1 a5" order="1"/>
+  <bond atomRefs2="a6 a8" order="2"/>
+ </bondArray>
+                <propertyList>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">21.527751977519895</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="CH3_post_comp">
+ <atomArray>
+  <atom id="a1" elementType="C" x3="0.206721" y3="2.900060" z3="-3.007546"/>
+  <atom id="a2" elementType="O" x3="1.412256" y3="2.577213" z3="-3.644175"/>
+  <atom id="a3" elementType="H" x3="-0.583189" y3="2.458765" z3="-4.014866"/>
+  <atom id="a4" elementType="H" x3="0.031069" y3="3.964077" z3="-2.937702"/>
+  <atom id="a5" elementType="H" x3="-0.084221" y3="2.264366" z3="-2.186764"/>
+  <atom id="a6" elementType="C" x3="2.527130" y3="2.201087" z3="-2.905961"/>
+  <atom id="a7" elementType="H" x3="3.264407" y3="1.869938" z3="-3.640846"/>
+  <atom id="a8" elementType="O" x3="2.570246" y3="2.288387" z3="-1.713104"/>
+  <atom id="a9" elementType="O" x3="-1.510535" y3="2.954108" z3="-4.602994"/>
+  <atom id="a10" elementType="H" x3="-1.061928" y3="3.391878" z3="-5.337289"/>
+ </atomArray>
+ <bondArray>
+  <bond atomRefs2="a10 a9" order="1"/>
+  <bond atomRefs2="a9 a3" order="1"/>
+  <bond atomRefs2="a2 a1" order="1"/>
+  <bond atomRefs2="a2 a6" order="1"/>
+  <bond atomRefs2="a7 a6" order="1"/>
+  <bond atomRefs2="a1 a4" order="1"/>
+  <bond atomRefs2="a1 a5" order="1"/>
+  <bond atomRefs2="a6 a8" order="2"/>
+ </bondArray>
+            <propertyList>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">21.527751977519895</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="COC=O">
+<atomArray>
+<atom elementType="C" id="a1" x3="1.099577" y3="-0.008930" z3="0.037108"/>
+<atom elementType="O" id="a2" x3="0.621540" y3="1.346787" z3="-0.100671"/>
+<atom elementType="C" id="a3" x3="0.995624" y3="2.203610" z3="0.861896"/>
+<atom elementType="O" id="a4" x3="1.687282" y3="1.938166" z3="1.817339"/>
+<atom elementType="H" id="a5" x3="0.696917" y3="-0.544724" z3="-0.822203"/>
+<atom elementType="H" id="a6" x3="0.735883" y3="-0.443768" z3="0.971583"/>
+<atom elementType="H" id="a7" x3="2.192426" y3="-0.026184" z3="0.028343"/>
+<atom elementType="H" id="a8" x3="0.573279" y3="3.195989" z3="0.648854"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a2 a3" order="1"/>
+<bond atomRefs2="a7 a1" order="1"/>
+<bond atomRefs2="a1 a6" order="1"/>
+<bond atomRefs2="a8 a3" order="1"/>
+<bond atomRefs2="a3 a4" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">124.873 295.1459 346.769 771.9385 932.3504 1031.9746 1179.7345 1188.7732 1242.4096 1404.4265 1481.5523 1506.4961 1514.9789 1800.1199 3078.455 3086.2888 3156.1217 3189.6461</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="[OH]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="O" id="a1" spinMultiplicity="2" x3="0.984943" y3="0.091530" z3="-0.032731"/>
+<atom elementType="H" id="a2" x3="1.968112" y3="0.091530" z3="-0.032731"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">3642.9425</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_COC=O_[CH2]OC=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="0.206721" y3="2.900060" z3="-3.007546"/>
+<atom elementType="O" id="a2" x3="1.412256" y3="2.577213" z3="-3.644175"/>
+<atom elementType="H" id="a3" x3="-0.583189" y3="2.458765" z3="-4.014866"/>
+<atom elementType="H" id="a4" x3="0.031069" y3="3.964077" z3="-2.937702"/>
+<atom elementType="H" id="a5" x3="-0.084221" y3="2.264366" z3="-2.186764"/>
+<atom elementType="C" id="a6" x3="2.527130" y3="2.201087" z3="-2.905961"/>
+<atom elementType="H" id="a7" x3="3.264407" y3="1.869938" z3="-3.640846"/>
+<atom elementType="O" id="a8" x3="2.570246" y3="2.288387" z3="-1.713104"/>
+<atom elementType="O" id="a9" x3="-1.510535" y3="2.954108" z3="-4.602994"/>
+<atom elementType="H" id="a10" x3="-1.061928" y3="3.391878" z3="-5.337289"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a10 a9" order="1"/>
+<bond atomRefs2="a9 a3" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a2 a6" order="1"/>
+<bond atomRefs2="a7 a6" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a5" order="1"/>
+<bond atomRefs2="a6 a8" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">0.040357116729565726 140.0531280818693 202.8581372167693 240.49983916373824 270.19137682075007 327.9521503802888 435.43770293008566 587.3816980712545 682.6303426823727 926.0611516872638 990.0971506594332 1037.2310119513577 1101.3973676256865 1130.295485818666 1223.1362111478074 1269.6201639407936 1311.0456734637194 1410.816961546784 1811.7571828592575 2573.1080338557053 2659.9895511738946 2692.3778913902993 2721.882905403462</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">1500.1931339001787</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">21.527751977519895</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="[CH2]OC=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="1.191213" y3="-0.097252" z3="-0.142376"/>
+<atom elementType="H" id="a2" x3="0.632833" y3="0.577907" z3="-0.774088"/>
+<atom elementType="H" id="a3" x3="0.806907" y3="-0.951914" z3="0.391555"/>
+<atom elementType="O" id="a4" x3="2.526723" y3="0.121271" z3="0.050511"/>
+<atom elementType="C" id="a5" x3="3.117340" y3="1.180982" z3="-0.571061"/>
+<atom elementType="O" id="a6" x3="2.556324" y3="1.965591" z3="-1.294217"/>
+<atom elementType="H" id="a7" x3="4.180318" y3="1.197486" z3="-0.303069"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a5 a7" order="1"/>
+<bond atomRefs2="a5 a4" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">79.5174 254.3383 318.3432 377.7609 746.5306 984.3687 1013.4773 1161.009 1235.7556 1405.2499 1455.3239 1796.7735 3118.2133 3216.9556 3372.5525</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-61.295845865726584</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="O">
+<atomArray>
+<atom elementType="O" id="a1" x3="0.949989" y3="-0.004039" z3="-0.084626"/>
+<atom elementType="H" id="a2" x3="0.659035" y3="0.577909" z3="-0.802673"/>
+<atom elementType="H" id="a3" x3="1.918373" y3="0.017224" z3="-0.110861"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a3 a1" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">1663.1707 3736.2461 3860.4325</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_CO[C]=O_C[O]" spinMultiplicity="4">
+<atomArray>
+<atom elementType="C" id="a1" x3="-6.607675" y3="0.971568" z3="0.062192"/>
+<atom elementType="O" id="a2" spinMultiplicity="2" x3="-5.259654" y3="1.162292" z3="0.364502"/>
+<atom elementType="H" id="a3" x3="-7.210475" y3="1.016053" z3="0.985092"/>
+<atom elementType="H" id="a4" x3="-6.662602" y3="-0.034036" z3="-0.394292"/>
+<atom elementType="H" id="a5" x3="-6.975240" y3="1.713120" z3="-0.685162"/>
+<atom elementType="C" id="a6" spinMultiplicity="3" x3="-3.830895" y3="-0.296871" z3="0.196495"/>
+<atom elementType="O" id="a7" x3="-4.279920" y3="-1.341877" z3="0.169714"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a7 a6" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">40.88068809972411 90.90796557576742 187.14335053542436 218.3586287278151 994.5909046729852 1077.6247217637933 1144.360649783079 1182.271283613486 1297.881909046448 1410.7072469062534 2064.490724336034 2594.039886023276 2641.9954373175988 2708.6207399512446</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">267.6734708362772</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">99.87426766769305</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="C[O]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="0.958138" y3="-0.085403" z3="0.012592"/>
+<atom elementType="O" id="a2" spinMultiplicity="2" x3="0.576512" y3="1.216598" z3="-0.183710"/>
+<atom elementType="H" id="a3" x3="0.650838" y3="-0.753177" z3="-0.808605"/>
+<atom elementType="H" id="a4" x3="0.651526" y3="-0.480635" z3="0.994725"/>
+<atom elementType="H" id="a5" x3="2.068821" y3="-0.065139" z3="0.009343"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">728.044 972.4009 1115.4424 1382.9766 1390.6313 1531.3026 2917.8935 2996.8179 3037.3362</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">66.49948370572115</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="[C]=O" spinMultiplicity="3">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="3" x3="1.134748" y3="-0.057839" z3="0.045169"/>
+<atom elementType="O" id="a2" x3="2.272011" y3="-0.057839" z3="0.045169"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">2202.3169</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_CO[C]=O_O=C=O" spinMultiplicity="4">
+<atomArray>
+<atom elementType="C" id="a1" x3="-0.960072" y3="0.467394" z3="-0.141685"/>
+<atom elementType="O" id="a2" x3="0.792861" y3="0.290598" z3="-0.082881"/>
+<atom elementType="H" id="a3" x3="-1.232119" y3="0.265131" z3="0.870515"/>
+<atom elementType="H" id="a4" x3="-1.225577" y3="-0.253145" z3="-0.883167"/>
+<atom elementType="H" id="a5" x3="-0.922617" y3="1.494207" z3="-0.445005"/>
+<atom elementType="C" id="a6" spinMultiplicity="3" x3="1.504085" y3="-0.635059" z3="0.193258"/>
+<atom elementType="O" id="a7" spinMultiplicity="2" x3="2.043440" y3="-1.629127" z3="0.488965"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a2 a6" order="1"/>
+<bond atomRefs2="a6 a7" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">29.42454082727513 136.27352017310568 515.5799252388766 527.947445305359 709.5215408452049 716.1579916035654 1047.324986405096 1251.0282407791522 1251.4240500986314 1257.5800089304144 2166.107712627256 2736.6326126417734 2740.7636338200755 2782.322222895846</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">546.0888010136204</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">76.72317650799323</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="O=C=O">
+<atomArray>
+<atom elementType="O" id="a1" x3="1.144292" y3="-0.069028" z3="0.058363"/>
+<atom elementType="C" id="a2" x3="2.313666" y3="-0.069028" z3="0.058363"/>
+<atom elementType="O" id="a3" x3="3.483041" y3="-0.069028" z3="0.058363"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="2"/>
+<bond atomRefs2="a2 a3" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">651.1889 651.1889 1363.4129 2410.5391</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-81.94525194886212</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="[CH3]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="1.017323" y3="0.298375" z3="0.108781"/>
+<atom elementType="H" id="a2" x3="0.506575" y3="0.067998" z3="1.036088"/>
+<atom elementType="H" id="a3" x3="0.506572" y3="0.856424" z3="-0.666815"/>
+<atom elementType="H" id="a4" x3="2.038783" y3="-0.029382" z3="-0.042959"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">514.3867 1423.9792 1424.0257 3137.4005 3311.6167 3311.82</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_[CH2]OC=O_C=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="0.073445" y3="1.140484" z3="-0.322584"/>
+<atom elementType="O" id="a2" x3="0.406573" y3="0.378796" z3="0.591680"/>
+<atom elementType="H" id="a3" x3="-0.364434" y3="0.755406" z3="-1.253134"/>
+<atom elementType="H" id="a4" x3="0.209141" y3="2.215230" z3="-0.199295"/>
+<atom elementType="C" id="a5" x3="-0.197905" y3="-1.300814" z3="0.517791"/>
+<atom elementType="O" id="a6" x3="-0.580698" y3="-1.501676" z3="-0.586595"/>
+<atom elementType="H" id="a7" x3="0.453877" y3="-1.687425" z3="1.252137"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a5 a2" order="1"/>
+<bond atomRefs2="a5 a7" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">153.14436468635378 196.92263203460013 332.4793851168169 439.274535734136 761.5819992099327 880.636132513514 1097.0438650792375 1124.692856578484 1319.8852375319582 1624.67460857664 1839.2195190891277 2630.771068922865 2672.5082078549726 2694.17395097778</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">524.9969256790417</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">99.75201982678855</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="C=O">
+<atomArray>
+<atom elementType="C" id="a1" x3="0.953591" y3="-0.005683" z3="0.062851"/>
+<atom elementType="O" id="a2" x3="0.348959" y3="0.477775" z3="-0.866140"/>
+<atom elementType="H" id="a3" x3="0.430912" y3="-0.456962" z3="0.930073"/>
+<atom elementType="H" id="a4" x3="2.061566" y3="-0.022357" z3="0.094925"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a2 a1" order="2"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">1191.0766 1267.5012 1544.7021 1823.2567 2931.1434 2990.5321</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">68.32801949590149</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="[CH]=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="1.007435" y3="-0.052063" z3="0.068497"/>
+<atom elementType="H" id="a2" x3="0.383175" y3="0.654082" z3="0.682735"/>
+<atom elementType="O" id="a3" x3="2.190267" y3="-0.052332" z3="0.066989"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a3 a1" order="2"/>
+<bond atomRefs2="a1 a2" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">1118.4912 1933.8903 2697.5145</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_COC=O_CO[C]=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-0.810882" y3="-1.209854" z3="0.303195"/>
+<atom elementType="O" id="a2" x3="-0.290402" y3="0.146673" z3="0.262388"/>
+<atom elementType="H" id="a3" x3="-0.094955" y3="-1.905253" z3="-0.148509"/>
+<atom elementType="H" id="a4" x3="-1.766181" y3="-1.228976" z3="-0.229612"/>
+<atom elementType="H" id="a5" x3="-0.938311" y3="-1.396227" z3="1.374684"/>
+<atom elementType="C" id="a6" x3="0.328099" y3="0.568248" z3="-0.880657"/>
+<atom elementType="H" id="a7" x3="0.583018" y3="1.695365" z3="-0.686865"/>
+<atom elementType="O" id="a8" x3="0.519191" y3="-0.091638" z3="-1.860533"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="1.495915" y3="1.827126" z3="0.532454"/>
+<atom elementType="H" id="a10" x3="0.974509" y3="1.594535" z3="1.333453"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a8 a6" order="2"/>
+<bond atomRefs2="a6 a7" order="1"/>
+<bond atomRefs2="a6 a2" order="1"/>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a1 a5" order="1"/>
+<bond atomRefs2="a9 a10" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">31.033417548352855 79.21461256239537 140.56241817108327 239.70396657400497 256.1375221964867 354.5000769942733 666.1194803830238 721.4909728155878 833.307838414131 981.5855775772957 1040.261948699563 1068.1137200707856 1131.1319635053699 1182.975027748637 1237.7129738242163 1246.0786877888804 1332.168954179621 1805.220009170764 2133.4180141020183 2598.637891551725 2672.5364434701833 2686.7908348521323 2755.9275750528996</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">343.5837569560862</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">13.37404026706472</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="CO[C]=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="1.076889" y3="0.062162" z3="0.062895"/>
+<atom elementType="O" id="a2" x3="0.538641" y3="1.089193" z3="0.930475"/>
+<atom elementType="C" id="a3" spinMultiplicity="2" x3="0.898110" y3="1.030820" z3="2.213764"/>
+<atom elementType="O" id="a4" x3="0.569155" y3="1.771786" z3="3.085470"/>
+<atom elementType="H" id="a5" x3="0.679895" y3="0.289373" z3="-0.926228"/>
+<atom elementType="H" id="a6" x3="0.738351" y3="-0.923630" z3="0.391014"/>
+<atom elementType="H" id="a7" x3="2.168529" y3="0.109543" z3="0.054472"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a7 a1" order="1"/>
+<bond atomRefs2="a1 a6" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a2 a3" order="1"/>
+<bond atomRefs2="a3 a4" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">68.9237 215.8872 314.9811 610.6049 989.2611 1128.762 1177.1506 1226.5859 1487.1552 1513.2766 1515.9972 1870.9786 3078.8621 3161.0149 3191.9477</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-62.79769859381709</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule description="Nitrogen" id="N2">
+<atom elementType="N2"/>
+<propertyList>
+<property dictRef="me:epsilon">
+<scalar>82.0</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>3.74</scalar>
+</property>
+<property dictRef="me:MW">
+<scalar units="amu">28.0</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="[O]OCOC=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-6.069635" y3="3.033924" z3="0.059524"/>
+<atom elementType="O" id="a2" x3="-4.975365" y3="2.224142" z3="-0.234035"/>
+<atom elementType="H" id="a3" x3="-5.934288" y3="3.637116" z3="0.963056"/>
+<atom elementType="H" id="a4" x3="-6.289192" y3="3.644292" z3="-0.815236"/>
+<atom elementType="C" id="a5" x3="-4.281473" y3="1.695550" z3="0.825922"/>
+<atom elementType="O" id="a6" x3="-3.359732" y3="0.952135" z3="0.667526"/>
+<atom elementType="H" id="a7" x3="-4.657151" y3="2.039447" z3="1.805572"/>
+<atom elementType="O" id="a8" x3="-7.211286" y3="2.145813" z3="0.297189"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="-8.293957" y3="2.862381" z3="0.549871"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a2 a5" order="1"/>
+<bond atomRefs2="a1 a8" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a8 a9" order="1"/>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a5 a7" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">55.5326 97.9024 149.9114 344.9218 366.1244 451.0178 684.4952 946.5418 1015.7854 1019.5092 1127.4549 1168.1964 1195.8002 1285.7521 1409.4787 1427.5766 1518.0797 1871.9849 3023.5742 3087.1646 3192.5517</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_[O]OCOC=O_[O]COOC=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-1.260728" y3="-0.190003" z3="0.725094"/>
+<atom elementType="O" id="a2" x3="-0.299094" y3="0.454033" z3="1.141878"/>
+<atom elementType="H" id="a3" x3="-1.470122" y3="-1.199165" z3="1.097290"/>
+<atom elementType="H" id="a4" x3="-2.008187" y3="0.265447" z3="0.064843"/>
+<atom elementType="C" id="a5" x3="1.414071" y3="0.533562" z3="-0.381915"/>
+<atom elementType="O" id="a6" x3="1.628799" y3="1.544472" z3="-0.953171"/>
+<atom elementType="H" id="a7" x3="1.698948" y3="0.058510" z3="0.546990"/>
+<atom elementType="O" id="a8" spinMultiplicity="2" x3="-0.364225" y3="-0.976269" z3="-0.920421"/>
+<atom elementType="O" id="a9" x3="0.660538" y3="-0.490587" z3="-1.320586"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a9 a5" order="1"/>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a5 a7" order="1"/>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a1 a2" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">51.69402274871444 119.27770302962298 151.65430719394948 277.3998513846724 337.42893846972953 436.6603969344181 485.7351038677017 506.17179327501213 714.7061597820679 936.5925622535593 1050.0941847731654 1093.7594519362742 1113.3541919751842 1179.658478819091 1342.0524362584513 1692.9577994106323 1865.5256600097764 2629.431673903001 2630.8067640057393 2671.7630891545828</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">142.1768703586572</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">156.11603065037616</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="[O]COOC=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="0.505864" y3="-0.807386" z3="1.251565"/>
+<atom elementType="O" id="a2" spinMultiplicity="2" x3="0.702376" y3="0.228300" z3="2.073624"/>
+<atom elementType="H" id="a3" x3="-0.168628" y3="-1.555191" z3="1.709557"/>
+<atom elementType="H" id="a4" x3="0.021751" y3="-0.422661" z3="0.331455"/>
+<atom elementType="C" id="a5" x3="3.655771" y3="-0.444220" z3="0.638476"/>
+<atom elementType="O" id="a6" x3="4.482691" y3="0.193160" z3="0.051192"/>
+<atom elementType="H" id="a7" x3="3.718190" y3="-0.846700" z3="1.658736"/>
+<atom elementType="O" id="a8" x3="1.657205" y3="-1.577922" z3="0.907796"/>
+<atom elementType="O" id="a9" x3="2.468317" y3="-0.753594" z3="0.020170"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a9 a5" order="1"/>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a5 a7" order="1"/>
+<bond atomRefs2="a8 a1" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">61.3457 138.7159 185.06 309.3907 417.6209 564.8493 619.4881 830.2448 900.5549 967.3347 1018.2825 1099.115 1114.1242 1214.6702 1342.4944 1361.5663 1369.9586 1846.261 2936.5936 2990.6352 3097.5402</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">44.42539502348401</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_[O]OCOC=O_OOCO[C]=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="0.632135" y3="0.751143" z3="-0.533767"/>
+<atom elementType="O" id="a2" x3="-0.526914" y3="0.848885" z3="0.337135"/>
+<atom elementType="H" id="a3" x3="0.279070" y3="0.657114" z3="-1.568601"/>
+<atom elementType="H" id="a4" x3="1.249505" y3="1.630470" z3="-0.292409"/>
+<atom elementType="C" id="a5" x3="-1.138704" y3="-0.307207" z3="0.734381"/>
+<atom elementType="O" id="a6" x3="-2.155461" y3="-0.338213" z3="1.339097"/>
+<atom elementType="H" id="a7" x3="-0.406206" y3="-1.357907" z3="0.406148"/>
+<atom elementType="O" id="a8" x3="1.383794" y3="-0.395452" z3="-0.075194"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="0.682780" y3="-1.488833" z3="-0.346791"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a8" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a2 a5" order="1"/>
+<bond atomRefs2="a7 a5" order="1"/>
+<bond atomRefs2="a5 a6" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">144.1995246578176 245.53871754661284 343.95362102151506 400.79316543563084 456.12535156407364 498.0544559330857 649.225442433104 858.4179750098947 956.7158372503317 966.9111888226158 997.3145643563388 1059.2385050483133 1064.895146421214 1134.618384642688 1244.4334925079827 1269.3465398844846 1602.194513729586 1888.134804223195 2661.947009897492 2696.7687834967296</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">2445.3645447441995</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">82.110638685511</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="OOCO[C]=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-9.110661" y3="-8.947057" z3="12.675225"/>
+<atom elementType="O" id="a2" x3="-9.935122" y3="-8.561502" z3="11.555178"/>
+<atom elementType="H" id="a3" x3="-8.833338" y3="-8.022609" z3="13.184687"/>
+<atom elementType="H" id="a4" x3="-9.665937" y3="-9.637016" z3="13.314998"/>
+<atom elementType="C" id="a5" spinMultiplicity="2" x3="-10.992277" y3="-9.341898" z3="11.280120"/>
+<atom elementType="O" id="a6" x3="-11.744876" y3="-9.221597" z3="10.368118"/>
+<atom elementType="H" id="a7" x3="-7.915463" y3="-10.803879" z3="10.891470"/>
+<atom elementType="O" id="a8" x3="-7.904392" y3="-9.490900" z3="12.257820"/>
+<atom elementType="O" id="a9" x3="-8.171456" y3="-10.859057" z3="11.831298"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a6 a5" order="2"/>
+<bond atomRefs2="a7 a9" order="1"/>
+<bond atomRefs2="a5 a2" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a8 a1" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">64.4098 136.8717 215.5606 242.327 308.2739 409.3612 518.9345 665.2025 879.9749 980.0455 1045.6393 1107.1264 1172.5698 1320.694 1400.7454 1428.3226 1482.6998 1876.7779 3102.6897 3182.2206 3697.7039</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">38.103285739914135</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+
+<molecule id="O=O">
+<atomArray>
+<atom elementType="O" id="a1" x3="0.921491" y3="-0.065833" z3="-0.043289"/>
+<atom elementType="O" id="a2" x3="2.136749" y3="-0.065833" z3="-0.043289"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">1641.2494</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="COC(=O)O[O]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-6.470241" y3="0.817023" z3="-0.011834"/>
+<atom elementType="O" id="a2" x3="-5.044778" y3="1.079930" z3="-0.012545"/>
+<atom elementType="H" id="a3" x3="-6.785610" y3="0.487552" z3="0.980233"/>
+<atom elementType="H" id="a4" x3="-6.706001" y3="0.051637" z3="-0.754006"/>
+<atom elementType="H" id="a5" x3="-6.928739" y3="1.769545" z3="-0.272335"/>
+<atom elementType="C" id="a6" x3="-4.287350" y3="0.045191" z3="0.282052"/>
+<atom elementType="O" id="a7" x3="-4.595597" y3="-1.082491" z3="0.551257"/>
+<atom elementType="O" id="a8" x3="-2.901592" y3="0.361262" z3="0.265892"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="-2.603668" y3="1.622448" z3="-0.036057"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a4 a1" order="1"/>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a2 a6" order="1"/>
+<bond atomRefs2="a1 a3" order="1"/>
+<bond atomRefs2="a8 a6" order="1"/>
+<bond atomRefs2="a6 a7" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> [CH2]OC(=O)OO </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">92.4738 119.2125 178.4685 238.3823 342.6441 545.7505 666.6311 722.656 871.0694 1028.1527 1141.5884 1182.3313 1212.4984 1272.1023 1487.6537 1507.4839 1511.5492 1871.3665 3089.6704 3174.148 3206.0802</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_COC(=O)O[O]_[CH2]OC(=O)OO" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="0.880803" y3="0.609649" z3="0.387197"/>
+<atom elementType="O" id="a2" x3="0.470175" y3="-0.722299" z3="0.551436"/>
+<atom elementType="H" id="a3" x3="1.694712" y3="0.693246" z3="-0.360943"/>
+<atom elementType="H" id="a4" x3="1.062273" y3="1.044692" z3="1.391060"/>
+<atom elementType="H" id="a5" x3="-0.136050" y3="1.264180" z3="-0.124354"/>
+<atom elementType="C" id="a6" x3="-0.562864" y3="-1.190217" z3="-0.201144"/>
+<atom elementType="O" id="a7" x3="-0.820462" y3="-2.372200" z3="-0.277741"/>
+<atom elementType="O" id="a8" x3="-1.268824" y3="-0.231568" z3="-0.938074"/>
+<atom elementType="O" id="a9" x3="-1.319763" y3="0.904517" z3="-0.427436"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a8 a9" order="1"/>
+<bond atomRefs2="a8 a6" order="1"/>
+<bond atomRefs2="a9 a5" order="1"/>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a7 a6" order="2"/>
+<bond atomRefs2="a6 a2" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">77.78864293297198 180.83109433171825 371.29640437695633 427.8857919669305 533.0912387061838 575.1087767212388 678.6960630942468 780.2710788475632 1025.207556076812 1129.8818525905629 1160.3902272690987 1220.4946108401546 1333.2835131588051 1385.8189079750998 1476.9565814009075 1506.2501666544297 1772.1949670509105 2145.611765054745 3123.4092619905846 3138.9189343225394</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">2510.406961438523</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">177.26234643757516</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="[CH2]OC(=O)OO" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" spinMultiplicity="2" x3="2.811206" y3="-12.013164" z3="31.918403"/>
+<atom elementType="O" id="a2" x3="2.204800" y3="-13.181163" z3="31.500321"/>
+<atom elementType="H" id="a3" x3="3.202193" y3="-11.350978" z3="31.153041"/>
+<atom elementType="H" id="a4" x3="3.264734" y3="-12.117690" z3="32.893494"/>
+<atom elementType="H" id="a5" x3="0.344491" y3="-10.551261" z3="30.859689"/>
+<atom elementType="C" id="a6" x3="1.515027" y3="-13.247720" z3="30.342453"/>
+<atom elementType="O" id="a7" x3="1.597430" y3="-14.162011" z3="29.572613"/>
+<atom elementType="O" id="a8" x3="0.665412" y3="-12.212864" z3="30.033823"/>
+<atom elementType="O" id="a9" x3="0.247318" y3="-11.457328" z3="31.208282"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a7 a6" order="2"/>
+<bond atomRefs2="a8 a6" order="1"/>
+<bond atomRefs2="a8 a9" order="1"/>
+<bond atomRefs2="a6 a2" order="1"/>
+<bond atomRefs2="a5 a9" order="1"/>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a2 a1" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">85.7909 101.5226 162.8966 224.4154 257.0744 335.0455 531.6307 548.9517 649.9068 760.9027 818.9672 957.9664 1146.1176 1177.9133 1257.9466 1414.5529 1481.6977 1861.2054 3169.2374 3324.3396 3702.4114</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">91.55339183980276</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_[O]OCOC=O_O=C=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="-0.581645" y3="-0.944332" z3="-0.136547"/>
+<atom elementType="O" id="a2" x3="0.111358" y3="-0.343776" z3="0.990618"/>
+<atom elementType="H" id="a3" x3="0.130024" y3="-1.577690" z3="-0.681306"/>
+<atom elementType="H" id="a4" x3="-1.463765" y3="-1.440097" z3="0.297846"/>
+<atom elementType="C" id="a5" x3="0.836951" y3="0.794292" z3="0.773919"/>
+<atom elementType="O" id="a6" x3="1.534576" y3="1.293843" z3="1.588907"/>
+<atom elementType="H" id="a7" x3="0.595660" y3="1.277320" z3="-0.433029"/>
+<atom elementType="O" id="a8" x3="-1.095215" y3="0.153922" z3="-0.923976"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="-0.067944" y3="0.786517" z3="-1.476433"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a9 a8" order="1"/>
+<bond atomRefs2="a8 a1" order="1"/>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a7 a5" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+<bond atomRefs2="a1 a2" order="1"/>
+<bond atomRefs2="a5 a2" order="1"/>
+<bond atomRefs2="a5 a6" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">144.2453623829185 245.48470568881848 343.8818121106179 400.75663698018474 456.12058025379946 498.0026600331488 649.2017906807757 858.3910371402726 956.7125648097153 966.8416256979435 997.4245865966893 1059.1940963613497 1064.8909106751034 1134.601541409036 1244.3499180918025 1269.3126712247113 1602.2127236715423 1888.0167165913163 2661.8826639742156 2696.7376262882863</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">2444.4651799199255</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">82.10660911116265</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="O=C=O">
+<atomArray>
+<atom elementType="O" id="a1" x3="1.041241" y3="-0.067229" z3="0.042966"/>
+<atom elementType="C" id="a2" x3="2.210616" y3="-0.067229" z3="0.042966"/>
+<atom elementType="O" id="a3" x3="3.379990" y3="-0.067229" z3="0.042966"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="2"/>
+<bond atomRefs2="a2 a3" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">651.1889 651.1889 1363.4129 2410.5391</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-185.1891770365622</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="C=O____[OH]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="0.265889" y3="-0.593837" z3="0.199196"/>
+<atom elementType="O" id="a2" x3="0.623345" y3="0.121449" z3="-0.713749"/>
+<atom elementType="O" id="a3" spinMultiplicity="2" x3="3.320588" y3="1.145264" z3="-0.386463"/>
+<atom elementType="H" id="a4" x3="2.398995" y3="0.872735" z3="-0.627573"/>
+<atom elementType="H" id="a5" x3="-0.739248" y3="-1.053055" z3="0.206753"/>
+<atom elementType="H" id="a6" x3="0.927064" y3="-0.815193" z3="1.057429"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a2 a1" order="2"/>
+<bond atomRefs2="a4 a3" order="1"/>
+<bond atomRefs2="a1 a5" order="1"/>
+<bond atomRefs2="a1 a6" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">48.5843 156.5237 201.0097 454.5132 566.8209 1200.0186 1270.2399 1539.9653 1808.2678 2965.32 3041.8796 3512.973</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="TS_[CH2]OC(=O)OO_O=C=O" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="3.064589" y3="-12.515648" z3="32.401606"/>
+<atom elementType="O" id="a2" x3="2.557743" y3="-13.399820" z3="31.709533"/>
+<atom elementType="H" id="a3" x3="2.997861" y3="-11.430125" z3="32.163580"/>
+<atom elementType="H" id="a4" x3="3.631257" y3="-12.781353" z3="33.321456"/>
+<atom elementType="H" id="a5" x3="-0.353074" y3="-11.111852" z3="30.999877"/>
+<atom elementType="C" id="a6" x3="1.523363" y3="-13.281049" z3="29.880318"/>
+<atom elementType="O" id="a7" x3="1.601953" y3="-14.468666" z3="29.776282"/>
+<atom elementType="O" id="a8" x3="1.373144" y3="-12.114661" z3="29.842115"/>
+<atom elementType="O" id="a9" spinMultiplicity="2" x3="0.315484" y3="-11.209628" z3="31.669754"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a7 a6" order="2"/>
+<bond atomRefs2="a8 a6" order="2"/>
+<bond atomRefs2="a5 a9" order="1"/>
+<bond atomRefs2="a2 a1" order="2"/>
+<bond atomRefs2="a3 a1" order="1"/>
+<bond atomRefs2="a1 a4" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">21.713404829222156 39.567419581367176 66.88852910040008 145.6940994928957 183.98713515722434 206.07362766789217 225.87590382051764 288.1654884625379 416.5850599134286 489.8534257349871 497.129379305052 1176.6690662810897 1180.4889943029914 1434.5636742274294 1494.0219898530688 2033.8175948242142 2588.520595538304 3071.870370240198 3104.8080470564996 3588.771177624917</array>
+</property>
+<property dictRef="me:imFreq">
+<scalar units="cm-1">131.93193696402574</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-91.42797369474947</scalar>
+</property>
+</propertyList>
+</molecule>
+<molecule id="O=C=O2">
+<atomArray>
+<atom elementType="O" id="a1" x3="1.152988" y3="-0.071298" z3="-0.047626"/>
+<atom elementType="C" id="a2" x3="2.322362" y3="-0.071298" z3="-0.047626"/>
+<atom elementType="O" id="a3" x3="3.491737" y3="-0.071298" z3="-0.047626"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a1 a2" order="2"/>
+<bond atomRefs2="a2 a3" order="2"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">651.1889 651.1889 1363.4129 2410.5391</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">-157.39080840471055</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">1</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+<molecule id="C=O____[OH]" spinMultiplicity="2">
+<atomArray>
+<atom elementType="C" id="a1" x3="1.133946" y3="-0.611342" z3="-0.802180"/>
+<atom elementType="O" id="a2" x3="0.464379" y3="-0.399717" z3="0.187644"/>
+<atom elementType="O" id="a3" spinMultiplicity="2" x3="1.430293" y3="1.811710" z3="1.802837"/>
+<atom elementType="H" id="a4" x3="0.994225" y3="1.044326" z3="1.352600"/>
+<atom elementType="H" id="a5" x3="0.876422" y3="-1.425025" z3="-1.504226"/>
+<atom elementType="H" id="a6" x3="2.025169" y3="-0.002430" z3="-1.042410"/>
+</atomArray>
+<bondArray>
+<bond atomRefs2="a5 a1" order="1"/>
+<bond atomRefs2="a6 a1" order="1"/>
+<bond atomRefs2="a1 a2" order="2"/>
+<bond atomRefs2="a4 a3" order="1"/>
+</bondArray>
+<propertyList>
+<property dictRef="me:lumpedSpecies">
+<array> </array>
+</property>
+<property dictRef="me:vibFreqs">
+<array units="cm-1">49.3315 155.5938 200.8498 463.1959 568.193 1200.2252 1270.126 1539.817 1808.2825 2965.2939 3041.8075 3513.3691</array>
+</property>
+<property dictRef="me:ZPE">
+<scalar units="kJ/mol">0.0</scalar>
+</property>
+<property dictRef="me:spinMultiplicity">
+<scalar units="cm-1">2</scalar>
+</property>
+<property dictRef="me:epsilon">
+<scalar>473.17</scalar>
+</property>
+<property dictRef="me:sigma">
+<scalar>5.09</scalar>
+</property>
+</propertyList>
+<me:energyTransferModel xsi:type="me:ExponentialDown">
+<scalar units="cm-1">250</scalar>
+</me:energyTransferModel>
+</molecule>
+</moleculeList>
+<reactionList>
+<reaction active="true" id="COC=O_CO[C]=O">
+<reactant>
+<molecule role="modelled" ref="COC=O"/>
+</reactant>
+<reactant>
+<molecule role="excessReactant" ref="[OH]"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="CH_pre_comp"/>
+</product>
+    <me:MCRCMethod xsi:type="me:MesmerILT">
+        <me:preExponential units="cm3molecule-1s-1">3.e-10</me:preExponential>
+        <me:activationEnergy  units="cm-1">0.0</me:activationEnergy>
+        <me:nInfinity>0</me:nInfinity>
+      </me:MCRCMethod>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+<reaction active="true" id="COC=O_CO[C]=O_comp">
+<reactant>
+<molecule role="modelled" ref="CH_pre_comp"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="CH_post_comp"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_COC=O_CO[C]=O"/>
+</me:transitionState>
+</reaction>
+<reaction active="true" id="COC=O_CO[C]=O_dissoc">
+<reactant>
+<molecule role="modelled" ref="CH_post_comp"/>
+</reactant>
+<product>
+<molecule role="sink" ref="O"/>
+</product>
+<product>
+<molecule role="modelled" ref="CO[C]=O"/>
+</product>
+    <me:MCRCMethod xsi:type="me:MesmerILT">
+        <me:preExponential units="cm3molecule-1s-1">3.e-10</me:preExponential>
+        <me:activationEnergy reverse="True"  units="cm-1">0.0</me:activationEnergy>
+        <me:nInfinity>0</me:nInfinity>
+      </me:MCRCMethod>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+    <reaction active="true" id="COC=O_[CH2]OC=O">
+<reactant>
+<molecule role="modelled" ref="COC=O"/>
+</reactant>
+<reactant>
+<molecule role="excessReactant" ref="[OH]"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="[CH2]OC=O"/>
+</product>
+    <me:MCRCMethod xsi:type="me:MesmerILT">
+        <me:preExponential units="cm3molecule-1s-1">3.e-10</me:preExponential>
+        <me:activationEnergy reverse="True"  units="cm-1">0.0</me:activationEnergy>
+        <me:nInfinity>0</me:nInfinity>
+      </me:MCRCMethod>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+    <reaction active="true" id="COC=O_[CH2]OC=O_comp">
+<reactant>
+<molecule role="modelled" ref="CH3_pre_comp"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="CH3_post_comp"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_COC=O_[CH2]OC=O"/>
+</me:transitionState>
+</reaction>
+<reaction active="true" id="COC=O_[CH2]OC=O_dissoc">
+<reactant>
+<molecule role="modelled" ref="CH3_post_comp"/>
+</reactant>
+<product>
+<molecule role="sink" ref="O"/>
+</product>
+<product>
+<molecule role="modelled" ref="[CH2]OC=O"/>
+</product>
+    <me:MCRCMethod xsi:type="me:MesmerILT">
+        <me:preExponential units="cm3molecule-1s-1">3.e-10</me:preExponential>
+        <me:activationEnergy reverse="True"  units="cm-1">0.0</me:activationEnergy>
+        <me:nInfinity>0</me:nInfinity>
+      </me:MCRCMethod>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+<reaction active="true" id="[CH2]OC=O_C=O">
+<product>
+<molecule role="sink" ref="C=O"/>
+</product>
+<reactant>
+<molecule role="modelled" ref="[CH2]OC=O"/>
+</reactant>
+<reactant>
+<molecule role="excessReactant" ref="[CH]=O"/>
+</reactant>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[CH2]OC=O_C=O"/>
+</me:transitionState>
+</reaction>
+<reaction active="true" id="CO[C]=O_[O]OCOC=O">
+<reactant>
+<molecule role="modelled" ref="CO[C]=O"/>
+</reactant>
+<reactant>
+<molecule role="excessReactant" ref="O=O"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="[O]OCOC=O"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[O]OCOC=O_[O]COOC=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+<reaction active="true" id="[O]OCOC=O_[O]COOC=O">
+<reactant>
+<molecule role="modelled" ref="[O]OCOC=O"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="[O]COOC=O"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[O]OCOC=O_[O]COOC=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+</reaction>
+<reaction active="true" id="[O]OCOC=O_OOCO[C]=O">
+<reactant>
+<molecule role="modelled" ref="[O]OCOC=O"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="OOCO[C]=O"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[O]OCOC=O_OOCO[C]=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+</reaction>
+<reaction active="true" id="CO[C]=O_[O]OCOC=O">
+<reactant>
+<molecule role="modelled" ref="CO[C]=O"/>
+</reactant>
+<reactant>
+<molecule role="excessReactant" ref="O=O"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="COC(=O)O[O]"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[O]OCOC=O_[O]COOC=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+<me:excessReactantConc>1E18</me:excessReactantConc>
+</reaction>
+<reaction active="true" id="COC(=O)O[O]_[CH2]OC(=O)OO">
+<reactant>
+<molecule role="modelled" ref="COC(=O)O[O]"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="[CH2]OC(=O)OO"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_COC(=O)O[O]_[CH2]OC(=O)OO"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+</reaction>
+<reaction active="true" id="[O]OCOC=O_O=C=O">
+<reactant>
+<molecule role="modelled" ref="[O]OCOC=O"/>
+</reactant>
+<product>
+<molecule role="sink" ref="O=C=O"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[O]OCOC=O_O=C=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+</reaction>
+<reaction active="true" id="[CH2]OC(=O)OO_O=C=O">
+<reactant>
+<molecule role="modelled" ref="[CH2]OC(=O)OO"/>
+</reactant>
+<product>
+<molecule role="modelled" ref="O=C=O2"/>
+</product>
+<me:transitionState>
+<molecule role="transitionState" ref="TS_[CH2]OC(=O)OO_O=C=O"/>
+</me:transitionState>
+<me:MCRCMethod name="SimpleRRKM"/>
+</reaction>
+
+</reactionList>
+<me:conditions>
+<me:bathGas>N2</me:bathGas>
+<me:PTs>
+<me:PTpair me:P="5000" me:T="2000" me:precision="d" me:units="Torr" refReactionExcess="R2">            </me:PTpair>
+</me:PTs>
+<me:modelParameters>
+<me:grainSize units="cm-1">100</me:grainSize>
+<me:energyAboveTheTopHill>10.0</me:energyAboveTheTopHill>
+</me:modelParameters>
+<me:InitialPopulation>
+<me:molecule grain="251.0" population="1.0" ref="[O]OCOC=O"/>
+</me:InitialPopulation>
+</me:conditions>
+<me:modelParameters>
+<me:numberStochasticTrials>1</me:numberStochasticTrials>
+<me:stochasticStartTime>1E-11</me:stochasticStartTime>
+<me:stochasticEndTime>1E60</me:stochasticEndTime>
+<me:StochasticThermalThreshold>5000</me:StochasticThermalThreshold>
+<me:StochasticEqilThreshold>100000000</me:StochasticEqilThreshold>
+<me:StochasticAxdLimit>-500</me:StochasticAxdLimit>
+<me:grainSize units="cm-1">100</me:grainSize>
+<me:energyAboveTheTopHill>10.0</me:energyAboveTheTopHill>
+</me:modelParameters>
+<me:control>
+<me:printSpeciesProfile/>
+<me:stochasticOnePass/>
+<me:stochasticSimulation/>
+</me:control>
+</me:mesmer>
