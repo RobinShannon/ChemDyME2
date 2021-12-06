@@ -38,6 +38,7 @@ class Molpro(FileIOCalculator):
 
     def reinitialize(self, atoms):
         self.atoms = atoms
+        self.results = {}
 
     def write_input(self, atoms, properties=None, system_changes=None):
         FileIOCalculator.write_input(self, atoms, properties, system_changes)

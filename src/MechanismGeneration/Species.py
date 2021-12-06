@@ -59,7 +59,7 @@ class Species:
             self.get_BXDE_DOS()
 
     @abstractmethod
-    def optimise(self):
+    def optimise(self, path, mol):
         pass
 
     @abstractmethod
@@ -120,11 +120,11 @@ class Species:
         self.rotor_indexes = rotatable_bonds
         for count ,b in enumerate(rotatable_bonds):
             hmol = mol.copy()
-            self.calculator.set_calculator(hmol, 'low')
+            self.calculator.set_calculator(hmol, 'high')
             hinderance_potential = []
             hinderance_traj = []
-            for i in range(0,72):
-                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 5)
+            for i in range(0,36):
+                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 10)
                 del hmol.constraints
                 constraints = []
                 dihedral = [hmol.get_dihedral(*b), b]
@@ -138,7 +138,6 @@ class Species:
                     dyn.run(fmax = 0.05, steps = 100)
                 hinderance_potential.append(hmol.get_potential_energy())
                 hinderance_traj.append(hmol.copy())
-            write('hind_temp.xyz',hinderance_traj)
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_indexes.append([b[1],b[2]])
@@ -175,7 +174,7 @@ class TS(Species):
         del self.mol.constraints
 
     def optimise(self, path, mol):
-        self.mol, self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol)
+        self.mol, self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol, ratoms= self.rmol, patoms= self.pmol)
         self.rmol_name = TL.getSMILES(self.rmol,False)
         self.pmol_name = TL.getSMILES(self.pmol,False)
 
@@ -239,7 +238,6 @@ class vdw(Species):
         self.vdw = True
         self.calculator.set_calculator(self.mol, 'low')
         smiles = TL.getSMILES(self.mol, True, True)
-        write('hind_temp.xyz', self.mol)
         self.hessian =[]
         self.combined_mol = mol.copy()
         self.calculator.set_calculator(self.combined_mol, 'low')

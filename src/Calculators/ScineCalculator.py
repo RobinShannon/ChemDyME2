@@ -118,7 +118,7 @@ class SparrowCalculator(Calculator):
     def close(self):
         self.calc = None
 
-    def minimise_ts(self,path, atoms: Optional[Atoms] = None ):
+    def minimise_ts(self,path=os.getcwd(), atoms=None, ratoms=None, patoms=None):
         if atoms is None:
             atoms = self.atoms
         current_dir = os.getcwd()

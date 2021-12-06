@@ -9,7 +9,7 @@ from ase.calculators.calculator import FileIOCalculator, EnvironmentError
 from pathlib import Path
 from shutil import copyfile
 import re
-import ChemDyME.Tools as tl
+import src.Utility.Tools as tl
 
 class GaussianDynamics:
     calctype = 'optimizer'
@@ -161,23 +161,34 @@ class Gaussian(FileIOCalculator):
         raise NotImplementedError  # not sure how to do this yet
 
     def minimise_stable(self, path = os.getcwd(), atoms: Optional[Atoms] = None):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
         opt = GaussianOptimizer(atoms, self)
         opt.run(steps=100, opt='calcall cartesian')
+        os.chdir(current_dir)
 
 
-
-    def minimise_ts_only(self, atoms, ratoms, patoms):
+    def minimise_ts(self,path=os.getcwd(), atoms=None, ratoms=None, patoms=None):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
         opt = GaussianOptimizer(ratoms, self)
         string = self.get_additional_lines(atoms,patoms)
         converged = opt.run(steps=100, opt='calcall, qst3, noeigentest', addsec=string)
-        return converged
+        os.chdir(current_dir)
+        return atoms, ratoms, patoms, [], []
 
     def get_frequencies(self, path=os.getcwd(), atoms = None, bimolecular = False, TS = False):
         imaginary_frequency = 0
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
         if TS:
             freqs,zpe,imaginary_frequency,hessian,correct = self.read_ts_vibs()
         else:
             freqs,zpe,hessian = self.read_vibs()
+        os.chdir(current_dir)
         return freqs, zpe, imaginary_frequency, hessian
 
     def read_vibs(self):
@@ -247,7 +258,7 @@ class Gaussian(FileIOCalculator):
         try:
             with open(str(self.label) + '.log', "r") as inp2:
                 data = inp2.read().replace('\n','')
-                pattern ="NImag=0\\\\(.*?)\\\\"
+                pattern ="NImag=1\\\\(.*?)\\\\"
                 substring = re.search(pattern, data).group(1)
                 hessian = substring.split(",")
         except:
