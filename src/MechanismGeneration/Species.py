@@ -32,31 +32,38 @@ class Species:
         self.vdw = False
 
     def characterise(self, mol, bimolecular = False):
-        self.calculator.set_calculator(mol, 'low')
-        self.optimise(self.dir + '/Low/' + '/', mol)
+        current_dir = os.getcwd()
+        os.makedirs(self.dir, exist_ok=True)
+        os.chdir(self.dir)
         try:
-            self.conformer_search(mol)
+            self.calculator.set_calculator(mol, 'low')
+            self.optimise( 'Low/', mol)
+            try:
+                self.conformer_search(mol)
+            except:
+                self.bonds_to_add = []
+                self.conformer_search(mol)
+            self.calculator.set_calculator(mol, 'high')
+            if self.calculator.multi_level == True:
+                self.optimise('High/' , mol)
+            if len(self.mol.get_masses())>1:
+                self.get_frequencies('Vibs/', bimolecular,mol)
+            if bimolecular:
+                self.energy['bimolecular_high'] = mol.get_potential_energy()
+            else:
+                self.energy['high'] = mol.get_potential_energy()
+            self.calculator.set_calculator(mol, 'single')
+            if bimolecular:
+                self.energy['bimolecular_single'] = mol.get_potential_energy()
+            else:
+                self.energy['single'] = mol.get_potential_energy()
+            if self.calculator.calc_hindered_rotors:
+                self.get_hindered_rotors(mol)
+            if self.calculator.calc_BXDE_DOS:
+                self.get_BXDE_DOS()
+            os.chdir(current_dir)
         except:
-            self.bonds_to_add = []
-            self.conformer_search(mol)
-        self.calculator.set_calculator(mol, 'high')
-        if self.calculator.multi_level == True:
-            self.optimise(self.dir + '/High/' + '/', mol)
-        if len(self.mol.get_masses())>1:
-            self.get_frequencies(self.dir + '/Vibs/', bimolecular,mol)
-        if bimolecular:
-            self.energy['bimolecular_high'] = mol.get_potential_energy()
-        else:
-            self.energy['high'] = mol.get_potential_energy()
-        self.calculator.set_calculator(mol, 'single')
-        if bimolecular:
-            self.energy['bimolecular_single'] = mol.get_potential_energy()
-        else:
-            self.energy['single'] = mol.get_potential_energy()
-        if self.calculator.calc_hindered_rotors:
-            self.get_hindered_rotors(mol)
-        if self.calculator.calc_BXDE_DOS:
-            self.get_BXDE_DOS()
+            os.chdir(current_dir)
 
     @abstractmethod
     def optimise(self, path, mol):
@@ -112,7 +119,7 @@ class Species:
                             mol = conf
                             found_new_min = True
                             break
-        write(self.dir+'/Conformers.xyz', conformers)
+        write('Conformers.xyz', conformers)
 
 
     def get_hindered_rotors(self,mol, rigid=False):
@@ -123,8 +130,8 @@ class Species:
             self.calculator.set_calculator(hmol, 'high')
             hinderance_potential = []
             hinderance_traj = []
-            for i in range(0,36):
-                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 10)
+            for i in range(0,12):
+                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 30)
                 del hmol.constraints
                 constraints = []
                 dihedral = [hmol.get_dihedral(*b), b]
@@ -141,7 +148,7 @@ class Species:
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_indexes.append([b[1],b[2]])
-            write(self.dir +'/hindered_rotor' +str(count)+ '.xyz', hinderance_traj)
+            write('hindered_rotor' +str(count)+ '.xyz', hinderance_traj)
 
 
 
