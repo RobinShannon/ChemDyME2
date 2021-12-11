@@ -68,7 +68,7 @@ class SparrowCalculator(Calculator):
 
     def reinitialize(self, atoms):
         self.atoms = atoms
-        self.self.results = {}
+        self.results = {}
 
 
     def _calculate_sparrow(self, atoms: Atoms, properties: Collection[str]):

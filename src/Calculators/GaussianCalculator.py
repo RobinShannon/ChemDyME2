@@ -216,7 +216,7 @@ class Gaussian(FileIOCalculator):
         try:
             with open(str(self.label) + '.log', "r") as inp2:
                 data = inp2.read().replace('\n','')
-                pattern ="NImag=0\\\\(.*?)\\\\"
+                pattern = r'NImag=0\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
                 hessian = substring.split(",")
         except:
@@ -258,7 +258,7 @@ class Gaussian(FileIOCalculator):
         try:
             with open(str(self.label) + '.log', "r") as inp2:
                 data = inp2.read().replace('\n','')
-                pattern ="NImag=1\\\\(.*?)\\\\"
+                pattern =r'NImag=1\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
                 hessian = substring.split(",")
         except:
