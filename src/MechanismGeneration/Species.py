@@ -197,6 +197,7 @@ class TS(Species):
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
         data['imaginary_frequency'] = self.imaginary_frequency
+        data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'ts', **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
 
@@ -234,6 +235,7 @@ class Stable(Species):
         data['name'] = self.smiles
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
+        data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
 
@@ -265,6 +267,7 @@ class vdw(Species):
         data['name'] = self.smiles
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
+        data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
 
