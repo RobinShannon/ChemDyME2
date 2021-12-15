@@ -6,7 +6,30 @@ except:
     import openbabel, pybel
 from ase.optimize import BFGS
 
+def convertMolToGauss(mol):
+    atoms = mol.get_atomic_numbers()
+    cart = mol.get_positions()
+    # Create open babel molecule BABMol
+    BABmol = openbabel.OBMol()
+    for i in range(0,atoms.size):
+        a = BABmol.NewAtom()
+        a.SetAtomicNum(int(atoms[i]))
+        a.SetVector(float(cart[i,0]), float(cart[i,1]), float(cart[i,2]))
 
+    # Assign bonds and fill out angles and torsions
+    BABmol.ConnectTheDots()
+    BABmol.FindAngles()
+    BABmol.FindTorsions()
+    BABmol.PerceiveBondOrders()
+    BABmol.SetTitle('')
+
+    #Create converter object to convert from XYZ to cml
+    obConversion = openbabel.OBConversion()
+    obConversion.SetInAndOutFormats("xyz", "gjf")
+    gjf = (obConversion.WriteString(BABmol))
+    # Just get molecular coordinates in gaussian form, dont trust obabel to get the righ spin multiplicity
+    gjf = gjf.split('\n')[5:]
+    return '\n'.join(gjf)
 
 # Function takes a molecule in ASE format, converts it into an OBmol and then returns a SMILES string as a name
 def getSMILES(mol, opt, partialOpt = False):

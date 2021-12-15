@@ -47,7 +47,7 @@ class Species:
             if self.calculator.multi_level == True:
                 self.optimise('High/' , mol)
             if len(self.mol.get_masses())>1:
-                self.get_frequencies('Vibs/', bimolecular,mol)
+                self.get_frequencies('High/', bimolecular,mol)
             if bimolecular:
                 self.energy['bimolecular_high'] = mol.get_potential_energy()
             else:
@@ -127,11 +127,11 @@ class Species:
         self.rotor_indexes = rotatable_bonds
         for count ,b in enumerate(rotatable_bonds):
             hmol = mol.copy()
-            self.calculator.set_calculator(hmol, 'high')
+            self.calculator.set_calculator(hmol, 'low')
             hinderance_potential = []
             hinderance_traj = []
-            for i in range(0,12):
-                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 30)
+            for i in range(0,36):
+                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 10)
                 del hmol.constraints
                 constraints = []
                 dihedral = [hmol.get_dihedral(*b), b]
@@ -143,8 +143,10 @@ class Species:
                 if not rigid:
                     dyn = BFGS(hmol)
                     dyn.run(fmax = 0.05, steps = 100)
+                self.calculator.set_calculator(hmol, 'high')
                 hinderance_potential.append(hmol.get_potential_energy())
                 hinderance_traj.append(hmol.copy())
+
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_indexes.append([b[1],b[2]])
@@ -165,8 +167,14 @@ class TS(Species):
         self.IRC = []
         self.hessian =[]
         self.real_saddle = False
-        self.bonds_to_add = CT.get_changed_bonds(self.rmol, self.pmol)
-        self.pre_optimise()
+        write( str(self.dir) + '/reac.xyz', self.rmol)
+        write(str(self.dir) + '/prod.xyz', self.pmol)
+        write(str(self.dir) + '/tsguess.xyz', self.mol)
+        try:
+            self.bonds_to_add = CT.get_changed_bonds(self.rmol, self.pmol)
+            self.pre_optimise()
+        except:
+            pass
         self.characterise(self.mol)
 
     def pre_optimise(self):
@@ -182,8 +190,11 @@ class TS(Species):
 
     def optimise(self, path, mol):
         self.mol, self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol, ratoms= self.rmol, patoms= self.pmol)
-        self.rmol_name = TL.getSMILES(self.rmol,False)
-        self.pmol_name = TL.getSMILES(self.pmol,False)
+        try:
+            self.rmol_name = TL.getSMILES(self.rmol,False)
+            self.pmol_name = TL.getSMILES(self.pmol,False)
+        except:
+            pass
 
     def get_frequencies(self, path, bimolecular, mol, TS=True):
         self.vibs, self.zpe, self.imaginary_frequency, self.hessian = mol._calc.get_frequencies(path, mol, TS=True)

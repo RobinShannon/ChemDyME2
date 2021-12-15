@@ -174,8 +174,15 @@ class Gaussian(FileIOCalculator):
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         opt = GaussianOptimizer(ratoms, self)
-        string = self.get_additional_lines(atoms,patoms)
-        converged = opt.run(steps=100, opt='calcall, qst3, noeigentest', addsec=string)
+        converged = False
+        try:
+            string = self.get_additional_lines(atoms,patoms)
+            converged = opt.run(steps=100, opt='calcall, qst3, noeigentest', addsec=string)
+        except:
+            pass
+        if converged == False:
+            opt = GaussianOptimizer(atoms, self)
+            converged = opt.run(steps=100, opt='calcall, qst, noeigentest')
         os.chdir(current_dir)
         return atoms, ratoms, patoms, [], []
 
@@ -266,8 +273,8 @@ class Gaussian(FileIOCalculator):
         return vibs, zpe, imaginaryFreq,hessian, correct
 
     def get_additional_lines(self,ts,p):
-        string1 = "Prod\n\n0 "+str(self.parameters['mult'])+"\n"
+        string1 = "Prod\n\n0 "+str(2)+"\n"
         xyz1 = tl.convertMolToGauss(p)
-        string2 = "TS\n\n0 "+str(self.parameters['mult'])+"\n"
+        string2 = "TS\n\n0 "+str(2)+"\n"
         xyz2 = tl.convertMolToGauss(ts)
         return string1+xyz1+string2+xyz2
