@@ -110,7 +110,7 @@ def getCOMdel(Mol, frag):
 # Set up a reference matrix for ideal bond length between any two atoms in the system
 # Maps species types onto a grid of stored ideal bond distances stored in the global variables module
 def refBonds(mol):
-    dict = {'CC' : 1.4, 'CH' : 1.2, 'HC' : 1.2, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.3, 'HO' : 1.3, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
+    dict = {'CC' : 1.4, 'CH' : 1.2, 'HC' : 1.2, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.2, 'HO' : 1.2, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
     size =len(mol.get_positions())
     symbols = mol.get_chemical_symbols()
     dRef = np.zeros((size,size))
@@ -185,33 +185,48 @@ def get_rotatable_bonds(mol, add_bonds):
     temp_rotatable =[]
 
     for bond in add_bonds:
+        bond_added = BABmol.AddBond(bond[0] + 1, bond[1] + 1, 1)
+
+    for bond in add_bonds:
         torsion = [0,0,0,0]
         atom = BABmol.GetAtom(int(bond[0]+1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom):
             bnd = atom.GetBond(neighbour_atom)
-            torsion[0] = bnd.GetBeginAtom().GetIdx()-1
-            torsion[1] = bnd.GetEndAtom().GetIdx()-1
-            break
+            if bnd.GetBeginAtom().GetIdx()-1 != bond[0]:
+                torsion[0] = bnd.GetBeginAtom().GetIdx()-1
+                torsion[1] = bnd.GetEndAtom().GetIdx()-1
+            else:
+                torsion[1] = bnd.GetBeginAtom().GetIdx()-1
+                torsion[0] = bnd.GetEndAtom().GetIdx()-1
+            if torsion[0] != bond[1]:
+                break
         atom2 = BABmol.GetAtom(int(bond[1]+1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom2):
             bnd = atom2.GetBond(neighbour_atom)
-            torsion[2] = bnd.GetBeginAtom().GetIdx()-1
-            torsion[3] = bnd.GetEndAtom().GetIdx()-1
-            break
-        bond_added = BABmol.AddBond(bond[0]+1,bond[1]+1,1)
+            if bnd.GetBeginAtom().GetIdx()-1 != bond[1]:
+                torsion[3] = bnd.GetBeginAtom().GetIdx()-1
+                torsion[2] = bnd.GetEndAtom().GetIdx()-1
+            else:
+                torsion[2] = bnd.GetBeginAtom().GetIdx()-1
+                torsion[3] = bnd.GetEndAtom().GetIdx()-1
+            if torsion[3] != torsion[1] and torsion[3] != torsion[0]:
+                break
         BABmol.FindRingAtomsAndBonds()
-        temp_torsions.append([torsion[0], torsion[1], torsion[2], torsion[3]])
-        temp_rotatable.append([torsion[1], torsion[2]])
+        if torsion[0] != bond[1]:
+            temp_torsions.append([torsion[0], torsion[1], torsion[2], torsion[3]])
+            temp_rotatable.append([torsion[1], torsion[2]])
 
     BABmol.FindAngles()
     BABmol.FindTorsions()
     BABmol.FindRingAtomsAndBonds()
 
-    for bond in add_bonds:
-        bond = BABmol.GetBond(bond[0] + 1, bond[1] + 1)
+    for tor in temp_torsions:
+        bond = BABmol.GetBond(tor[1] + 1, tor[2] + 1)
         if not bond.IsInRing():
-            rotors.append([torsion[0], torsion[1], torsion[2], torsion[3]])
-            rotatablebonds.append([torsion[1], torsion[2]])
+            rotors.append(tor)
+            rotatablebonds.append([tor[1], tor[2]])
+
+
 
     for torsion in openbabel.OBMolTorsionIter(BABmol):
         bond = BABmol.GetBond(torsion[1]+1,torsion[2]+1)
