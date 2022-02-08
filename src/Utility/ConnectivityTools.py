@@ -1,7 +1,6 @@
 import numpy as np
 import src.Utility.Tools as tl
 from time import process_time
-import util
 try:
     from openbabel import openbabel, pybel
 except:
@@ -211,10 +210,12 @@ def get_rotatable_bonds(mol, add_bonds):
                 torsion[3] = bnd.GetEndAtom().GetIdx()-1
             if torsion[3] != torsion[1] and torsion[3] != torsion[0]:
                 break
+
         BABmol.FindRingAtomsAndBonds()
         if torsion[0] != bond[1]:
             temp_torsions.append([torsion[0], torsion[1], torsion[2], torsion[3]])
             temp_rotatable.append([torsion[1], torsion[2]])
+
 
     BABmol.FindAngles()
     BABmol.FindTorsions()
@@ -226,7 +227,31 @@ def get_rotatable_bonds(mol, add_bonds):
             rotors.append(tor)
             rotatablebonds.append([tor[1], tor[2]])
 
-
+    if len(rotors) > 1 and (temp_torsions[0][1] == temp_torsions[1][1] or temp_torsions[0][1] == temp_torsions[1][2]):
+        new_torsion = [0,0,0,0]
+        if temp_torsions[0][0] != temp_torsions[1][1] and temp_torsions[0][0] != temp_torsions[1][2]:
+            new_torsion[0] = temp_torsions[0][0]
+            new_torsion[1] = temp_torsions[0][1]
+            if temp_torsions[0][1] != temp_torsions[1][2] and temp_torsions[0][1] != temp_torsions[1][2]:
+                new_torsion[2] = temp_torsions[1][2]
+                new_torsion[3] = temp_torsions[1][3]
+            else:
+                new_torsion[2] = temp_torsions[1][1]
+                new_torsion[3] = temp_torsions[1][0]
+        else:
+            new_torsion[3] = temp_torsions[1][0]
+            new_torsion[2] = temp_torsions[1][1]
+            if temp_torsions[1][1] != temp_torsions[0][2] and temp_torsions[1][1] != temp_torsions[0][2]:
+                new_torsion[1] = temp_torsions[0][2]
+                new_torsion[0] = temp_torsions[0][3]
+            else:
+                new_torsion[1] = temp_torsions[0][1]
+                new_torsion[0] = temp_torsions[0][0]
+        bond = [temp_rotatable[0][0], temp_rotatable[0][1]]
+        rotors = []
+        rotatablebonds = []
+        rotors.append(new_torsion)
+        rotatablebonds.append(bond)
 
     for torsion in openbabel.OBMolTorsionIter(BABmol):
         bond = BABmol.GetBond(torsion[1]+1,torsion[2]+1)
@@ -234,7 +259,27 @@ def get_rotatable_bonds(mol, add_bonds):
             if [torsion[1],torsion[2]] not in rotatablebonds:
                 rotors.append([torsion[0],torsion[1],torsion[2],torsion[3]])
                 rotatablebonds.append([torsion[1],torsion[2]])
-    return rotors
+    coAtoms =[]
+    for rot in rotors:
+        mask = []
+        mask.append(int(rot[3]))
+        atom2 = BABmol.GetAtom(int(rot[3] + 1))
+        for neighbour_atom in openbabel.OBAtomAtomIter(atom2):
+            id = neighbour_atom.GetIdx()
+            if id != rot[2] + 1:
+                mask.append(id - 1)
+                atom4 = BABmol.GetAtom(id)
+                for neighbour_atom in openbabel.OBAtomAtomIter(atom4):
+                    id = neighbour_atom.GetIdx()
+                    if id != rot[3] + 1:
+                        mask.append(id - 1)
+        atom3 = BABmol.GetAtom(int(rot[2] + 1))
+        for neighbour_atom in openbabel.OBAtomAtomIter(atom3):
+            id = neighbour_atom.GetIdx()
+            if id != rot[1] + 1:
+                mask.append(id - 1)
+        coAtoms.append(mask)
+    return rotors, coAtoms
 
 def get_bi_xyz(smile1, mol):
     mol1 = tl.getMolFromSmile(smile1)

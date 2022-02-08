@@ -1,7 +1,7 @@
 from pathlib import Path
 
 class MDLogger:
-    def __init__(self, logging_function = None, triggering_function = None, outpath= None):
+    def __init__(self, logging_function = None, triggering_function = None, outpath= None, write_to_list = False):
         if logging_function is None:
             self.log = lambda var: str(var.mdsteps)
         else:
@@ -12,23 +12,24 @@ class MDLogger:
             self.trigger = triggering_function
         self.outpath = outpath
         self.outfile = None
+        self.write_to_list = write_to_list
+        self.lst = []
 
 
     def initialise_file(self):
         if self.outfile is not None and not Path(self.outfile).is_file():
-            self.outfile = open(self.outfile, "w")
+            self.outfile = open(self.outfile, "a")
 
     def write_log(self, *args):
         if self.trigger(args[0]):
             log_msg = self.log(args[0])
             if self.outfile is None:
-                print(log_msg)
+                print(str(log_msg))
             else:
-                self.outfile.write(log_msg)
+                self.outfile.write(str(log_msg))
+            if self.write_to_list:
+                self.lst.append(log_msg)
 
     def close_file(self):
         if self.outfile is not None:
             self.outfile.close()
-
-
-

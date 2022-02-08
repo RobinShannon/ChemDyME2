@@ -196,3 +196,5 @@ def get_overall_rates(BXD, directory, milestoning, decorrelation_limit):
             transition_array[i][i+1] = upperloss
             transition_array[i + 1][i] = uppergain
         eigval, eigvec = np.linalg.eig(transition_array)
+        f = open('output.txt', 'w')
+        f.write(eigval)

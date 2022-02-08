@@ -24,7 +24,7 @@ class SparrowCalculator(Calculator):
     """
     implemented_properties = ['energy', 'forces']
 
-    def __init__(self, atoms: Optional[Atoms] = None, method='AM1', triplet=False, **kwargs):
+    def __init__(self, atoms: Optional[Atoms] = None, method='PM6', triplet=False, **kwargs):
         super().__init__(**kwargs)
         self.atoms = atoms
         self.method = method
@@ -159,7 +159,7 @@ class SparrowCalculator(Calculator):
             pass
         os.remove('temp.xyz')
         os.chdir(current_dir)
-        return atoms, rmol, pmol, irc_for, irc_rev
+        return rmol, pmol, irc_for, irc_rev
 
     def minimise_bspline(self,path, reac, prod ):
         current_dir = os.getcwd()

@@ -182,9 +182,9 @@ class Gaussian(FileIOCalculator):
             pass
         if converged == False:
             opt = GaussianOptimizer(atoms, self)
-            converged = opt.run(steps=100, opt='calcall, qst, noeigentest')
+            converged = opt.run(steps=100, opt='calcall, ts, noeigentest')
         os.chdir(current_dir)
-        return atoms, ratoms, patoms, [], []
+        return  ratoms, patoms, [], []
 
     def get_frequencies(self, path=os.getcwd(), atoms = None, bimolecular = False, TS = False):
         imaginary_frequency = 0
@@ -237,29 +237,39 @@ class Gaussian(FileIOCalculator):
         correct = True
         for line in inp:
             if re.search("Frequencies", line):
+                l = line.split()
                 try:
-                    l = line.split()
                     vibs.append(float(l[2]))
                     zpe += float(l[2])
+                except:
+                    pass
+                try:
                     vibs.append(float(l[3]))
-                    zpe += float(l[3])
-                    vibs.append(l[4])
+                    zpe += float(float(l[3]))
+                except:
+                    pass
+                try:
+                    vibs.append(float(l[4]))
                     zpe += float(float(l[4]))
                 except:
                     pass
-            if re.search("Error termination"):
+            if re.search("Error termination", line):
+                print('Error')
                 return 0
+        print('here are the vibs')
+        print(str(vibs))
         if vibs[0] > -250:
             print("GaussianTS has no imaginary Frequency")
             correct = False
         if vibs[1] < 0:
             print("GaussianTS has more than 1 imaginary Frequency")
             correct = False
-
+        print('read vibs')
+        print(str(vibs))
         zpe -= vibs[0]
         imaginaryFreq = abs((vibs[0]))
         vibs.pop(0)
-        zpe *= 0.00012
+        zpe *= 0.012
         zpe /= 2
         inp.close()
         try:
@@ -270,6 +280,7 @@ class Gaussian(FileIOCalculator):
                 hessian = substring.split(",")
         except:
             hessian =[]
+        print('finished reading TS vibs')
         return vibs, zpe, imaginaryFreq,hessian, correct
 
     def get_additional_lines(self,ts,p):

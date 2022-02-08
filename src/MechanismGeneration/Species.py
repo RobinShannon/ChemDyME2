@@ -1,11 +1,15 @@
 import src.Utility.ConnectivityTools as CT
 import src.Utility.Tools as TL
 from ase.constraints import FixInternals, FixAtoms, FixBondLength, FixBondLengths
-from ase.optimize import BFGS as BFGS
+from ase.optimize.sciopt import SciPyFminBFGS as BFGS
 import math
-import MESMER_API.src.meMolecule as me_mol
+try:
+    import MESMER_API.src.meMolecule as me_mol
+except:
+    pass
 from ase.io import write
 from abc import abstractmethod
+import copy
 import os
 
 
@@ -31,39 +35,41 @@ class Species:
         self.bonds_to_add = []
         self.vdw = False
 
-    def characterise(self, mol, bimolecular = False):
+    def characterise(self, bimolecular = False):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
-        try:
-            self.calculator.set_calculator(mol, 'low')
-            self.optimise( 'Low/', mol)
-            if len (self.bonds_to_add) <=1:
-                try:
-                    self.conformer_search(mol)
-                except:
-                    pass
-            self.calculator.set_calculator(mol, 'high')
-            if self.calculator.multi_level == True:
-                self.optimise('High/' , mol)
-            if len(self.mol.get_masses())>1:
-                self.get_frequencies('High/', bimolecular,mol)
-            if bimolecular:
-                self.energy['bimolecular_high'] = mol.get_potential_energy() * 96.49
-            else:
-                self.energy['high'] = mol.get_potential_energy() * 96.49
-            self.calculator.set_calculator(mol, 'single')
-            if bimolecular:
-                self.energy['bimolecular_single'] = mol.get_potential_energy() * 96.49
-            else:
-                self.energy['single'] = mol.get_potential_energy()
-            if self.calculator.calc_hindered_rotors:
-                self.get_hindered_rotors(mol)
-            if self.calculator.calc_BXDE_DOS:
-                self.get_BXDE_DOS()
-            os.chdir(current_dir)
-        except:
-            os.chdir(current_dir)
+        self.calculator.set_calculator(self.mol, 'low')
+        self.optimise('Low/', self.mol)
+        #self.conformer_search(self.mol)
+        #if self.calculator.calc_hindered_rotors:
+            #self.get_hindered_rotors(self.mol)
+        self.calculator.set_calculator(self.mol, 'high')
+        if self.calculator.multi_level == True:
+            self.optimise('High/', self.mol)
+            if len(self.mol.get_masses()) > 1:
+                self.calculator.set_calculator(self.mol, 'high')
+                self.get_frequencies('High/', bimolecular, self.mol)
+            self.calculator.set_calculator(self.mol, 'high')
+        else:
+            self.calculator.set_calculator(self.mol, 'low')
+        if bimolecular:
+            self.energy['bimolecular_high'] = self.mol.get_potential_energy() * 96.4869
+        else:
+            self.energy['high'] = self.mol.get_potential_energy() * 96.4869
+        self.calculator.set_calculator(self.mol, 'single')
+        if bimolecular:
+            self.energy['bimolecular_single'] = self.mol.get_potential_energy() * 96.4869
+        else:
+            try:
+                self.energy['single'] = self.mol.get_potential_energy() * 96.4869
+            except:
+                self.energy['single'] = 0.0
+        if self.calculator.calc_BXDE_DOS:
+            self.get_BXDE_DOS()
+        os.chdir(current_dir)
+
+
 
     @abstractmethod
     def optimise(self, path, mol):
@@ -78,56 +84,48 @@ class Species:
         pass
 
     def conformer_search(self, mol):
-        rotatable_bonds = CT.get_rotatable_bonds(mol, self.bonds_to_add)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
         conformer_energies = []
         conformers = []
         found_new_min = True
+        self.calculator.set_calculator(mol, 'low')
         ene = mol.get_potential_energy()
         conformer_energies.append(ene)
         self.rotor_indexes = rotatable_bonds
+        distances = []
+        for bond in self.bonds_to_add:
+            dist = mol.get_distance(bond[0],bond[1])
+            distances.append(dist)
         while found_new_min == True:
             found_new_min = False
-            for b in rotatable_bonds:
+            for b, co in zip(rotatable_bonds, coId):
                 conformer = mol.copy()
-                dist = []
-                for bond in self.bonds_to_add:
-                    dist.append(conformer.get_distance(bond[0], bond[1]))
-                for i in range(0,36):
+                dihed = conformer.get_dihedral(*b)
+                for i in range(0,73):
                     print(str(i))
                     del conformer.constraints
+                    conformer.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
                     constraints1 =[]
-                    if self.vdw == False:
-                        constraints1.append(FixBondLengths(self.bonds_to_add))
-                    conformer.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 10)
-                    dihedral = [conformer.get_dihedral(*b), b]
+                    constraints1.append(FixBondLengths(self.bonds_to_add, bondlengths = distances))
+                    dihedral = [dihed, b]
                     constraints1.append(FixInternals(dihedrals_deg=[dihedral]))
                     conformer.set_constraint(constraints1)
-                    dyn = BFGS(conformer)
                     self.calculator.set_calculator(conformer, 'low')
+                    dyn = BFGS(conformer)
                     try:
-                        dyn.run(fmax = 0.05, steps = 50)
+                        dyn.run(fmax = 0.05, steps = 75)
                     except:
                         pass
-                    dist2 = []
-                    for bond in self.bonds_to_add:
-                        dist2.append(conformer.get_distance(bond[0], bond[1]))
                     conf = conformer.copy()
                     del conf.constraints
                     self.calculator.set_calculator(conf, 'low')
                     constraints = []
-                    if self.vdw == False:
-                        constraints.append(FixBondLengths(self.bonds_to_add))
+                    constraints.append(FixBondLengths(self.bonds_to_add))
                     conf.set_constraint(constraints)
                     dyn = BFGS(conf)
-                    if len(self.bonds_to_add) <= 1:
-                        try:
-                            dyn.run(fmax=0.01, steps = 50)
-                        except:
-                            pass
-                    dist3 = []
-                    for bond in self.bonds_to_add:
-                        dist3.append(conformer.get_distance(bond[0], bond[1]))
+                    dyn.run(fmax=0.01, steps = 1)
                     ene = conf.get_potential_energy()
+                    dihed += 5.
                     found = False
                     for c in conformer_energies:
                         if math.isclose(ene, c, rel_tol=1e-4):
@@ -136,39 +134,67 @@ class Species:
                         conformer_energies.append(ene)
                         conformers.append(conf.copy())
                         if min(conformer_energies) == ene:
-                            mol = conf.copy()
                             self.mol = conf.copy()
+                            mol = conf.copy()
                             found_new_min = True
-                            break
+                    if found_new_min:
+                        break
+                if found_new_min:
+                    break
+
+
             write('Conformers.xyz', conformers)
 
 
+
     def get_hindered_rotors(self,mol, rigid=False):
-        rotatable_bonds = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
         self.rotor_indexes = rotatable_bonds
-        for count ,b in enumerate(rotatable_bonds):
+        distances = []
+        self.calculator.set_calculator(mol, 'high')
+        high_min = mol.get_potential_energy()*96.49
+        for bond in self.bonds_to_add:
+            dist = mol.get_distance(bond[0],bond[1])
+            distances.append(dist)
+        for count,(b,co) in enumerate(zip(rotatable_bonds,coId)):
             hmol = mol.copy()
+            dihed = hmol.get_dihedral(*b)
             self.calculator.set_calculator(hmol, 'low')
             hinderance_potential = []
             hinderance_traj = []
-            for i in range(0,36):
-                hmol.rotate_dihedral(b[0], b[1], b[2], b[3], angle = 10)
+            for i in range(0,73):
+                hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
                 del hmol.constraints
                 constraints = []
-                dihedral = [hmol.get_dihedral(*b), b]
+                dihedral = [dihed, b]
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
-                if self.vdw == False:
-                    constraints.append(FixBondLengths(self.bonds_to_add))
+                constraints.append(FixBondLengths(self.bonds_to_add, bondlengths = distances))
                 hmol.set_constraint(constraints)
                 if not rigid:
                     dyn = BFGS(hmol)
                     try:
-                        dyn.run(fmax = 0.05, steps = 5)
+                        dyn.run(fmax = 0.01, steps = 75)
                     except:
                         pass
-                self.calculator.set_calculator(hmol, 'high')
-                hinderance_potential.append(hmol.get_potential_energy()*96.49)
+                hinderance_potential.append(hmol.get_potential_energy()*96.4869)
                 hinderance_traj.append(hmol.copy())
+                dihed += 5.
+
+            max_value = max(hinderance_potential)
+            max_index = hinderance_potential.index(max_value)
+            max_structure = hinderance_traj[max_index].copy()
+            self.calculator.set_calculator(max_structure, 'high')
+            high_barrier = max_structure.get_potential_energy() * 96.4869 - high_min
+            low_barrier = hinderance_potential[max_index] - hinderance_potential[0]
+            try:
+                ratio = high_barrier / low_barrier
+            except:
+                ratio = 1
+            min = copy.deepcopy(hinderance_potential[0])
+            for i in range(0,len(hinderance_potential)):
+                hinderance_potential[i] -= min
+                hinderance_potential[i] *= ratio
+
 
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_trajectories.append(hinderance_traj)
@@ -199,7 +225,7 @@ class TS(Species):
             self.pre_optimise()
         except:
             pass
-        self.characterise(self.mol)
+        self.characterise()
 
     def pre_optimise(self):
         self.calculator.set_calculator(self.mol, 'low')
@@ -212,7 +238,8 @@ class TS(Species):
         del self.mol.constraints
 
     def optimise(self, path, mol):
-        self.mol, self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol, ratoms= self.rmol, patoms= self.pmol)
+        self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol, ratoms= self.rmol, patoms= self.pmol)
+        self.mol = mol.copy()
         try:
             self.rmol_name = TL.getSMILES(self.rmol,False)
             self.pmol_name = TL.getSMILES(self.pmol,False)
@@ -225,13 +252,14 @@ class TS(Species):
 
     def write_cml(self):
         data = {}
-        data['zpe'] = self.energy['single']
+        data['zpe'] = self.energy['single'] + float(self.zpe)
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
         data['imaginary_frequency'] = self.imaginary_frequency
         data['hessian'] = self.hessian
+        data['newBonds'] = self.bonds_to_add
         mes_mol = me_mol.meMolecule(self.mol, role = 'ts', **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
 
@@ -248,16 +276,18 @@ class Stable(Species):
             name = self.smiles
         self.name = name
         self.hessian = []
+        write(str(self.dir) + '/reac.xyz', self.mol)
         if len(smiles) > 1:
             self.bimolecular = True
             self.mol = TL.getMolFromSmile(smiles[0])
             self.fragment_two = TL.getMolFromSmile(smiles[1])
-            self.characterise(self.fragment_two, bimolecular=True)
+            self.characterise( bimolecular=True)
             self.bi_smiles = smiles[1]
-        self.characterise(self.mol)
+        self.characterise()
 
     def optimise(self, path, mol):
         mol._calc.minimise_stable(path=path, atoms=mol)
+        self.mol = mol.copy()
 
     def get_frequencies(self, path, bimolecular, mol):
         if bimolecular:
@@ -267,7 +297,7 @@ class Stable(Species):
 
     def write_cml(self):
         data = {}
-        data['zpe'] = self.energy['single']
+        data['zpe'] = self.energy['single'] + float(self.zpe)
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
@@ -292,22 +322,24 @@ class vdw(Species):
         self.calculator.set_calculator(self.combined_mol, 'low')
         self.smiles = 'vdw_' + str(smiles[0]) + '_' + str(smiles[1])
         self.bonds_to_add = CT.get_hbond_idxs(self.mol)
-        self.characterise(self.mol)
+        self.characterise()
 
     def optimise(self, path, mol):
         mol._calc.minimise_stable(path=path, atoms=mol)
+        self.mol = mol.copy()
 
     def get_frequencies(self, path, bimolecular, mol):
         self.vibs, self.zpe, imag, self.hessian = mol._calc.get_frequencies(path, mol)
 
     def write_cml(self):
         data = {}
-        data['zpe'] = self.energy['single']
+        data['zpe'] = self.energy['single'] + float(self.zpe)
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
         data['hessian'] = self.hessian
+        data['newBonds'] = self.bonds_to_add
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
 

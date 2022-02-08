@@ -1,6 +1,6 @@
 from abc import abstractmethod
 import numpy as np
-from ChemDyME import util
+from src.Utility import cython_utils
 
 
 class CollectiveVariable(object):
@@ -69,7 +69,7 @@ class PrincipalCoordinates(CollectiveVariable):
         :param mol: ASE atoms object with current cartesian coordinates
         :return: Numpy array of floats corresponding to the value of each PC at the current geometry
         """
-        d = util.getPC(self.indicies, self.coefficients, mol.get_positions())
+        d = cython_utils.getPC(self.indicies, self.coefficients, mol.get_positions())
         return d
 
     def read_principal_components(self, arr):
@@ -100,7 +100,7 @@ class PrincipalCoordinates(CollectiveVariable):
         :param arr: ndarray, typicall containing poitions velocities or forces
         :return: Numpy array of floats corresponding to the value of each PC at the current geometry
         """
-        d = util.getPC(self.indicies, self.coefficients, arr)
+        d = cython_utils.getPC(self.indicies, self.coefficients, arr)
         return d
 
     def nget_delta(self, mol, n, indicies, coefficients):
