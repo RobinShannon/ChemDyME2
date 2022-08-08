@@ -110,43 +110,64 @@ def get_rot_tran(coord_true, coord_pred):
     model_coords_rotated = np.dot(coord_pred, rot)
 
     return rot, model_coords_rotated
+#mol = read('MFGeoms/CO[C]=O.xyz')
+#mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-570000', atoms=mol))
+#dyn = BFGS(mol)
+#try:
+#    dyn.run(1e-3, 1000)
+#except:
+#    pass
+#write('bad_product.xyz',mol)
+#vib = Vibrations(mol)
+#vib.clean()
+#vib.run()
+#vib.summary(method='Frederiksen')
+#np.save('MFGeoms/CO[C]=O.npy',vib.H)
+#for i, mol in enumerate(ircfull):
+    #list = generate_displacements(mol.copy(), 0.025, rand_dis=True, seccond_order=False)
+    #write('testMF2_CH_' + str(i) + '.xyz', list)
 
 
+GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
+write('GlyoxalGeoms/GlyoxalPaths.xyz',GlyIRC)
+narupa_mol = GlyIRC[0].copy()
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-960000', atoms=narupa_mol))
+baseline = narupa_mol.get_potential_energy()
+for i in GlyIRC:
+    narupa_mol.set_positions(i.get_positions())
+    ene = narupa_mol.get_potential_energy()
+    print(str((ene-baseline)*96.48))
 
 
-
-#ts.set_calculator(NNCalculator(checkpoint='best_model.ckpt-880000', atoms=ts))
-#f = ts.get_forces()
+narupa_mol.set_positions(GlyIRC[0].get_positions())
 # Set up a Sella Dynamics object
-#dyn = Sella(ts, internal = True)
-#try:
-#    dyn.run(1e-3, 1000)
-#except:
-#    pass
-#ts_ene = ts.get_potential_energy()*96.58
-#write('MFTS.xyz', ts)
-#ts.set_positions(GlyIRC[-1].get_positions())
-#dyn = BFGS(ts)
-#try:
-#    dyn.run(1e-3, 1000)
-#except:
-#    pass
-#comp_ene = ts.get_potential_energy()*96.58
-#diff = ts_ene - comp_ene
-#write('MFComp.xyz', ts)
+dyn = Sella(narupa_mol, internal = True)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
+ts_ene = narupa_mol.get_potential_energy()*96.58
+write('GlyoxalGeoms/NN_TS.xyz', narupa_mol)
+narupa_mol.set_positions(GlyIRC[43].get_positions())
+dyn = BFGS(narupa_mol)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
+comp_ene = narupa_mol.get_potential_energy()*96.58
+diff = ts_ene - comp_ene
+write('GlyoxalGeoms/NN_Comp.xyz', narupa_mol)
 
-#ts.set_positions(GlyIRC[47].get_positions())
-#dyn = BFGS(ts)
-#try:
-#    dyn.run(1e-3, 1000)
-#except:
-#    pass
-#comp_ene = ts.get_potential_energy()*96.58
-#diff = ts_ene - comp_ene
-#write('MFComp2.xyz', ts)
-#narupa_mol = read('Start.xyz', index=0)
-narupa_mol = read('MFGeoms/Start.xyz')
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-570000', atoms=narupa_mol))
+narupa_mol.set_positions(GlyIRC[-1].get_positions())
+dyn = BFGS(narupa_mol)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
+comp_ene = narupa_mol.get_potential_energy()*96.58
+diff = ts_ene - comp_ene
+write('GlyoxalGeoms/NNComp2.xyz', narupa_mol)
+
 f =open("vibresults.txt", 'a')
 f2 =open("vibresults2.txt", 'a')
 f3 =open("vibresults3.txt", 'a')
@@ -154,13 +175,13 @@ f4 =open("vibresults4.txt", 'a')
 for run in range(0, 1000):
     # The general set-up here is identical to the adaptive run to ensure the converging run samples the same path
     #narupa_mol = read('water', index=0)
-    temp = read('MFGeoms/Start.xyz')
+    temp = read('GlyoxalGeoms/glyoxal.xyz')
     narupa_mol.set_positions(temp.get_positions())
     ##dyn = Langevin(narupa_mol, .5 * units.fs, 291, 1)
     #dyn.run(1000)
     pcs = 2
     #collective_variable = CV.Distances(narupa_mol, [[1,3]])
-    collective_variable = CV.Distances(narupa_mol, [[8,2]])
+    collective_variable = CV.Distances(narupa_mol, [[5,6]])
     progress_metric = PM.Line(collective_variable, [0], [1.8])
 
     #collective_variable = CV.COM(narupa_mol, [0,1,2,3,4,5], [6,7])
@@ -175,7 +196,7 @@ for run in range(0, 1000):
     file = 'geom.xyz'
     gfile = open('gtemp.xyz', 'a')
     lf3 = lambda var: str(write(file,var.mol, append=True))
-    tf3 = lambda var: var.mdsteps % 100 == 0
+    tf3 = lambda var: var.mdsteps % 1 == 0
     log3 = lg.MDLogger( logging_function=lf3, triggering_function=tf3, outpath=gfile)
     loggers.append(log3)
 

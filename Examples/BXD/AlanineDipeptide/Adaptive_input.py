@@ -1,15 +1,14 @@
 from src.Calculators.OpenMM import OpenMMCalculator
-import src.BXD.CollectiveVariable as CV
-import src.BXD.ProgressMetric as PM
-import src.BXD.Path as Path
-import src.MolecularDynamics.MDIntegrator as MD
-import src.BXD.DimensionalityReduction as DR
-import src.BXD.BXDConstraint as BXD
-import src.MolecularDynamics.Trajectory as Traj
-import src.MolecularDynamics.MDLogger as lg
+import src.bxd.collective_variable as CV
+import src.bxd.ProgressMetric as PM
+import src.bxd.path as Path
+import src.molecular_dynamics.md_Integrator as MD
+import src.bxd.dimensionality_reduction as DR
+import src.bxd.bxd_constraint as BXD
+import src.molecular_dynamics.trajectory as Traj
+import src.molecular_dynamics.md_logger as lg
 from ase.io import read
 from ase.optimize import BFGS
-
 
 
 # The general set-up here is identical to the adaptive run to ensure the converging run samples the same path

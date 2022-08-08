@@ -1,39 +1,42 @@
-import MESMER_API.src.Main as me_main
-import ChemDyME2.src.MechanismGeneration.Species as species
-import ChemDyME2.src.MechanismGeneration.Calculator_manager as CM
-import multiprocessing
+import src.mechanism_generation.calculator_manager as cm
+from src.mechanism_generation.mol_types import ts, well, vdw
+import sys
+from ase.io import read
+from src.Calculators.XtbCalculator import XTB
+from src.Calculators.GaussianCalculator import Gaussian
 
-def refine_mol(name):
-    me.parse_me_xml('Glyoxal.xml')
-    mol = me.mols_dict[name]
-    if mol.role != 'ts':
-        if 'comp' in mol.name:
-            calculator_manager = CM.Calculator_manager(calc_hindered_rotors=False, multi_level=False)
-            sp = species.vdw(mol.ase_mol, calculator_manager, dir = str(mol.name))
+def refine_mol(dir):
+    mol = read(str(dir)+'/guess.xyz')
+    low =XTB(method="GFN2xTB", electronic_temperature=1000)
+    high = Gaussian(
+        nprocshared=1,
+        label='Gauss',
+        method='M062x',
+        basis='6-31+G**',
+        mult=int(2),
+        scf='qc'
+    )
+    if is_ts != True:
+        if is_vdw == True:
+            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
+            sp = vdw.vdw(mol, calculator_manager, dir = dir)
+            sp.conformer_search(mol)
             sp.write_cml()
         else:
-            calculator_manager = CM.Calculator_manager(calc_hindered_rotors=False, multi_level=False)
-            sp = species.Stable(mol.ase_mol, calculator_manager, dir = str(mol.name))
+            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
+            sp = well.well(mol, calculator_manager, dir = dir)
+            sp.get_hindered_rotors(mol)
             sp.write_cml()
     else:
-        for reac in me.reactions_dict.values():
-            if reac.ts is not None and reac.ts.name == mol.name:
-                r_mol = reac.reacs[0].ase_mol
-                p_mol = reac.prods[0].ase_mol
-                calculator_manager = CM.Calculator_manager(calc_hindered_rotors=False, multi_level=False)
-                sp = species.TS(mol.ase_mol, calculator_manager, r_mol, p_mol,dir = str(mol.name))
-                sp.write_cml()
-                break
+        calculator_manager = cm.calculator_manager(trajectory = low, low=high, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
+        sp = ts.ts(mol, calculator_manager, dir = dir)
+        sp.write_hindered_rotors(mol)
 
 
+#ts = bool(sys.argv[2])
+#vdw = bool(sys.argv[3])
+#refine_mol(sys.argv[1])
 
-me = me_main.MESMER_API()
-me.parse_me_xml('RingTS.xml')
-number_of_mols = str(len(me.mols_dict))
-values = me.mols_dict.keys()
-values_list = list(values)
-#p = multiprocessing.Pool(int(number_of_mols))
-#results = p.map(refine_mol, values_list)
-#outputs = [result for result in results]
-for val in values_list:
-    refine_mol(val)
+is_ts = True
+is_vdw = False
+refine_mol('TS1')

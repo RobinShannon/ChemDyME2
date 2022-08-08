@@ -7,7 +7,7 @@ from ase import Atoms
 from ase.calculators.calculator import Calculator, all_changes
 from scine_sparrow import Calculation
 from ase.vibrations import Vibrations
-import src.Utility.Tools as tl
+import src.utility.tools as tl
 from ase.io import write, read
 import scine_readuct
 import time

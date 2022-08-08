@@ -4,7 +4,7 @@ from typing import Optional, Collection
 from ase import Atoms
 from ase.calculators.calculator import Calculator, all_changes
 import os
-import src.Utility.Tools as tl
+import src.utility.tools as tl
 
 EV_PER_HARTREE = 27.2114
 ANG_PER_BOHR = 0.529177

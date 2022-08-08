@@ -1,13 +1,12 @@
 
-import src.MolecularDynamics.MDIntegrator as MD
-import src.MechanismGeneration.ReactionCriteria as RC
-import src.MasterEquation.MESMER as ME
-import src.MechanismGeneration.MechanismMain as Mech
-import src.MechanismGeneration.Calculator_manager as CM
+import src.molecular_dynamics.md_Integrator as MD
+import src.MechanismGeneration.reaction_crtieria as RC
+import src.master_equation.MESMER as ME
+import src.MechanismGeneration.mechanism_main as Mech
+import src.MechanismGeneration.calculator_manager as CM
 #from src.Calculators.QcoreCalculator import QcoreCalculator as QC
 from src.Calculators.XtbCalculator import XTB
 from src.Calculators.DFTBCalculator import Dftb
-
 from ase.io import read,write
 from ase.optimize import BFGS as BFGS
 from ase.neb import NEB

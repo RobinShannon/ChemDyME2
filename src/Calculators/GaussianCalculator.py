@@ -9,7 +9,7 @@ from ase.calculators.calculator import FileIOCalculator, EnvironmentError
 from pathlib import Path
 from shutil import copyfile
 import re
-import src.Utility.Tools as tl
+import src.utility.tools as tl
 
 class GaussianDynamics:
     calctype = 'optimizer'
@@ -165,7 +165,27 @@ class Gaussian(FileIOCalculator):
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         opt = GaussianOptimizer(atoms, self)
-        opt.run(steps=100, opt='calcall cartesian')
+        opt.run(steps=100, opt='calcall, cartesian')
+        os.chdir(current_dir)
+
+    def minimise_stable_constrained(self, dihedral, path=os.getcwd(), atoms: Optional[Atoms] = None):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
+        opt = GaussianOptimizer(atoms, self)
+        mod = self.get_modred_lines(dihedral)
+        #opt.run(steps=100, opt='calcall, cartesian, modredundant', addsec = mod)
+        write(self.label + '.com', atoms, format='gaussian-in', **self.parameters)
+        os.chdir(current_dir)
+
+    def minimise_ts_constrained(self, dihedral, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
+        opt = GaussianOptimizer(atoms, self)
+        mod = self.get_modred_lines(dihedral)
+        params = {'steps' : 100, 'opt':'calcall, ts, noeigentest, modredundant', 'addsec' : str(mod)}
+        write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
         os.chdir(current_dir)
 
 
@@ -289,3 +309,7 @@ class Gaussian(FileIOCalculator):
         string2 = "TS\n\n0 "+str(2)+"\n"
         xyz2 = tl.convertMolToGauss(ts)
         return string1+xyz1+string2+xyz2
+
+    def get_modred_lines(self,dihedral):
+        string = "D " + str(dihedral[0]) + " " + str(dihedral[1]) + " " + str(dihedral[2]) + " " + str(dihedral[3]) +" F\n"
+        return string
