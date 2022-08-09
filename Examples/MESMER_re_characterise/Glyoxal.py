@@ -28,7 +28,7 @@ def refine_mol(dir):
             sp.get_hindered_rotors(mol)
             sp.write_cml()
     else:
-        calculator_manager = cm.calculator_manager(trajectory = low, low=high, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
+        calculator_manager = cm.calculator_manager(trajectory = low, low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
         sp = ts.ts(mol, calculator_manager, dir = dir)
         sp.write_hindered_rotors(mol)
 

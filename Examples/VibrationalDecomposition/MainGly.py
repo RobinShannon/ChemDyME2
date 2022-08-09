@@ -7,7 +7,7 @@ import src.molecular_dynamics.md_Integrator as MD
 import src.bxd.bxd_constraint as BXD
 import src.molecular_dynamics.trajectory as Traj
 import src.molecular_dynamics.md_logger as lg
-import src.MechanismGeneration.reaction_crtieria as RC
+import src.mechanism_generation.reaction_crtieria as RC
 import src.utility.tools as Tl
 from copy import deepcopy
 import numpy as np
@@ -131,7 +131,7 @@ def get_rot_tran(coord_true, coord_pred):
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
 write('GlyoxalGeoms/GlyoxalPaths.xyz',GlyIRC)
 narupa_mol = GlyIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-960000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1510000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 for i in GlyIRC:
     narupa_mol.set_positions(i.get_positions())
@@ -182,7 +182,7 @@ for run in range(0, 1000):
     pcs = 2
     #collective_variable = CV.Distances(narupa_mol, [[1,3]])
     collective_variable = CV.Distances(narupa_mol, [[5,6]])
-    progress_metric = PM.Line(collective_variable, [0], [1.8])
+    progress_metric = PM.Line(collective_variable, [0], [1.7])
 
     #collective_variable = CV.COM(narupa_mol, [0,1,2,3,4,5], [6,7])
     #progress_metric = PM.Line(collective_variable, [0], 0.5)

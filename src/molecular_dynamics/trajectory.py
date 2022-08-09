@@ -1,7 +1,7 @@
 import numpy as np
 import sys
 from ase.md import velocitydistribution as vd
-import src.MechanismGeneration.reaction_crtieria as RC
+import src.mechanism_generation.reaction_crtieria as RC
 import src.utility.connectivity_tools as CT
 import src.molecular_dynamics.md_logger as Log
 from typing import Optional

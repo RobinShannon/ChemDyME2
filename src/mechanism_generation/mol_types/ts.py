@@ -229,7 +229,31 @@ class ts(species):
                 constraints = []
                 dihedral = [dihed, b]
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
-                constraints.append(FixBondLengths(self.bonds_to_add, bondlengths = distances))
                 hmol.set_constraint(constraints)
                 dihed += float(increment)
-                hmol._calc.minimise_ts_constrained(b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                hmol._calc.minimise_ts_constrained(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+
+    def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
+        current_dir = os.getcwd()
+        os.makedirs(self.dir, exist_ok=True)
+        os.chdir(self.dir)
+        os.makedirs(directory, exist_ok=True)
+        os.chdir(directory)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        self.rotor_indexes = rotatable_bonds
+        distances = []
+        for bond in self.bonds_to_add:
+            dist = mol.get_distance(bond[0],bond[1])
+            distances.append(dist)
+
+        for count,(b,co) in enumerate(zip(rotatable_bonds,coId)):
+            os.makedirs('Hind' +str(count), exist_ok=True)
+            hmol = mol.copy()
+            dihed = hmol.get_dihedral(*b)
+            self.calculator.set_calculator(hmol, 'low')
+            rng = 360.0 / float(increment)
+            for i in range(0,int(rng)):
+                hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
+                del hmol.constraints
+                dihed += float(increment)
+                hmol._calc.minimise_ts_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)

@@ -168,24 +168,28 @@ class Gaussian(FileIOCalculator):
         opt.run(steps=100, opt='calcall, cartesian')
         os.chdir(current_dir)
 
-    def minimise_stable_constrained(self, dihedral, path=os.getcwd(), atoms: Optional[Atoms] = None):
+    def minimise_stable_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         opt = GaussianOptimizer(atoms, self)
         mod = self.get_modred_lines(dihedral)
-        #opt.run(steps=100, opt='calcall, cartesian, modredundant', addsec = mod)
-        write(self.label + '.com', atoms, format='gaussian-in', **self.parameters)
+        if dihedral != None:
+            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)', addsec=str(mod), **self.parameters)
+        else:
+            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall)', **self.parameters)
         os.chdir(current_dir)
 
-    def minimise_ts_constrained(self, dihedral, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
+    def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         opt = GaussianOptimizer(atoms, self)
         mod = self.get_modred_lines(dihedral)
-        params = {'steps' : 100, 'opt':'calcall, ts, noeigentest, modredundant', 'addsec' : str(mod)}
-        write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+        if dihedral != None:
+            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+        else:
+            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
         os.chdir(current_dir)
 
 
