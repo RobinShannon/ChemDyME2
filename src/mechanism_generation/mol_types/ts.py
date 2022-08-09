@@ -232,6 +232,7 @@ class ts(species):
                 hmol.set_constraint(constraints)
                 dihed += float(increment)
                 hmol._calc.minimise_ts_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+        os.chdir(current_dir)
 
     def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
         current_dir = os.getcwd()
@@ -257,3 +258,4 @@ class ts(species):
                 del hmol.constraints
                 dihed += float(increment)
                 hmol._calc.minimise_ts_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+        os.chdir(current_dir)
