@@ -231,7 +231,7 @@ class ts(species):
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
                 hmol.set_constraint(constraints)
                 dihed += float(increment)
-                hmol._calc.minimise_ts_constrained(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                hmol._calc.minimise_ts_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
 
     def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
         current_dir = os.getcwd()
