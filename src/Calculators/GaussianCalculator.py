@@ -172,9 +172,9 @@ class Gaussian(FileIOCalculator):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
-        opt = GaussianOptimizer(atoms, self)
-        mod = self.get_modred_lines(dihedral)
+
         if dihedral != None:
+            mod = self.get_modred_lines(dihedral)
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)', addsec=str(mod), **self.parameters)
         else:
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall)', **self.parameters)
@@ -184,9 +184,10 @@ class Gaussian(FileIOCalculator):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
-        opt = GaussianOptimizer(atoms, self)
-        mod = self.get_modred_lines(dihedral)
+
+
         if dihedral != None:
+            mod = self.get_modred_lines(dihedral)
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
         else:
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
