@@ -11,7 +11,9 @@ from abc import abstractmethod
 import copy
 import os
 import numpy as np
-
+import glob
+from ase.io import read
+import src.utility.tools as tl
 
 class species:
     def __init__(self, mol, calculator, dir):
@@ -261,4 +263,62 @@ class species:
                 hmol._calc.minimise_stable_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
 
 
+    def read_conformer_files(self, path):
+        os.chdir(path)
+        os.chdir('conformers')
+        rotors =len([f for f in os.listdir(".") if os.path.isdir(f)])
+        min_ene = np.inf
+        conformers =[]
+        ene_list = []
+        minimum = None
+        for i in range(0,rotors):
+            os.chdir("Hind" + str(i))
+            steps = len([f for f in os.listdir(".") if f.endswith('.log')])
+            names = []
+            for j in range(0,steps):
+                mol = read("H" +str(j)+ ".log")
+                ene = mol.get_potential_energy()
+                names.append(tl.getSMILES(mol,False,False))
+                if ene < min_ene and j > 0 and names[j] == names[0]:
+                    min_ene = ene
+                    minimum = mol.copy()
+                if ene not in ene_list and j > 0 and names[j] == names[0]:
+                    ene_list.append(ene)
+                    conformers.append(mol.copy())
+            os.chdir('../')
+        write("conformers.xyz", conformers)
+        np.savetxt("energies.txt", ene_list, delimiter="\n")
+        os.chdir('../')
+        write("min.xyz", minimum)
 
+
+    def read_hindered_files(self, path):
+        os.chdir(path)
+        os.chdir('hindered_rotor')
+        rotors =len([f for f in os.listdir(".") if os.path.isdir(f)])
+        min_ene = np.inf
+        conformers =[]
+        ene_list = []
+        minimum = None
+        for i in range(0,rotors):
+            os.chdir("Hind" + str(i))
+            steps = len([f for f in os.listdir(".") if f.endswith('.log')])
+            hinderance_potential = []
+            hinderance_traj = []
+            hinderance_angles = []
+            dihedral = tl.read_mod_redundant('H0.com')
+            for j in range(0,steps):
+                mol = read("H" +str(j)+ ".log")
+                ene = mol.get_potential_energy()
+                hinderance_potential.append(ene)
+                hinderance_traj.append(mol.copy())
+                hinderance_angles.append(mol.get_dihedral(int(dihedral[0]),int(dihedral[1]),int(dihedral[2]),int(dihedral[3])))
+            self.hinderance_trajectories.append(hinderance_traj)
+            self.hinderance_potentials.append(hinderance_potential)
+            self.hinderance_indexes.append([dihedral[1],dihedral[2]])
+            write('traj.xyz',hinderance_traj)
+            os.chdir('../')
+        write("conformers.xyz", conformers)
+        np.savetxt("energies.txt", ene_list, delimiter="\n")
+        os.chdir('../')
+        write("min.xyz", minimum)

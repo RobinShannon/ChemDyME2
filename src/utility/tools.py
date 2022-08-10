@@ -106,6 +106,16 @@ def getCML(ASEmol, name):
 
     return cml
 
+def read_mod_redundant(file):
+    with open(file,'r') as f:
+        lines = f.readlines()
+        last_line = lines[-3]
+        last_line=last_line.strip("FD\n")
+        last_line=last_line.split(' ')
+        last_line.pop(0)
+        last_line.pop(-1)
+        return last_line
+
 def getSpinMult(mol, name, trip = False):
     #Babel incorrectly guessing spin multiplicity from trajectory snapshots
     #If molecule is O2 or O assume triplet rather than singlet

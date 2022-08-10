@@ -18,8 +18,8 @@ for run in range(0, 1000):
     #narupa_mol = read('water', index=0)
     temp = read('NN_Comp.xyz')
     narupa_mol.set_positions(temp.get_positions())
-    vd.MaxwellBoltzmannDistribution(narupa_mol, temperature_K=298, force_temp=True)
-    dyn = Langevin(narupa_mol, 1 * units.fs, 298*units.kB, 0.01)
+    vd.MaxwellBoltzmannDistribution(narupa_mol, temperature_K=500, force_temp=True)
+    dyn = Langevin(narupa_mol, 1 * units.fs, 800*units.kB, 0.01)
     traj = []
     for i in range(0,1000):
         dyn.run(20)

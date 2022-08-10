@@ -223,10 +223,12 @@ class Gaussian(FileIOCalculator):
         os.chdir(current_dir)
         return freqs, zpe, imaginary_frequency, hessian
 
-    def read_vibs(self):
+    def read_vibs(self, file=None):
         vibs = []
         zpe = 0
-        inp = open(str(self.label) + '.log', "r")
+        if file == None:
+            file = self.label + '.log'
+        inp = open(file, "r")
         for line in inp:
             if re.search("Frequencies", line):
                 l = line.split()
@@ -316,5 +318,5 @@ class Gaussian(FileIOCalculator):
         return string1+xyz1+string2+xyz2
 
     def get_modred_lines(self,dihedral):
-        string = "D " + str(dihedral[0]) + " " + str(dihedral[1]) + " " + str(dihedral[2]) + " " + str(dihedral[3]) +" F\n"
+        string = "D " + str(dihedral[0]+1) + " " + str(dihedral[1]+1) + " " + str(dihedral[2]+1) + " " + str(dihedral[3]+1) +" F\n"
         return string

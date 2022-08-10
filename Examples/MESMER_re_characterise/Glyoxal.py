@@ -2,13 +2,12 @@ import src.mechanism_generation.calculator_manager as cm
 from src.mechanism_generation.mol_types import ts, well, vdw
 import sys
 from ase.io import read
-from src.Calculators.XtbCalculator import XTB
 from src.Calculators.GaussianCalculator import Gaussian
 
 def refine_mol(dir):
     mol = read(str(dir)+'/guess.xyz')
-    low =XTB(method="GFN2xTB", electronic_temperature=1000)
-    high = Gaussian(
+    #low =XTB(method="GFN2xTB", electronic_temperature=1000)
+    low = Gaussian(
         nprocshared=1,
         label='Gauss',
         method='M062x',
@@ -31,7 +30,6 @@ def refine_mol(dir):
         calculator_manager = cm.calculator_manager(trajectory = low, low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
         sp = ts.ts(mol, calculator_manager, dir = dir)
         sp.write_hindered_rotors(mol)
-
 
 #ts = bool(sys.argv[2])
 #vdw = bool(sys.argv[3])

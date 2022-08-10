@@ -2,6 +2,7 @@ import src.utility.connectivity_tools as CT
 import src.utility.tools as TL
 from ase.constraints import FixInternals, FixAtoms, FixBondLength, FixBondLengths
 from ase.optimize.sciopt import SciPyFminBFGS as BFGS
+from ase.io import read,write
 import math
 try:
     import MESMER_API.src.meMolecule as me_mol
@@ -14,6 +15,7 @@ import os
 from sella import Sella
 from src.mechanism_generation.mol_types.species import species
 import numpy as np
+import os
 
 class ts(species):
 
@@ -202,7 +204,7 @@ class ts(species):
             np.savetxt("hindered_rotor_energies" +str(count)+ ".txt", self.hinderance_potentials, delimiter ="\n")
 
 
-    def write_hindered_rotors(self,mol, rigid=False, increment = 30, directory="hindered_rotor"):
+    def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor"):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
@@ -225,6 +227,7 @@ class ts(species):
             rng = 360.0 / float(increment)
             for i in range(0,int(rng)):
                 hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
+                dihed = hmol.get_dihedral(*b)
                 del hmol.constraints
                 constraints = []
                 dihedral = [dihed, b]
@@ -259,3 +262,4 @@ class ts(species):
                 dihed += float(increment)
                 hmol._calc.minimise_ts_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
         os.chdir(current_dir)
+
