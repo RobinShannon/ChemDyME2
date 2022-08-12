@@ -188,7 +188,7 @@ class Gaussian(FileIOCalculator):
 
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)
-            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+            write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
         else:
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
         os.chdir(current_dir)
@@ -318,5 +318,5 @@ class Gaussian(FileIOCalculator):
         return string1+xyz1+string2+xyz2
 
     def get_modred_lines(self,dihedral):
-        string = "D " + str(dihedral[0]+1) + " " + str(dihedral[1]+1) + " " + str(dihedral[2]+1) + " " + str(dihedral[3]+1) +" F\n"
+        string = 'D ' + str(dihedral[0]+1) + " " + str(dihedral[1]+1) + " " + str(dihedral[2]+1) + " " + str(dihedral[3]+1) +" F\n"
         return string

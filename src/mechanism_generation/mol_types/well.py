@@ -20,7 +20,7 @@ class well(species):
     def __init__(self, mol, calculator, dir = 'Raw', name=''):
         super(well, self).__init__(mol, calculator, dir)
         self.calculator.set_calculator(self.mol, 'low')
-        smiles = TL.getSMILES(self.mol, True)
+        smiles = TL.getSMILES(self.mol, False, False)
         self.combined_mol = mol.copy()
         self.calculator.set_calculator(self.combined_mol, 'low')
         self.smiles = smiles[0]

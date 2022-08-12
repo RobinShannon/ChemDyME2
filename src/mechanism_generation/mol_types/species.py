@@ -312,7 +312,7 @@ class species:
                 ene = mol.get_potential_energy()
                 hinderance_potential.append(ene)
                 hinderance_traj.append(mol.copy())
-                hinderance_angles.append(mol.get_dihedral(int(dihedral[0]),int(dihedral[1]),int(dihedral[2]),int(dihedral[3])))
+                hinderance_angles.append(mol.get_dihedral(int(dihedral[0])-1,int(dihedral[1])-1,int(dihedral[2])-1,int(dihedral[3])-1))
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_indexes.append([dihedral[1],dihedral[2]])
