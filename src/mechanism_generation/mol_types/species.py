@@ -206,7 +206,7 @@ class species:
             np.savetxt("hindered_rotor_energies" +str(count)+ ".txt", self.hinderance_potentials, delimiter ="\n")
 
 
-    def write_hindered_rotors(self,mol, rigid=False, increment = 30, directory="hindered_rotor"):
+    def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor"):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
@@ -229,13 +229,15 @@ class species:
             rng = 360.0 / float(increment)
             for i in range(0,int(rng)):
                 hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
+                dihed = hmol.get_dihedral(*b)
                 del hmol.constraints
                 constraints = []
                 dihedral = [dihed, b]
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
                 hmol.set_constraint(constraints)
                 dihed += float(increment)
-                hmol._calc.minimise_stable_constrained(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                hmol._calc.minimise_stable_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+        os.chdir(current_dir)
 
     def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
         current_dir = os.getcwd()
