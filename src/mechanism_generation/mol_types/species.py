@@ -298,10 +298,6 @@ class species:
         os.chdir(path)
         os.chdir('hindered_rotor')
         rotors =len([f for f in os.listdir(".") if os.path.isdir(f)])
-        min_ene = np.inf
-        conformers =[]
-        ene_list = []
-        minimum = None
         for i in range(0,rotors):
             os.chdir("Hind" + str(i))
             steps = len([f for f in os.listdir(".") if f.endswith('.log')])
@@ -311,7 +307,10 @@ class species:
             dihedral = tl.read_mod_redundant('H0.com')
             for j in range(0,steps):
                 mol = read("H" +str(j)+ ".log")
-                ene = mol.get_potential_energy()
+                try:
+                    ene = mol.get_potential_energy()
+                except:
+                    ene = hinderance_potential[-1]
                 hinderance_potential.append(ene)
                 hinderance_traj.append(mol.copy())
                 hinderance_angles.append(mol.get_dihedral(int(dihedral[0])-1,int(dihedral[1])-1,int(dihedral[2])-1,int(dihedral[3])-1))
@@ -319,8 +318,7 @@ class species:
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_indexes.append([dihedral[1],dihedral[2]])
             write('traj.xyz',hinderance_traj)
+            np.savetxt("energies.txt", hinderance_potential, delimiter="\n")
+            np.savetxt("angles.txt", hinderance_angles, delimiter="\n")
             os.chdir('../')
-        write("conformers.xyz", conformers)
-        np.savetxt("energies.txt", ene_list, delimiter="\n")
         os.chdir('../')
-        write("min.xyz", minimum)

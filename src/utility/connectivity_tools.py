@@ -109,7 +109,7 @@ def getCOMdel(Mol, frag):
 # Set up a reference matrix for ideal bond length between any two atoms in the system
 # Maps mol_types types onto a grid of stored ideal bond distances stored in the global variables module
 def refBonds(mol):
-    dict = {'CC' : 1.4, 'CH' : 1.2, 'HC' : 1.2, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.2, 'HO' : 1.2, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
+    dict = {'CC' : 1.3, 'CH' : 1.2, 'HC' : 1.2, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.2, 'HO' : 1.2, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
     size =len(mol.get_positions())
     symbols = mol.get_chemical_symbols()
     dRef = np.zeros((size,size))
@@ -273,16 +273,26 @@ def get_rotatable_bonds(mol, add_bonds):
                     id = neighbour_atom.GetIdx()
                     if id != rot[3] + 1:
                         mask.append(id - 1)
+                        atom5 = BABmol.GetAtom(id)
+                        for neighbour_atom in openbabel.OBAtomAtomIter(atom5):
+                            id = neighbour_atom.GetIdx()
+                            if id != atom4:
+                                mask.append(id - 1)
         atom3 = BABmol.GetAtom(int(rot[2] + 1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom3):
             id = neighbour_atom.GetIdx()
             if id != rot[1] + 1:
                 mask.append(id - 1)
-                atom5 = BABmol.GetAtom(id)
-                for neighbour_atom in openbabel.OBAtomAtomIter(atom5):
+                atom6 = BABmol.GetAtom(id)
+                for neighbour_atom in openbabel.OBAtomAtomIter(atom6):
                     id = neighbour_atom.GetIdx()
                     if id != rot[2] + 1:
                         mask.append(id - 1)
+                        atom7 = BABmol.GetAtom(id)
+                        for neighbour_atom in openbabel.OBAtomAtomIter(atom7):
+                            id = neighbour_atom.GetIdx()
+                            if id != atom6:
+                                mask.append(id - 1)
         coAtoms.append(mask)
     return rotors, coAtoms
 

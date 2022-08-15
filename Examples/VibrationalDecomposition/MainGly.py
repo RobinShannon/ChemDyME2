@@ -110,22 +110,21 @@ def get_rot_tran(coord_true, coord_pred):
     model_coords_rotated = np.dot(coord_pred, rot)
 
     return rot, model_coords_rotated
-#mol = read('MFGeoms/CO[C]=O.xyz')
-#mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-570000', atoms=mol))
-#dyn = BFGS(mol)
-#try:
-#    dyn.run(1e-3, 1000)
-#except:
-#    pass
-#write('bad_product.xyz',mol)
-#vib = Vibrations(mol)
-#vib.clean()
-#vib.run()
-#vib.summary(method='Frederiksen')
-#np.save('MFGeoms/CO[C]=O.npy',vib.H)
-#for i, mol in enumerate(ircfull):
-    #list = generate_displacements(mol.copy(), 0.025, rand_dis=True, seccond_order=False)
-    #write('testMF2_CH_' + str(i) + '.xyz', list)
+mol = read('MFGeoms/water.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
+dyn = BFGS(mol)
+try:
+    dyn.run(1e-3, 1000)
+except:
+    pass
+write('bad_product.xyz',mol)
+vib = Vibrations(mol)
+vib.clean()
+vib.run()
+vib.summary(method='Frederiksen')
+np.save('MFGeoms/water.npy',vib.modes.T)
+
+
 
 
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')

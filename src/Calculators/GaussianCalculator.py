@@ -189,6 +189,13 @@ class Gaussian(FileIOCalculator):
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)
             write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+            f=open(str(title) + '.com','r')
+            lines = f.readlines()
+            lines.pop(-4)
+            f.close()
+            f=open(str(title) + '.com','w')
+            f.writelines(lines)
+            f.close()
         else:
             write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
         os.chdir(current_dir)

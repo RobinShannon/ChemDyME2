@@ -204,7 +204,7 @@ class ts(species):
             np.savetxt("hindered_rotor_energies" +str(count)+ ".txt", self.hinderance_potentials, delimiter ="\n")
 
 
-    def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor"):
+    def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor", partial = False):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
@@ -232,9 +232,20 @@ class ts(species):
                 constraints = []
                 dihedral = [dihed, b]
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
+                constraints.append(FixBondLengths(self.bonds_to_add, bondlengths = distances))
                 hmol.set_constraint(constraints)
+                if partial:
+                    try:
+                        opt = BFGS(hmol)
+                        opt.run(steps=5)
+                    except:
+                        pass
                 dihed += float(increment)
+                self.calculator.set_calculator(hmol, 'high')
                 hmol._calc.minimise_ts_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                self.calculator.set_calculator(hmol, 'low')
+                hinderance_traj.append(hmol.copy())
+            write('test'+str(count)+'.xyz', hinderance_traj)
         os.chdir(current_dir)
 
     def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
