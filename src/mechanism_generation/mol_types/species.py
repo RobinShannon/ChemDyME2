@@ -308,16 +308,16 @@ class species:
             hinderance_angles = []
             dihedral = tl.read_mod_redundant('H0.com')
             for j in range(0,steps):
-                mol = read("H" +str(j)+ ".log")
+                hind_mol = read("H" +str(j)+ ".log")
                 try:
-                    ene = mol.get_potential_energy()
+                    ene = hind_mol.get_potential_energy()
                 except:
                     ene = hinderance_potential[-1]
                 if j == 0:
                     baseline =  ene * mol / kJ
                 hinderance_potential.append((ene * mol / kJ)-baseline)
-                hinderance_traj.append(mol.copy())
-                hinderance_angles.append(mol.get_dihedral(int(dihedral[0])-1,int(dihedral[1])-1,int(dihedral[2])-1,int(dihedral[3])-1))
+                hinderance_traj.append(hind_mol.copy())
+                hinderance_angles.append(hind_mol.get_dihedral(int(dihedral[0])-1,int(dihedral[1])-1,int(dihedral[2])-1,int(dihedral[3])-1))
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_potentials.append(hinderance_potential)
             self.hinderance_angles.append(hinderance_angles)
