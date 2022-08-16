@@ -69,6 +69,7 @@ class ts(species):
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
+        data['hinderedAngles'] = self.hindered_angles
         data['hinderedBonds'] = self.hinderance_indexes
         data['imaginary_frequency'] = self.imaginary_frequency
         data['hessian'] = self.hessian
@@ -248,7 +249,7 @@ class ts(species):
             write('test'+str(count)+'.xyz', hinderance_traj)
         os.chdir(current_dir)
 
-    def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):
+    def write_conformers(self,mol, rigid=False, increment = 60, partial=False, directory="conformers"):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
@@ -270,6 +271,16 @@ class ts(species):
             for i in range(0,int(rng)):
                 hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
                 del hmol.constraints
+                constraints =[]
+                constraints.append(FixInternals(dihedrals_deg=[dihedral]))
+                constraints.append(FixBondLengths(self.bonds_to_add, bondlengths=distances))
+                hmol.set_constraint(constraints)
+                if partial:
+                    try:
+                        opt = BFGS(hmol)
+                        opt.run(steps=5)
+                    except:
+                        pass
                 dihed += float(increment)
                 hmol._calc.minimise_ts_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
         os.chdir(current_dir)

@@ -14,6 +14,7 @@ import numpy as np
 import glob
 from ase.io import read
 import src.utility.tools as tl
+from ase.units import kJ, mol
 
 class species:
     def __init__(self, mol, calculator, dir):
@@ -33,6 +34,7 @@ class species:
         self.hinderance_potentials = []
         self.hinderance_trajectories=[]
         self.hinderance_indexes = []
+        self.hinderance_angles = []
         self.rotor_indexes=[]
         self.bonds_to_add = []
         self.vdw = False
@@ -53,15 +55,15 @@ class species:
         else:
             self.calculator.set_calculator(self.mol, 'low')
         if bimolecular:
-            self.energy['bimolecular_high'] = self.mol.get_potential_energy() * 96.4869
+            self.energy['bimolecular_high'] = self.mol.get_potential_energy() * mol / kJ
         else:
-            self.energy['high'] = self.mol.get_potential_energy() * 96.4869
+            self.energy['high'] = self.mol.get_potential_energy() * mol / kJ
         self.calculator.set_calculator(self.mol, 'single')
         if bimolecular:
-            self.energy['bimolecular_single'] = self.mol.get_potential_energy() * 96.4869
+            self.energy['bimolecular_single'] = self.mol.get_potential_energy() * mol / kJ
         else:
             try:
-                self.energy['single'] = self.mol.get_potential_energy() * 96.4869
+                self.energy['single'] = self.mol.get_potential_energy() * mol / kJ
             except:
                 self.energy['single'] = 0.0
         os.chdir(current_dir)
@@ -311,11 +313,14 @@ class species:
                     ene = mol.get_potential_energy()
                 except:
                     ene = hinderance_potential[-1]
-                hinderance_potential.append(ene)
+                if j == 0:
+                    baseline =  ene * mol / kJ
+                hinderance_potential.append((ene * mol / kJ)-baseline)
                 hinderance_traj.append(mol.copy())
                 hinderance_angles.append(mol.get_dihedral(int(dihedral[0])-1,int(dihedral[1])-1,int(dihedral[2])-1,int(dihedral[3])-1))
             self.hinderance_trajectories.append(hinderance_traj)
             self.hinderance_potentials.append(hinderance_potential)
+            self.hinderance_angles.append(hinderance_angles)
             self.hinderance_indexes.append([dihedral[1],dihedral[2]])
             write('traj.xyz',hinderance_traj)
             np.savetxt("energies.txt", hinderance_potential, delimiter="\n")
