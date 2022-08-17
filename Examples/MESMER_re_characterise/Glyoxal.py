@@ -18,15 +18,13 @@ def refine_mol(dir):
     )
     if is_ts != True:
         if is_vdw == True:
-            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
+            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
             sp = vdw.vdw(mol, calculator_manager, dir = dir)
-            sp.conformer_search(mol)
-            sp.write_cml()
+            sp.write_hindered_rotors(mol, partial=True)
         else:
-            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=low, single_point=low, calc_hindered_rotors=False, multi_level=False)
+            calculator_manager = cm.calculator_manager(trajectory = low,low=low, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
             sp = well.well(mol, calculator_manager, dir = dir)
-            sp.get_hindered_rotors(mol)
-            sp.write_cml()
+            sp.write_hindered_rotors(mol, partial=True)
     else:
         calculator_manager = cm.calculator_manager(trajectory = low, low=low, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
         sp = ts.ts(mol, calculator_manager, dir = dir)
@@ -38,4 +36,4 @@ def refine_mol(dir):
 
 is_ts = True
 is_vdw = False
-refine_mol('TS2')
+refine_mol('TS3')

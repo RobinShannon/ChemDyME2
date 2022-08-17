@@ -109,7 +109,7 @@ def getCOMdel(Mol, frag):
 # Set up a reference matrix for ideal bond length between any two atoms in the system
 # Maps mol_types types onto a grid of stored ideal bond distances stored in the global variables module
 def refBonds(mol):
-    dict = {'CC' : 1.3, 'CH' : 1.2, 'HC' : 1.2, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.2, 'HO' : 1.2, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
+    dict = {'CN' : 1.6, 'NC': 1.6, 'HN' : 1.0, 'NH' : 1.0, 'ON' :1.6, 'NO' : 1.6, 'CC' : 1.6, 'CH' : 1.1, 'HC' : 1.1, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.1, 'HO' : 1.1, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
     size =len(mol.get_positions())
     symbols = mol.get_chemical_symbols()
     dRef = np.zeros((size,size))
@@ -155,21 +155,24 @@ def get_hbond_idxs(mol):
     C = bondMatrix(r, mol)
     dref = refBonds(mol)
     size =len(mol.get_positions())
+    indicies = []
     min_dist = 100000
     for i in range(1,size):
         for j in range(0,i):
-            if C[i][j] == 0 and (mol.get_distance(i,j) / dref[i][j]) < min_dist:
+            if C[i][j] == 0 and dref[i][j] == 1.1 and mol.get_distance(i,j) < 1.6:
                 min_dist = (mol.get_distance(i,j) / dref[i][j])
-                indicies = [[i,j]]
+                indicies.append([i,j])
     return indicies
 
-def get_rotatable_bonds(mol, add_bonds):
+def get_rotatable_bonds(mol, add_bonds, combine = True):
     # Get list of atomic numbers and cartesian coords from ASEmol
+    r = refBonds(mol)
+    C = bondMatrix(r, mol)
     rotors = []
     rotatablebonds =[]
     atoms = mol.get_atomic_numbers()
     cart = mol.get_positions()
-
+    excluded = 100000
     # Create open babel molecule BABMol
     BABmol = openbabel.OBMol()
     for i in range(0,atoms.size):
@@ -216,7 +219,6 @@ def get_rotatable_bonds(mol, add_bonds):
             temp_torsions.append([torsion[0], torsion[1], torsion[2], torsion[3]])
             temp_rotatable.append([torsion[1], torsion[2]])
 
-
     BABmol.FindAngles()
     BABmol.FindTorsions()
     BABmol.FindRingAtomsAndBonds()
@@ -227,31 +229,18 @@ def get_rotatable_bonds(mol, add_bonds):
             rotors.append(tor)
             rotatablebonds.append([tor[1], tor[2]])
 
-    if len(rotors) > 1 and (temp_torsions[0][1] == temp_torsions[1][1] or temp_torsions[0][1] == temp_torsions[1][2]):
-        new_torsion = [0,0,0,0]
-        if temp_torsions[0][0] != temp_torsions[1][1] and temp_torsions[0][0] != temp_torsions[1][2]:
-            new_torsion[0] = temp_torsions[0][0]
-            new_torsion[1] = temp_torsions[0][1]
-            if temp_torsions[0][1] != temp_torsions[1][2] and temp_torsions[0][1] != temp_torsions[1][2]:
-                new_torsion[2] = temp_torsions[1][2]
-                new_torsion[3] = temp_torsions[1][3]
-            else:
-                new_torsion[2] = temp_torsions[1][1]
-                new_torsion[3] = temp_torsions[1][0]
+
+    if len(rotors) ==2 and combine:
+        if rotors[1][2] == rotors[0][1]:
+            rotors[0][0] = rotors[1][0]
+            rotors[0][1] = rotors[1][1]
+            excluded = rotors[1][2]
         else:
-            new_torsion[3] = temp_torsions[1][0]
-            new_torsion[2] = temp_torsions[1][1]
-            if temp_torsions[1][1] != temp_torsions[0][2] and temp_torsions[1][1] != temp_torsions[0][2]:
-                new_torsion[1] = temp_torsions[0][2]
-                new_torsion[0] = temp_torsions[0][3]
-            else:
-                new_torsion[1] = temp_torsions[0][1]
-                new_torsion[0] = temp_torsions[0][0]
-        bond = [temp_rotatable[0][0], temp_rotatable[0][1]]
-        rotors = []
-        rotatablebonds = []
-        rotors.append(new_torsion)
-        rotatablebonds.append(bond)
+            rotors[0][2] = rotors[1][2]
+            rotors[0][3] = rotors[1][3]
+            excluded = rotors[0][2]
+        del rotors[-1]
+        del rotatablebonds[-1]
 
     for torsion in openbabel.OBMolTorsionIter(BABmol):
         bond = BABmol.GetBond(torsion[1]+1,torsion[2]+1)
@@ -260,41 +249,60 @@ def get_rotatable_bonds(mol, add_bonds):
                 rotors.append([torsion[0],torsion[1],torsion[2],torsion[3]])
                 rotatablebonds.append([torsion[1],torsion[2]])
     coAtoms =[]
+    coAtoms2 = []
+    for rotor in rotors:
+        mask = list(range(0,len(atoms)))
+        mask.remove(rotor[0])
+        mask.remove(rotor[1])
+        coAtoms.append(mask)
     for rot in rotors:
         mask = []
         mask.append(int(rot[3]))
         atom2 = BABmol.GetAtom(int(rot[3] + 1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom2):
             id = neighbour_atom.GetIdx()
-            if id != rot[2] + 1:
+            if id != rot[2] + 1 and id != excluded and C[int(rot[3])][id-1] == 1:
                 mask.append(id - 1)
                 atom4 = BABmol.GetAtom(id)
                 for neighbour_atom in openbabel.OBAtomAtomIter(atom4):
-                    id = neighbour_atom.GetIdx()
-                    if id != rot[3] + 1:
-                        mask.append(id - 1)
-                        atom5 = BABmol.GetAtom(id)
+                    id2 = neighbour_atom.GetIdx()
+                    if id2 != rot[3] + 1 and C[id-1][id2-1] == 1:
+                        mask.append(id2 - 1)
+                        atom5 = BABmol.GetAtom(id2)
                         for neighbour_atom in openbabel.OBAtomAtomIter(atom5):
-                            id = neighbour_atom.GetIdx()
-                            if id != atom4:
-                                mask.append(id - 1)
-        atom3 = BABmol.GetAtom(int(rot[2] + 1))
-        for neighbour_atom in openbabel.OBAtomAtomIter(atom3):
-            id = neighbour_atom.GetIdx()
-            if id != rot[1] + 1:
-                mask.append(id - 1)
-                atom6 = BABmol.GetAtom(id)
-                for neighbour_atom in openbabel.OBAtomAtomIter(atom6):
-                    id = neighbour_atom.GetIdx()
-                    if id != rot[2] + 1:
-                        mask.append(id - 1)
-                        atom7 = BABmol.GetAtom(id)
-                        for neighbour_atom in openbabel.OBAtomAtomIter(atom7):
-                            id = neighbour_atom.GetIdx()
-                            if id != atom6:
-                                mask.append(id - 1)
-        coAtoms.append(mask)
-    return rotors, coAtoms
+                            id3 = neighbour_atom.GetIdx()
+                            if id3 != id and C[id2-1][id3-1] == 1:
+                                mask.append(id3 - 1)
+                                atom6 = BABmol.GetAtom(id3)
+                                for neighbour_atom in openbabel.OBAtomAtomIter(atom6):
+                                    id4 = neighbour_atom.GetIdx()
+                                    if id4 != id2 and C[id3-1][id4-1] == 1:
+                                        mask.append(id4 - 1)
+        atom22  = BABmol.GetAtom(int(rot[2] + 1))
+        for neighbour_atom in openbabel.OBAtomAtomIter(atom22):
+            id5 = neighbour_atom.GetIdx()
+            if id5 != rot[1] + 1 and id5 != excluded and id5 != rot[3] + 1:
+                mask.append(id5 - 1)
+                atom42 = BABmol.GetAtom(id5)
+                for neighbour_atom in openbabel.OBAtomAtomIter(atom42):
+                    id6 = neighbour_atom.GetIdx()
+                    if id6 != rot[2] + 1:
+                        mask.append(id6 - 1)
+                        atom52 = BABmol.GetAtom(id6)
+                        for neighbour_atom in openbabel.OBAtomAtomIter(atom52):
+                            id7 = neighbour_atom.GetIdx()
+                            if id7 != id5 and C[id6-1][id7-1] == 1:
+                                mask.append(id7 - 1)
+                                atom62 = BABmol.GetAtom(id7)
+                                for neighbour_atom in openbabel.OBAtomAtomIter(atom62):
+                                    id8 = neighbour_atom.GetIdx()
+                                    if id8 != id6 and C[id6-1][id7-1] == 1:
+                                        mask.append(id8 - 1)
+
+
+
+        coAtoms2.append(mask)
+    return rotors, coAtoms2
 
 def get_bi_xyz(smile1, mol):
     mol1 = tl.getMolFromSmile(smile1)

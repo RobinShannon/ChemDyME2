@@ -207,38 +207,48 @@ class species:
             write('hindered_rotor' + str(count) + '.xyz', hinderance_traj)
             np.savetxt("hindered_rotor_energies" +str(count)+ ".txt", self.hinderance_potentials, delimiter ="\n")
 
-
-    def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor"):
+    def write_hindered_rotors(self, mol, rigid=False, increment=10, directory="hindered_rotor", partial=False):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
         os.makedirs(directory, exist_ok=True)
         os.chdir(directory)
-        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol, self.bonds_to_add)
         self.rotor_indexes = rotatable_bonds
         distances = []
         for bond in self.bonds_to_add:
-            dist = mol.get_distance(bond[0],bond[1])
+            dist = mol.get_distance(bond[0], bond[1])
             distances.append(dist)
 
-        for count,(b,co) in enumerate(zip(rotatable_bonds,coId)):
-            os.makedirs('Hind' +str(count), exist_ok=True)
+        for count, (b, co) in enumerate(zip(rotatable_bonds, coId)):
+            os.makedirs('Hind' + str(count), exist_ok=True)
             hmol = mol.copy()
             dihed = hmol.get_dihedral(*b)
             self.calculator.set_calculator(hmol, 'low')
             hinderance_potential = []
             hinderance_traj = []
             rng = 360.0 / float(increment)
-            for i in range(0,int(rng)):
+            for i in range(0, int(rng)):
                 hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
                 dihed = hmol.get_dihedral(*b)
                 del hmol.constraints
                 constraints = []
                 dihedral = [dihed, b]
                 constraints.append(FixInternals(dihedrals_deg=[dihedral]))
+                constraints.append(FixBondLengths(self.bonds_to_add, bondlengths=distances))
                 hmol.set_constraint(constraints)
+                if partial:
+                    try:
+                        opt = BFGS(hmol)
+                        opt.run(steps=2)
+                    except:
+                        pass
                 dihed += float(increment)
-                hmol._calc.minimise_stable_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                self.calculator.set_calculator(hmol, 'high')
+                hmol._calc.minimise_stable_write(dihedral=b, path="Hind" + str(count), title="H" + str(i), atoms=hmol)
+                self.calculator.set_calculator(hmol, 'low')
+                hinderance_traj.append(hmol.copy())
+            write('test' + str(count) + '.xyz', hinderance_traj)
         os.chdir(current_dir)
 
     def write_conformers(self,mol, rigid=False, increment = 60, directory="conformers"):

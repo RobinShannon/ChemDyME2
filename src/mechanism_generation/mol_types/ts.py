@@ -238,7 +238,7 @@ class ts(species):
                 if partial:
                     try:
                         opt = BFGS(hmol)
-                        opt.run(steps=5)
+                        opt.run(steps=2)
                     except:
                         pass
                 dihed += float(increment)
