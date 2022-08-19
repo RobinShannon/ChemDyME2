@@ -34,6 +34,6 @@ def refine_mol(dir):
 #vdw = bool(sys.argv[3])
 #refine_mol(sys.argv[1])
 
-is_ts = True
-is_vdw = False
-refine_mol('TS3')
+is_ts = False
+is_vdw = True
+refine_mol('Precomp3')

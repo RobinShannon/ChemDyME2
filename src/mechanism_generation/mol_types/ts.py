@@ -69,7 +69,7 @@ class ts(species):
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
-        data['hinderedAngles'] = self.hindered_angles
+        data['hinderedAngles'] = self.hinderance_angles
         data['hinderedBonds'] = self.hinderance_indexes
         data['imaginary_frequency'] = self.imaginary_frequency
         data['hessian'] = self.hessian
