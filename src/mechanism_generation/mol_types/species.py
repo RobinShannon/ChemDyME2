@@ -73,6 +73,7 @@ class species:
     def optimise(self, path, mol):
         pass
 
+    @abstractmethod
     def save_object(self, filename = 'mol.pkl'):
         with open(filename, 'wb') as outp:  # Overwrites any existing file.
             pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
