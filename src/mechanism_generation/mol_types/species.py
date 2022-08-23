@@ -15,6 +15,7 @@ import glob
 from ase.io import read
 import src.utility.tools as tl
 from ase.units import kJ, mol
+import pickle
 
 class species:
     def __init__(self, mol, calculator, dir):
@@ -71,6 +72,10 @@ class species:
     @abstractmethod
     def optimise(self, path, mol):
         pass
+
+    def save_object(self, filename = 'mol.pkl'):
+        with open(filename, 'wb') as outp:  # Overwrites any existing file.
+            pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
 
     @abstractmethod
     def get_frequencies(self):
