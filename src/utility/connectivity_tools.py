@@ -150,7 +150,12 @@ def get_changed_bonds(mol1, mol2):
     [ind2.append(item) for item in indicies if item not in ind2]
     return ind2
 
-def get_hbond_idxs(mol):
+def get_hbond_idxs(mol, is_vdw= False):
+    if is_vdw:
+        hbond = 2.1
+    else:
+        hbond = 1.95
+
     r = refBonds(mol)
     C = bondMatrix(r, mol)
     dref = refBonds(mol)
@@ -159,7 +164,7 @@ def get_hbond_idxs(mol):
     min_dist = 100000
     for i in range(1,size):
         for j in range(0,i):
-            if C[i][j] == 0 and dref[i][j] == 1.1 and mol.get_distance(i,j) < 1.6:
+            if C[i][j] == 0 and mol.get_distance(i,j) < hbond:
                 min_dist = (mol.get_distance(i,j) / dref[i][j])
                 indicies.append([i,j])
     return indicies
@@ -168,6 +173,13 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
     # Get list of atomic numbers and cartesian coords from ASEmol
     r = refBonds(mol)
     C = bondMatrix(r, mol)
+    if len(add_bonds) > 1:
+        C[add_bonds[0][0]][add_bonds[0][1]] = 1
+        C[add_bonds[0][1]][add_bonds[0][0]] = 1
+    if len(add_bonds) > 2:
+        C[add_bonds[1][0]][add_bonds[1][1]] = 1
+        C[add_bonds[1][1]][add_bonds[1][0]] = 1
+
     rotors = []
     rotatablebonds =[]
     atoms = mol.get_atomic_numbers()
@@ -261,7 +273,7 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
         atom2 = BABmol.GetAtom(int(rot[3] + 1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom2):
             id = neighbour_atom.GetIdx()
-            if id != rot[2] + 1 and id != excluded and C[int(rot[3])][id-1] == 1:
+            if id != rot[2] + 1 and id != excluded and C[int(rot[3])][id-1]:
                 mask.append(id - 1)
                 atom4 = BABmol.GetAtom(id)
                 for neighbour_atom in openbabel.OBAtomAtomIter(atom4):
@@ -286,7 +298,7 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
                 atom42 = BABmol.GetAtom(id5)
                 for neighbour_atom in openbabel.OBAtomAtomIter(atom42):
                     id6 = neighbour_atom.GetIdx()
-                    if id6 != rot[2] + 1:
+                    if id6 != rot[2] + 1 and id6 != rot[1] + 1:
                         mask.append(id6 - 1)
                         atom52 = BABmol.GetAtom(id6)
                         for neighbour_atom in openbabel.OBAtomAtomIter(atom52):

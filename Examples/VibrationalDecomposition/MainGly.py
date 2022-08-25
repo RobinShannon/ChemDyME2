@@ -23,6 +23,31 @@ import random
 from sella import Sella
 from ase.optimize import BFGS
 
+def gram_schmidt_columns(X):
+    Q, R = np.linalg.qr(X)
+    return Q
+
+def gs_cofficient(v1, v2):
+    return np.dot(v2, v1) / np.dot(v1, v1)
+
+def multiply(cofficient, v):
+    return map((lambda x : x * cofficient), v)
+
+def proj(v1, v2):
+    return multiply(gs_cofficient(v1, v2) , v1)
+
+def gs(X):
+    Y = []
+    for i in range(len(X)):
+        temp_vec = X[i]
+        for inY in Y :
+            proj_vec = proj(inY, X[i])
+            #print "i =", i, ", projection vector =", proj_vec
+            temp_vec = map(lambda x, y : x - y, temp_vec, proj_vec)
+            #print "i =", i, ", temporary vector =", temp_vec
+        Y.append(temp_vec)
+    return Y
+
 def convert_hessian_to_cartesian(Hess, m):
     masses = np.tile(m,(len(m),1))
     reduced_mass = 1/masses**0.5
@@ -111,6 +136,20 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 mol = read('MFGeoms/water.xyz')
+t = read('vib.0.traj', index=":")
+write('vib0.xyz',t)
+t = read('vib.1.traj', index=":")
+write('vib1.xyz',t)
+t = read('vib.2.traj', index=":")
+write('vib2.xyz',t)
+t = read('vib.3.traj', index=":")
+write('vib3.xyz',t)
+t = read('vib.4.traj', index=":")
+write('vib4.xyz',t)
+t = read('vib.5.traj', index=":")
+write('vib5.xyz',t)
+
+
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
 dyn = BFGS(mol)
 try:
@@ -123,7 +162,8 @@ vib.clean()
 vib.run()
 vib.summary(method='Frederiksen')
 np.save('MFGeoms/water.npy',vib.modes.T)
-
+vib.write_mode()
+print(gram_schmidt_columns(vib.modes))
 
 
 

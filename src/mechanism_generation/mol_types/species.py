@@ -219,7 +219,7 @@ class species:
         os.chdir(self.dir)
         os.makedirs(directory, exist_ok=True)
         os.chdir(directory)
-        rotatable_bonds, coId = CT.get_rotatable_bonds(mol, self.bonds_to_add)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol, self.bonds_to_add, combine=False)
         self.rotor_indexes = rotatable_bonds
         distances = []
         for bond in self.bonds_to_add:

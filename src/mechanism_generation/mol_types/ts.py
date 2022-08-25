@@ -75,7 +75,7 @@ class ts(species):
         data['hessian'] = self.hessian
         data['newBonds'] = self.bonds_to_add
         mes_mol = me_mol.meMolecule(self.mol, role = 'ts', **data)
-        mes_mol.write_cml(self.dir + '/mes.xml')
+        mes_mol.write_cml('mes.xml')
 
     def conformer_search(self, mol, directory='conformers'):
         current_dir = os.getcwd()
