@@ -154,7 +154,7 @@ def get_hbond_idxs(mol, is_vdw= False):
     if is_vdw:
         hbond = 2.1
     else:
-        hbond = 1.95
+        hbond = 1.6
 
     r = refBonds(mol)
     C = bondMatrix(r, mol)

@@ -63,7 +63,7 @@ class ts(species):
         self.vibs, self.zpe, self.imaginary_frequency, self.hessian = mol._calc.get_frequencies(path, mol, TS=True)
 
 
-    def write_cml(self):
+    def write_cml(self, coupled = False):
         data = {}
         data['zpe'] = self.energy['single'] + float(self.zpe)
         data['vibFreqs'] = self.vibs
@@ -74,7 +74,7 @@ class ts(species):
         data['imaginary_frequency'] = self.imaginary_frequency
         data['hessian'] = self.hessian
         data['newBonds'] = self.bonds_to_add
-        mes_mol = me_mol.meMolecule(self.mol, role = 'ts', **data)
+        mes_mol = me_mol.meMolecule(self.mol, role = 'ts', coupled = coupled, **data)
         mes_mol.write_cml('mes.xml')
 
     def conformer_search(self, mol, directory='conformers'):

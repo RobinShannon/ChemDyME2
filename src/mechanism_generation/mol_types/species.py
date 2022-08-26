@@ -55,6 +55,10 @@ class species:
             self.calculator.set_calculator(self.mol, 'high')
         else:
             self.calculator.set_calculator(self.mol, 'low')
+            if len(self.mol.get_masses()) > 1:
+                self.calculator.set_calculator(self.mol, 'low')
+                self.get_frequencies('High/', self.mol)
+            self.calculator.set_calculator(self.mol, 'low')
         if bimolecular:
             self.energy['bimolecular_high'] = self.mol.get_potential_energy() * mol / kJ
         else:

@@ -22,6 +22,42 @@ from ase import units
 import random
 from sella import Sella
 from ase.optimize import BFGS
+import src.utility.connectivity_tools as CT
+
+
+def get_moments_of_inertia(mol):
+    """Get the moments of inertia along the principal axes.
+
+    The three principal moments of inertia are computed from the
+    eigenvalues of the symmetric inertial tensor. Periodic boundary
+    conditions are ignored. Units of the moments of inertia are
+    amu*angstrom**2.
+    """
+    com = mol.get_center_of_mass()
+    positions = mol.get_positions()
+    positions -= com  # translate center of mass to origin
+    masses = mol.get_masses()
+
+    # Initialize elements of the inertial tensor
+    I11 = I22 = I33 = I12 = I13 = I23 = 0.0
+    for i in range(len(mol)):
+        x, y, z = positions[i]
+        m = masses[i]
+
+        I11 += m * (y ** 2 + z ** 2)
+        I22 += m * (x ** 2 + z ** 2)
+        I33 += m * (x ** 2 + y ** 2)
+        I12 += -m * x * y
+        I13 += -m * x * z
+        I23 += -m * y * z
+
+    Itensor = np.array([[I11, I12, I13],
+                        [I12, I22, I23],
+                        [I13, I23, I33]])
+
+    evals, evecs = np.linalg.eigh(Itensor)
+    return evecs, Itensor
+
 
 def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
