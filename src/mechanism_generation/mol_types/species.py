@@ -78,9 +78,12 @@ class species:
         pass
 
     @abstractmethod
-    def save_object(self, filename = 'mol.pkl'):
+    def save_object(self, directory, filename = 'mol.pkl'):
+        current_dir = os.getcwd()
+        os.chdir(directory)
         with open(filename, 'wb') as outp:  # Overwrites any existing file.
             pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
+        os.chdir(current_dir)
 
     @abstractmethod
     def get_frequencies(self):
