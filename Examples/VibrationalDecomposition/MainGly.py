@@ -1,7 +1,10 @@
+import numpy
+
 try:
     import src.bxd.collective_variable as CV
 except:
     pass
+import scipy
 import src.bxd.ProgressMetric as PM
 import src.molecular_dynamics.md_Integrator as MD
 import src.bxd.bxd_constraint as BXD
@@ -22,6 +25,8 @@ from ase import units
 import random
 from sella import Sella
 from ase.optimize import BFGS
+import math
+import copy
 import src.utility.connectivity_tools as CT
 
 
@@ -56,8 +61,51 @@ def get_moments_of_inertia(mol):
                         [I13, I23, I33]])
 
     evals, evecs = np.linalg.eigh(Itensor)
+    absevec = abs(evecs)
+    sum_of_rows = absevec.sum(axis=0)
+    evecs = evecs / sum_of_rows[np.newaxis, :]
+    is_normal = np.dot(evecs[:,0],evecs[:,1])
+    is_normal = np.dot(evecs[:,0],evecs[:,2])
+    is_normal = np.dot(evecs[:,1],evecs[:,2])
     return evecs, Itensor
 
+def get_translational_vectors(mol):
+    T = np.zeros((3,len(mol)*3))
+    masses = mol.get_masses()
+    for i in range(len(mol)):
+        m = masses[i]
+        T[0][(i*3)] = math.sqrt(m)
+        T[1][(i*3)+1] = math.sqrt(m)
+        T[2][(i * 3) + 2] = math.sqrt(m)
+    row_sums = T.sum(axis=1)
+    T_normalised = T / row_sums[:, np.newaxis]
+    return T_normalised
+
+def get_rotational_vectors(mol, X):
+    com = mol.get_center_of_mass()
+    positions = mol.get_positions()
+    positions -= com  # translate center of mass to origin
+    Rot = np.zeros((3,len(mol)*3))
+    R = np.asarray(positions)
+    Px = np.dot(R,X[0,:])
+    Py = np.dot(R,X[1,:])
+    Pz = np.dot(R,X[2,:])
+    masses = mol.get_masses()
+    for i in range(len(mol)):
+        m = math.sqrt(masses[i])
+        for j in range(0,3):
+            Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) * m
+            Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) * m
+            Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) * m
+    RotGS = gram_schmidt_columns(Rot.T).T
+    Rot[2,:] = RotGS[2,:]
+    absR = abs(Rot)
+    row_sums = absR.sum(axis=1)
+    Rot_normalised = Rot / row_sums[:, np.newaxis]
+    is_normal = np.dot(Rot[0,:],Rot[1,:])
+    is_normal = np.dot(Rot[0, :], Rot[2, :])
+    is_normal = np.dot(Rot[1, :], Rot[2, :])
+    return Rot_normalised
 
 def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
@@ -88,10 +136,19 @@ def convert_hessian_to_cartesian(Hess, m):
     masses = np.tile(m,(len(m),1))
     reduced_mass = 1/masses**0.5
     H = np.multiply(Hess,reduced_mass.T)
-    sum_of_rows = H.sum(axis=0)
-    normalized_array = H / sum_of_rows[np.newaxis, :]
+    absH = abs(H)
+    sum_of_rows = absH.sum(axis=0)
+    normalized_array = H / sum_of_rows[np.newaxis,:]
     return normalized_array
 
+def convert_hessian_to_cartesian2(Hess, m):
+    masses = np.tile(m,(3,1))
+    reduced_mass = 1/masses**0.5
+    H = np.multiply(Hess,reduced_mass.T)
+    absH = abs(H)
+    sum_of_rows = absH.sum(axis=0)
+    normalized_array = H / sum_of_rows[np.newaxis,:]
+    return normalized_array
 
 def generate_displacements(mol, disp, rand_dis, seccond_order):
     copy = mol.copy()
@@ -171,35 +228,101 @@ def get_rot_tran(coord_true, coord_pred):
     model_coords_rotated = np.dot(coord_pred, rot)
 
     return rot, model_coords_rotated
-mol = read('MFGeoms/water.xyz')
-t = read('vib.0.traj', index=":")
-write('vib0.xyz',t)
-t = read('vib.1.traj', index=":")
-write('vib1.xyz',t)
-t = read('vib.2.traj', index=":")
-write('vib2.xyz',t)
-t = read('vib.3.traj', index=":")
-write('vib3.xyz',t)
-t = read('vib.4.traj', index=":")
-write('vib4.xyz',t)
-t = read('vib.5.traj', index=":")
-write('vib5.xyz',t)
+
+mol = read('FormGeoms/HCO_1removed.xyz')
 
 
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
 dyn = BFGS(mol)
-try:
-    dyn.run(1e-3, 1000)
-except:
-    pass
-write('bad_product.xyz',mol)
+dyn.run(1e-7, 1000)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
-vib.summary(method='Frederiksen')
-np.save('MFGeoms/water.npy',vib.modes.T)
-vib.write_mode()
-print(gram_schmidt_columns(vib.modes))
+vib.summary()
+vib.clean()
+L = vib.modes
+T = get_translational_vectors(mol)
+X,I = get_moments_of_inertia(mol)
+R = get_rotational_vectors(mol, X.T)
+
+L[0:3,:] = copy.deepcopy(T)
+L[3:6,:] = copy.deepcopy(R)
+new = L.T
+is_normal = np.dot(new[:,3],new[:,0])
+is_normal = np.dot(new[:,3],new[:,1])
+is_normal = np.dot(new[:,3],new[:,2])
+is_normal = np.dot(new[:,3],new[:,4])
+is_normal = np.dot(new[:,3],new[:,5])
+is_normal = np.dot(new[:,3],new[:,6])
+is_normal = np.dot(new[:,3],new[:,7])
+is_normal = np.dot(new[:,3],new[:,8])
+newGS = (gram_schmidt_columns(L.T))
+new[:,6:9] = copy.deepcopy(newGS[:,6:9])
+is_normal = np.dot(new[:,3],new[:,4])
+is_normal = np.dot(new[:,3],new[:,5])
+is_normal = np.dot(new[:,3],new[:,6])
+is_normal = np.dot(new[:,3],new[:,7])
+is_normal = np.dot(new[:,3],new[:,8])
+#new_converted = L.T
+masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
+new_converted = convert_hessian_to_cartesian(new,masses)
+is_normal = np.dot(new[:,3],new[:,4])
+is_normal = np.dot(new[:,3],new[:,5])
+is_normal = np.dot(new[:,3],new[:,6])
+is_normal = np.dot(new[:,3],new[:,7])
+is_normal = np.dot(new[:,3],new[:,8])
+
+np.save('FormGeoms/HCO_GS.npy', new_converted)
+mode1 = new_converted[:,3].reshape(3,3)
+mode1_traj= []
+com = mol.get_center_of_mass()
+positions = mol.get_positions()
+positions -= com
+mol.set_positions(positions)
+for i in range(0,30):
+    mode1_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode1)
+write('WaterModes/t1.xyz', mode1_traj)
+
+mode2 = new_converted[:,4].reshape(3,3)
+mode2_traj= []
+mol.set_positions(positions)
+for i in range(0,30):
+    mode2_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode2)
+write('WaterModes/t2.xyz', mode2_traj)
+
+mode3 = new_converted[:,5].reshape(3,3)
+mode3_traj= []
+mol.set_positions(positions)
+for i in range(0,30):
+    mode3_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode3)
+write('WaterModes/t3.xyz', mode3_traj)
+
+mode4 = new_converted[:,6].reshape(3,3)
+mode4_traj= []
+mol.set_positions(positions)
+for i in range(0,30):
+    mode4_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode4)
+write('WaterModes/t4.xyz', mode4_traj)
+
+mode5 = new_converted[:,7].reshape(3,3)
+mode5_traj= []
+mol.set_positions(positions)
+for i in range(0,30):
+    mode5_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode5)
+write('WaterModes/t5.xyz', mode5_traj)
+
+mode6 = new_converted[:,8].reshape(3,3)
+mode6_traj= []
+mol.set_positions(positions)
+for i in range(0,30):
+    mode6_traj.append(mol.copy())
+    mol.set_positions(mol.get_positions() + 0.1 * mode6)
+write('WaterModes/t6.xyz', mode6_traj)
 
 
 

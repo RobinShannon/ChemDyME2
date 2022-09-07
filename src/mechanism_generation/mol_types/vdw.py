@@ -28,7 +28,8 @@ class vdw(species):
         self.combined_mol = mol.copy()
         self.calculator.set_calculator(self.combined_mol, 'low')
         self.smiles = 'vdw_' + str(smiles[0]) + '_' + str(smiles[1])
-        self.bonds_to_add = CT.get_hbond_idxs(self.mol, is_vdw=True)
+        self.fragments = CT.get_fragments()
+        self.bonds_to_add = CT.get_hbond_idxs(self.mol, self.fragments, is_vdw=True)
 
     def optimise(self, path, mol):
         mol._calc.minimise_stable(path=path, atoms=mol)

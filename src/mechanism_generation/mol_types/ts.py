@@ -31,6 +31,7 @@ class ts(species):
         self.hessian =[]
         self.real_saddle = False
         self.name = name
+        self.fragments = CT.get_fragments(mol)
         write(str(self.dir) + '/tsguess.xyz', self.mol)
         if reac != None and prod != None:
             write(str(self.dir) + '/reac.xyz', self.rmol)
@@ -38,7 +39,7 @@ class ts(species):
             self.bonds_to_add = CT.get_changed_bonds(self.rmol, self.pmol)
             self.pre_optimise()
         else:
-            self.bonds_to_add = CT.get_hbond_idxs(self.mol)
+            self.bonds_to_add = CT.get_hbond_idxs(self.mol, self.fragments)
 
     def pre_optimise(self):
         self.calculator.set_calculator(self.mol, 'low')

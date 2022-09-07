@@ -31,8 +31,8 @@ def refine_mol(dir):
         import os
         with open(str(dir) +'/mol.pkl', 'rb') as inp:
             sp = pickle.load(inp)
-        #sp = ts.ts(mol, calculator_manager, dir = dir)
-        #sp.write_hindered_rotors(mol, partial = True)
+        sp = ts.ts(mol, calculator_manager, dir = dir)
+        sp.write_hindered_rotors(mol, partial = True)
         sp.read_hindered_files(str(dir))
         sp.write_cml(coupled=True)
 

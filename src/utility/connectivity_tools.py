@@ -150,24 +150,85 @@ def get_changed_bonds(mol1, mol2):
     [ind2.append(item) for item in indicies if item not in ind2]
     return ind2
 
-def get_hbond_idxs(mol, is_vdw= False):
-    if is_vdw:
-        hbond = 2.1
-    else:
-        hbond = 1.6
+def get_hbond_idxs(mol, fragments, is_vdw= False):
+
+
+    r = refBonds(mol)
+    C = bondMatrix(r, mol)
+    dref = refBonds(mol)
+    size =len(mol.get_positions())
+    bond_dict = {}
+    if len(fragments) == 2:
+        for i in range(0,size):
+            for j in range(0,size):
+                if (i in fragments[0] and j in fragments[1]) or (i in fragments[1] and j in fragments[0]):
+                    bond_dict[(i,j)] = C[i][j]
+        indicies = sorted(bond_dict, key=bond_dict.get)
+        if is_vdw:
+            indicies = indicies[0:1]
+        else:
+            indicies = indicies[0:2]
+    if len(fragments) == 3 and not is_vdw:
+        min_length = size
+        for i,frag in enumerate(fragments):
+            if len(frag) < min_length:
+                min_length = len(frag)
+                transfering_group = i
+                idx = fragments[transfering_group][0]
+        for j in range(0,size):
+            if j not in fragments[transfering_group]:
+                bond_dict[(idx, j)] = mol.get_distance(idx,j)
+        indicies = sorted(bond_dict, key=bond_dict.get)
+        indicies = indicies[0:2]
+
+    return indicies
+
+def get_fragments(mol):
 
     r = refBonds(mol)
     C = bondMatrix(r, mol)
     dref = refBonds(mol)
     size =len(mol.get_positions())
     indicies = []
-    min_dist = 100000
-    for i in range(1,size):
-        for j in range(0,i):
-            if C[i][j] == 0 and mol.get_distance(i,j) < hbond:
-                min_dist = (mol.get_distance(i,j) / dref[i][j])
-                indicies.append([i,j])
-    return indicies
+    fragments = []
+    not_found = []
+    moiety1 = []
+    moiety1.append(0)
+    for i in range(0,size):
+        for j in range(0,size):
+            if C[i][j] == 1 and j in moiety1 and not i in moiety1:
+                moiety1.append(i)
+    fragments.append(moiety1)
+    new_start = np.inf
+    for i in range(0,size):
+        if not i in moiety1:
+            new_start = i
+            break
+
+    if new_start != np.inf:
+        moiety2 = []
+        moiety2.append(new_start)
+        for i in range(0,size):
+            for j in range(0,size):
+                if C[i][j] == 1 and j in moiety2 and not i in moiety2:
+                    moiety2.append(i)
+        fragments.append(moiety2)
+
+    new_start = np.inf
+    for i in range(0,size):
+        if not i in moiety1 and not i in moiety2:
+            new_start = i
+            break
+    if new_start != np.inf:
+        moiety3 = []
+        moiety3.append(new_start)
+        for i in range(0,size):
+            for j in range(0,size):
+                if C[i][j] == 1 and j in moiety3 and not i in moiety3:
+                    moiety3.append(i)
+        fragments.append(moiety3)
+    return fragments
+
 
 def get_rotatable_bonds(mol, add_bonds, combine = True):
     # Get list of atomic numbers and cartesian coords from ASEmol
