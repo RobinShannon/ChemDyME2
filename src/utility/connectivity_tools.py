@@ -165,9 +165,9 @@ def get_hbond_idxs(mol, fragments, is_vdw= False):
                     bond_dict[(i,j)] = C[i][j]
         indicies = sorted(bond_dict, key=bond_dict.get)
         if is_vdw:
-            indicies = indicies[0:1]
-        else:
             indicies = indicies[0:2]
+        else:
+            indicies = indicies[0:1]
     if len(fragments) == 3 and not is_vdw:
         min_length = size
         for i,frag in enumerate(fragments):

@@ -29,8 +29,8 @@ def refine_mol(dir):
     else:
         calculator_manager = cm.calculator_manager(trajectory = low, low=low, high=high, single_point=low, calc_hindered_rotors=False, multi_level=False)
         import os
-        with open(str(dir) +'/mol.pkl', 'rb') as inp:
-            sp = pickle.load(inp)
+        #with open(str(dir) +'/mol.pkl', 'rb') as inp:
+        #    sp = pickle.load(inp)
         sp = ts.ts(mol, calculator_manager, dir = dir)
         sp.write_hindered_rotors(mol, partial = True)
         sp.read_hindered_files(str(dir))
@@ -42,4 +42,4 @@ def refine_mol(dir):
 
 is_ts = True
 is_vdw = False
-refine_mol('TS2')
+refine_mol('TS1')
