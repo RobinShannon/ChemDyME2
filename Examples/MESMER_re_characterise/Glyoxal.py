@@ -42,4 +42,4 @@ def refine_mol(dir):
 
 is_ts = True
 is_vdw = False
-refine_mol('TS1')
+refine_mol('DecompTS')

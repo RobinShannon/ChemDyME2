@@ -27,6 +27,7 @@ from sella import Sella
 from ase.optimize import BFGS
 import math
 import copy
+#from src.Calculators.XtbCalculator import XTB
 import src.utility.connectivity_tools as CT
 
 
@@ -229,7 +230,7 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-mol = read('FormGeoms/HCO_1removed.xyz')
+mol = read('MFGeoms/[CH2]OC=O_1.xyz')
 
 
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
@@ -272,7 +273,7 @@ is_normal = np.dot(new[:,3],new[:,6])
 is_normal = np.dot(new[:,3],new[:,7])
 is_normal = np.dot(new[:,3],new[:,8])
 
-np.save('FormGeoms/HCO_GS.npy', new_converted)
+np.save('MFGeoms/CO[CH2]OC=O_1_GS.npy', new_converted)
 mode1 = new_converted[:,3].reshape(3,3)
 mode1_traj= []
 com = mol.get_center_of_mass()
@@ -329,7 +330,7 @@ write('WaterModes/t6.xyz', mode6_traj)
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
 write('GlyoxalGeoms/GlyoxalPaths.xyz',GlyIRC)
 narupa_mol = GlyIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1510000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 for i in GlyIRC:
     narupa_mol.set_positions(i.get_positions())

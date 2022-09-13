@@ -162,7 +162,7 @@ def get_hbond_idxs(mol, fragments, is_vdw= False):
         for i in range(0,size):
             for j in range(0,size):
                 if (i in fragments[0] and j in fragments[1]) or (i in fragments[1] and j in fragments[0]):
-                    bond_dict[(i,j)] = C[i][j]
+                    bond_dict[(i,j)] = mol.get_distance(i,j)
         indicies = sorted(bond_dict, key=bond_dict.get)
         if is_vdw:
             indicies = indicies[0:2]

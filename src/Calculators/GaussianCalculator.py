@@ -168,27 +168,17 @@ class Gaussian(FileIOCalculator):
         opt.run(steps=100, opt='calcall, cartesian')
         os.chdir(current_dir)
 
-    def minimise_stable_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
+    def minimise_stable_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid = False):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
 
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)
-            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)', addsec=str(mod), **self.parameters)
-        else:
-            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall)', **self.parameters)
-        os.chdir(current_dir)
-
-    def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
-        current_dir = os.getcwd()
-        os.makedirs(path, exist_ok=True)
-        os.chdir(path)
-
-
-        if dihedral != None:
-            mod = self.get_modred_lines(dihedral)
-            write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+            if rigid:
+                write(str(title) + '.com', atoms, format='gaussian-in', addsec=str(mod), **self.parameters)
+            else:
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)',addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
             lines.pop(-4)
@@ -197,7 +187,36 @@ class Gaussian(FileIOCalculator):
             f.writelines(lines)
             f.close()
         else:
-            write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
+            if rigid:
+                write(str(title) + '.com', atoms, format='gaussian-in', **self.parameters)
+            else:
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)' **self.parameters)
+        os.chdir(current_dir)
+
+    def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
+
+
+        if dihedral != None:
+            mod = self.get_modred_lines(dihedral)
+            if not rigid:
+                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+            else:
+                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', addsec=str(mod), **self.parameters)
+            f=open(str(title) + '.com','r')
+            lines = f.readlines()
+            lines.pop(-4)
+            f.close()
+            f=open(str(title) + '.com','w')
+            f.writelines(lines)
+            f.close()
+        else:
+            if not rigid:
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall,ts,noeigentest)', **self.parameters)
+            else:
+                write(str(title) + '.com', atoms, format='gaussian-in', **self.parameters)
         os.chdir(current_dir)
 
 

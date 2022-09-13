@@ -258,7 +258,7 @@ class species:
                         pass
                 dihed += float(increment)
                 self.calculator.set_calculator(hmol, 'high')
-                hmol._calc.minimise_stable_write(dihedral=b, path="Hind" + str(count), title="H" + str(i), atoms=hmol)
+                hmol._calc.minimise_stable_write(dihedral=b, path="Hind" + str(count), title="H" + str(i), atoms=hmol, rigid=rigid)
                 self.calculator.set_calculator(hmol, 'low')
                 hinderance_traj.append(hmol.copy())
             write('test' + str(count) + '.xyz', hinderance_traj)
