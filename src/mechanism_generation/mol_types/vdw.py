@@ -1,5 +1,5 @@
-import src.utility.connectivity_tools as CT
-import src.utility.tools as TL
+import src.Utility.connectivity_tools as CT
+import src.Utility.Tools as TL
 from ase.constraints import FixInternals, FixAtoms, FixBondLength, FixBondLengths
 from ase.optimize.sciopt import SciPyFminBFGS as BFGS
 import math
@@ -28,7 +28,7 @@ class vdw(species):
         self.combined_mol = mol.copy()
         self.calculator.set_calculator(self.combined_mol, 'low')
         self.smiles = 'vdw_' + str(smiles[0]) + '_' + str(smiles[1])
-        self.fragments = CT.get_fragments()
+        self.fragments = CT.get_fragments(mol)
         self.bonds_to_add = CT.get_hbond_idxs(self.mol, self.fragments, is_vdw=True)
 
     def optimise(self, path, mol):

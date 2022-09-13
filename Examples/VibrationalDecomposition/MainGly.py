@@ -230,7 +230,7 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-mol = read('MFGeoms/[CH2]OC=O_1.xyz')
+mol = read('MFGeoms/CO[C]=O.xyz')
 
 
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
@@ -258,7 +258,7 @@ is_normal = np.dot(new[:,3],new[:,6])
 is_normal = np.dot(new[:,3],new[:,7])
 is_normal = np.dot(new[:,3],new[:,8])
 newGS = (gram_schmidt_columns(L.T))
-new[:,6:9] = copy.deepcopy(newGS[:,6:9])
+new[:,6:21] = copy.deepcopy(newGS[:,6:21])
 is_normal = np.dot(new[:,3],new[:,4])
 is_normal = np.dot(new[:,3],new[:,5])
 is_normal = np.dot(new[:,3],new[:,6])
@@ -273,7 +273,7 @@ is_normal = np.dot(new[:,3],new[:,6])
 is_normal = np.dot(new[:,3],new[:,7])
 is_normal = np.dot(new[:,3],new[:,8])
 
-np.save('MFGeoms/CO[CH2]OC=O_1_GS.npy', new_converted)
+np.save('MFGeoms/CO[C]=O_GS.npy', new_converted)
 mode1 = new_converted[:,3].reshape(3,3)
 mode1_traj= []
 com = mol.get_center_of_mass()

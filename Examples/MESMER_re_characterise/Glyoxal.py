@@ -1,4 +1,4 @@
-import src.mechanism_generation.calculator_manager as cm
+import src.mechanism_generation.Calculator_manager as cm
 from src.mechanism_generation.mol_types import ts, well, vdw
 import sys
 from ase.io import read
@@ -7,14 +7,14 @@ from src.Calculators.GaussianCalculator import Gaussian
 import pickle
 
 def refine_mol(dir):
-    mol = read(str(dir)+'/tsguess.xyz')
+    mol = read(str(dir)+'/min.xyz')
     low =XTB(method="GFN2xTB", electronic_temperature=1000)
     high = Gaussian(
         nprocshared=1,
         label='Gauss',
         method='M062x',
         basis='6-31+G**',
-        mult=int(1),
+        mult=int(2),
         scf='qc'
     )
     if is_ts != True:
@@ -40,6 +40,6 @@ def refine_mol(dir):
 #vdw = bool(sys.argv[3])
 #refine_mol(sys.argv[1])
 
-is_ts = True
-is_vdw = False
-refine_mol('DecompTS')
+is_ts = False
+is_vdw = True
+refine_mol('Postcomp1')
