@@ -151,8 +151,6 @@ def get_changed_bonds(mol1, mol2):
     return ind2
 
 def get_hbond_idxs(mol, fragments, is_vdw= False):
-
-
     r = refBonds(mol)
     C = bondMatrix(r, mol)
     dref = refBonds(mol)

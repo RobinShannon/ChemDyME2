@@ -9,7 +9,7 @@ from ase.calculators.calculator import FileIOCalculator, EnvironmentError
 from pathlib import Path
 from shutil import copyfile
 import re
-import src.Utility.Tools as tl
+import src.utility.tools as tl
 
 class GaussianDynamics:
     calctype = 'optimizer'

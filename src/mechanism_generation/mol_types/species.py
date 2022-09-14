@@ -1,4 +1,4 @@
-import src.Utility.connectivity_tools as CT
+import src.utility.connectivity_tools as CT
 from ase.constraints import FixInternals, FixBondLengths
 from ase.optimize.sciopt import SciPyFminBFGS as BFGS
 import math
@@ -13,7 +13,7 @@ import os
 import numpy as np
 import glob
 from ase.io import read
-import src.Utility.Tools as tl
+import src.utility.tools as tl
 from ase.units import kJ, mol
 import pickle
 

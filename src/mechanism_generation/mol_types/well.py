@@ -1,6 +1,6 @@
 
-import src.Utility.connectivity_tools as CT
-import src.Utility.Tools as TL
+import src.utility.connectivity_tools as CT
+import src.utility.tools as TL
 from ase.constraints import FixInternals, FixAtoms, FixBondLength, FixBondLengths
 from ase.optimize.sciopt import SciPyFminBFGS as BFGS
 import math
