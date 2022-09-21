@@ -190,7 +190,7 @@ class Gaussian(FileIOCalculator):
             if rigid:
                 write(str(title) + '.com', atoms, format='gaussian-in', **self.parameters)
             else:
-                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)' **self.parameters)
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall)', **self.parameters)
         os.chdir(current_dir)
 
     def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
