@@ -233,8 +233,9 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
     r = refBonds(mol)
     C = bondMatrix(r, mol)
 
-    C[add_bonds[0][0]][add_bonds[0][1]] = 1
-    C[add_bonds[0][1]][add_bonds[0][0]] = 1
+    if len(add_bonds) != 0:
+        C[add_bonds[0][0]][add_bonds[0][1]] = 1
+        C[add_bonds[0][1]][add_bonds[0][0]] = 1
     if len(add_bonds) > 1:
         C[add_bonds[1][0]][add_bonds[1][1]] = 1
         C[add_bonds[1][1]][add_bonds[1][0]] = 1
