@@ -273,7 +273,7 @@ class ts(species):
                 hmol.set_dihedral(b[0], b[1], b[2], b[3], dihed, indices=co)
                 del hmol.constraints
                 constraints =[]
-                constraints.append(FixInternals(dihedrals_deg=[dihedral]))
+                constraints.append(FixInternals(dihedrals_deg=[dihed]))
                 constraints.append(FixBondLengths(self.bonds_to_add, bondlengths=distances))
                 hmol.set_constraint(constraints)
                 if partial:
@@ -283,6 +283,8 @@ class ts(species):
                     except:
                         pass
                 dihed += float(increment)
+                self.calculator.set_calculator(hmol, 'high')
                 hmol._calc.minimise_ts_write( path = "Hind"+str(count), title="H" +str(i), atoms= hmol)
+                self.calculator.set_calculator(hmol, 'low')
         os.chdir(current_dir)
 

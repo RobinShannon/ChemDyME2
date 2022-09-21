@@ -109,7 +109,7 @@ def getCOMdel(Mol, frag):
 # Set up a reference matrix for ideal bond length between any two atoms in the system
 # Maps mol_types types onto a grid of stored ideal bond distances stored in the global variables module
 def refBonds(mol):
-    dict = {'CN' : 1.6, 'NC': 1.6, 'HN' : 1.0, 'NH' : 1.0, 'ON' :1.6, 'NO' : 1.6, 'NN' : 1.4, 'CC' : 1.6, 'CH' : 1.1, 'HC' : 1.1, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.1, 'HO' : 1.1, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
+    dict = {'CN' : 1.6, 'NC': 1.6, 'HN' : 1.0, 'NH' : 1.0, 'ON' :1.6, 'NO' : 1.6, 'NN' : 1.4, 'CC' : 1.6, 'CH' : 1.1, 'HC' : 1.1, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.1, 'HO' : 1.1, 'OO' : 1.9, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
     size =len(mol.get_positions())
     symbols = mol.get_chemical_symbols()
     dRef = np.zeros((size,size))
@@ -194,8 +194,8 @@ def get_fragments(mol):
     moiety1.append(0)
     for i in range(0,size):
         for j in range(0,size):
-            if C[i][j] == 1 and j in moiety1 and not i in moiety1:
-                moiety1.append(i)
+            if C[i][j] == 1 and i in moiety1 and not j in moiety1:
+                moiety1.append(j)
     fragments.append(moiety1)
     new_start = np.inf
     for i in range(0,size):
@@ -208,8 +208,8 @@ def get_fragments(mol):
         moiety2.append(new_start)
         for i in range(0,size):
             for j in range(0,size):
-                if C[i][j] == 1 and j in moiety2 and not i in moiety2:
-                    moiety2.append(i)
+                if C[i][j] == 1 and i in moiety2 and not j in moiety2:
+                    moiety2.append(j)
         fragments.append(moiety2)
 
     new_start = np.inf

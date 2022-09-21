@@ -7,7 +7,7 @@ from src.Calculators.GaussianCalculator import Gaussian
 import pickle
 
 def refine_mol(dir):
-    mol = read(str(dir)+'/min.xyz')
+    mol = read(str(dir)+'/Gaussgaussian.log')
     low =XTB(method="GFN2xTB", electronic_temperature=1000)
     high = Gaussian(
         nprocshared=1,
@@ -32,7 +32,8 @@ def refine_mol(dir):
         #with open(str(dir) +'/mol.pkl', 'rb') as inp:
         #    sp = pickle.load(inp)
         sp = ts.ts(mol, calculator_manager, dir = dir)
-        sp.write_hindered_rotors(mol, partial = True)
+        sp.write_hindered_rotors(mol, partial=True)
+        sp.write_conformers(mol, partial = True)
         sp.read_hindered_files(str(dir))
         sp.write_cml(coupled=True)
 
@@ -40,6 +41,6 @@ def refine_mol(dir):
 #vdw = bool(sys.argv[3])
 #refine_mol(sys.argv[1])
 
-is_ts = False
-is_vdw = True
-refine_mol('Postcomp1')
+is_ts = True
+is_vdw = False
+refine_mol('Meth_QOOH')
