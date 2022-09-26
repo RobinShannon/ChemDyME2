@@ -1,4 +1,4 @@
-import src.MechanismGeneration.species.species as Species
+import src.mechanism_generation.mol_types.species as Species
 import src.utility.connectivity_tools as CT
 from ase.optimize import BFGS
 from ase.constraints import FixAtoms

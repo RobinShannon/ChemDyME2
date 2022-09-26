@@ -1,12 +1,12 @@
 import os
-import src.MechanismGeneration.reaction as rxn
+import src.mechanism_generation.reaction as rxn
 import src.molecular_dynamics.trajectory as Traj
 import src.bxd.collective_variable as CV
 import src.bxd.ProgressMetric as PM
 import src.bxd.bxd_constraint as BXD
 import gc
 
-import src.MechanismGeneration.species.species as Species
+import src.mechanism_generation.mol_types.species as Species
 
 
 class ReactionNetwork:
