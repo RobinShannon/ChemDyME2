@@ -35,7 +35,7 @@ class vdw(species):
         mol._calc.minimise_stable(path=path, atoms=mol)
         self.mol = mol.copy()
 
-    def get_frequencies(self, path, bimolecular, mol):
+    def get_frequencies(self, path, mol):
         self.vibs, self.zpe, imag, self.hessian = mol._calc.get_frequencies(path, mol)
 
     def write_cml(self):

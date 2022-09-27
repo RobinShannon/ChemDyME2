@@ -16,17 +16,13 @@ import numpy as np
 min_scan = []
 mol = read('scan.log', index=':')
 del mol[-1]
+old_dist = 0
 for i,frame in enumerate(mol):
-    previous = 100
-    next = 100
-    if i > 0:
-        previous= np.amax(mol[i-1].get_potential_energy())
-    if i < len(mol)-1:
-        next = np.amax(mol[i+1].get_potential_energy())
-    current = np.amax(frame.get_potential_energy())
-    if  current < previous and current < next:
-        min_scan.append(frame.copy())
-        print(current)
+    dist = frame.get_distance(1,4)
+    if dist > old_dist + 0.05:
+        min_scan.append(mol[i].copy())
+        print(mol[i].get_potential_energy())
+    old_dist = dist
 
 write('min_scan.xyz', min_scan)
 
