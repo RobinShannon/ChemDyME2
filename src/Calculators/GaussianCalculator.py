@@ -278,6 +278,7 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern = r'NImag=0\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
+                substring = substring.strip()
                 hessian = substring.split(",")
         except:
             hessian =[]
@@ -330,6 +331,7 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern =r'NImag=1\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
+                substring = substring.strip()
                 hessian = substring.split(",")
         except:
             hessian =[]
