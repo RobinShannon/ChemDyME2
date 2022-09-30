@@ -11,6 +11,7 @@ from shutil import copyfile
 import re
 import src.utility.tools as tl
 import re
+import string
 
 class GaussianDynamics:
     calctype = 'optimizer'
@@ -279,7 +280,8 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern = r'NImag=0\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
-                substring = re.sub('\s+','',substring)
+                for elem in string.whitespace:
+                   substring = substring.replace(elem, '')
                 hessian = ' '.join(substring.split(","))
         except:
             hessian =[]
@@ -332,7 +334,8 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern =r'NImag=1\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
-                substring = re.sub('\s+','',substring)
+                for elem in string.whitespace:
+                   substring = substring.replace(elem, '')
                 hessian = ' '.join(substring.split(","))
         except:
             hessian =[]
