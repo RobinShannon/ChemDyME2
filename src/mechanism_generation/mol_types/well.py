@@ -46,7 +46,7 @@ class well(species):
         else:
             self.vibs, self.zpe, imag, self.hessian = mol._calc.get_frequencies(path, mol)
 
-    def write_cml(self):
+    def write_cml(self, coupled = False):
         data = {}
         data['zpe'] = self.energy['single'] + float(self.zpe)
         data['vibFreqs'] = self.vibs
@@ -54,5 +54,5 @@ class well(species):
         data['hinderedRotors'] = self.hinderance_potentials
         data['hinderedBonds'] = self.hinderance_indexes
         data['hessian'] = self.hessian
-        mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', **data)
+        mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled = coupled, **data)
         mes_mol.write_cml(self.dir + '/mes.xml')
