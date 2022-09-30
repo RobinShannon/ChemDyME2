@@ -55,4 +55,4 @@ class well(species):
         data['hinderedBonds'] = self.hinderance_indexes
         data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled = coupled, **data)
-        mes_mol.write_cml(self.dir + '/mes.xml')
+        mes_mol.write_cml('/mes.xml')
