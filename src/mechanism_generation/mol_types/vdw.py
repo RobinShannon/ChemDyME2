@@ -48,4 +48,4 @@ class vdw(species):
         data['hessian'] = self.hessian
         data['newBonds'] = self.bonds_to_add
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled=coupled, **data)
-        mes_mol.write_cml('/mes.xml')
+        mes_mol.write_cml('mes.xml')
