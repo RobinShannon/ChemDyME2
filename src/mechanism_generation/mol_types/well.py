@@ -52,6 +52,7 @@ class well(species):
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
+        data['hinderedAngles'] = self.hinderance_angles
         data['hinderedBonds'] = self.hinderance_indexes
         data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled = coupled, **data)

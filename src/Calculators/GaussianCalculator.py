@@ -280,7 +280,7 @@ class Gaussian(FileIOCalculator):
                 pattern = r'NImag=0\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
                 substring = re.sub('\s+','',substring)
-                hessian = substring.split(",")
+                hessian = ' '.join(substring.split(","))
         except:
             hessian =[]
         return vibs, zpe, hessian
@@ -333,7 +333,7 @@ class Gaussian(FileIOCalculator):
                 pattern =r'NImag=1\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
                 substring = re.sub('\s+','',substring)
-                hessian = substring.split(",")
+                hessian = ' '.join(substring.split(","))
         except:
             hessian =[]
         print('finished reading TS vibs')
