@@ -10,6 +10,7 @@ from pathlib import Path
 from shutil import copyfile
 import re
 import src.utility.tools as tl
+import re
 
 class GaussianDynamics:
     calctype = 'optimizer'
@@ -278,7 +279,7 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern = r'NImag=0\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
-                substring = substring.strip()
+                substring = re.sub('\s+','',substring)
                 hessian = substring.split(",")
         except:
             hessian =[]
@@ -331,7 +332,7 @@ class Gaussian(FileIOCalculator):
                 data = inp2.read().replace('\n','')
                 pattern =r'NImag=1\\\\(.*?)\\\\'
                 substring = re.search(pattern, data).group(1)
-                substring = substring.strip()
+                substring = re.sub('\s+','',substring)
                 hessian = substring.split(",")
         except:
             hessian =[]
