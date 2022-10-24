@@ -4,9 +4,12 @@ import src.molecular_dynamics.trajectory as Traj
 import src.bxd.collective_variable as CV
 import src.bxd.ProgressMetric as PM
 import src.bxd.bxd_constraint as BXD
+import src.utility.connectivity_tools as CT
+from ase.io import write
 import gc
 
-import src.mechanism_generation.mol_types.species as Species
+import src.mechanism_generation.mol_types.well as stable
+
 
 
 class ReactionNetwork:
@@ -37,20 +40,28 @@ class ReactionNetwork:
         # Check whether there is a directory for putting calculation data in. If not create it
         if not os.path.exists(self.path + '/Raw'):
             os.mkdir(self.path + '/Raw')
-
+        if not os.path.exists(self.path + '/Network'):
+            os.mkdir(self.path + '/Network')
 
     def run(self):
 
         # Create Molecule object for the current reactant
-        reac = Species.Stable(self.start, self.calculators)
-        reac.node_visits = 1
+        reacs = []
+        if self.bimolecular_start:
+            bimolecular, reactants = CT.split_mol(self.start)
+            reacs.append(stable.well(reactants[0], self.calculators))
+            reacs.append(stable.well(reactants[1], self.calculators))
+            reacs.append(stable.well(self.start, self.calculators))
+        else:
+            reacs.append(stable.well(self.start, self.calculators))
+        reacs[0].node_visits = 1
         # Open files for saving summary
         mainsumfile = open(('mainSummary.txt'), "a")
 
 
         while self.master_equation.time < self.master_equation.max_time:
             for itr in range(0, self.reaction_trials):
-                self.run_single_generation(reac,bimolecular=self.bimolecular_start)
+                self.run_single_generation(reacs,bimolecular=self.bimolecular_start)
             if self.bimolecular_bath:
                 lifetime = self.run_KME(dummy=True)
                 for item in self.bimolecular_bath.items():
@@ -67,56 +78,72 @@ class ReactionNetwork:
 
 
 
-    def run_single_generation(self, reactant, bimolecular=False, bath=None):
+    def run_single_generation(self, reactant, bimolecular=False, bath=None  ):
         # Reinitialise the reaction criteria to the geometry of "reactant" and set up default logger and MD integrator
         if bimolecular:
-            self.reaction_criteria.reinitialise(reactant.combined_mol)
+            self.reaction_criteria.reinitialise(reactant[2].mol)
         else:
-            self.reaction_criteria.reinitialise(reactant.mol)
+            self.reaction_criteria.reinitialise(reactant[0].mol)
         log = None
         # Set up the first bxd object as as bxd in energy
         bxd_list = []
-        collective_variable1 = CV.Energy(reactant.mol)
+        collective_variable1 = CV.Energy(reactant[2].mol)
         if bimolecular:
-            progress_metric1 = PM.ProgressMetric(collective_variable1, reactant.combined_mol, [100000])
+            progress_metric1 = PM.ProgressMetric(collective_variable1, reactant[2].mol, [100000])
         else:
-            progress_metric1 = PM.ProgressMetric(collective_variable1, reactant.mol, [100000])
+            progress_metric1 = PM.ProgressMetric(collective_variable1, reactant.mol[0], [100000])
         bxd1 = BXD.Adaptive(progress_metric1, fix_to_path=False, adaptive_steps = self.adaptive_bxd_steps, epsilon = self.bxd_epsilon)
         bxd_list.append(bxd1)
         # If there are multiple fragments then set up a second bxd object pulling the moieties together
         if bimolecular:
             #frag1, frag2 = reactant.get_fragment_indicies()
-            collective_variable2 = CV.COM(reactant.combined_mol, self.start_frag_indicies[0], self.start_frag_indicies[1])
+            collective_variable2 = CV.COM(reactant[2].mol, self.start_frag_indicies[0], self.start_frag_indicies[1])
             progress_metric2 = PM.Line(collective_variable2, [0], [self.max_com_seperation])
             bxd2 = BXD.Fixed(progress_metric2)
             bxd1.connected_BXD = bxd2
             bxd_list.append(bxd2)
-            traj = Traj.Trajectory(reactant.combined_mol, bxd_list, self.md_integrator, loggers = log,criteria = self.reaction_criteria, reactive=True)
+            traj = Traj.Trajectory(reactant[2].mol, bxd_list, self.md_integrator, loggers = log,criteria = self.reaction_criteria, reactive=True)
         else:
-            traj = Traj.Trajectory(reactant.mol, bxd_list, self.md_integrator, loggers=log, criteria=self.reaction_criteria, reactive=True)
+            traj = Traj.Trajectory(reactant[0].mol, bxd_list, self.md_integrator, loggers=log, criteria=self.reaction_criteria, reactive=True)
         product_geometry = traj.run_trajectory()
-        product = Species.Stable(product_geometry, self.calculators)
+        prods = []
+        bimolecular_product, products = CT.split_mol(product_geometry)
+        if bimolecular_product:
+            prods.append(stable.well(products[0], self.calculators))
+            prods.append(stable.well(products[1], self.calculators))
+            prods.append(stable.well(product_geometry, self.calculators))
+        else:
+            prods.append(stable.well(product_geometry, self.calculators))
         for s in self.species:
-            if s.smiles is product.smiles:
+            if s.smiles is prods[0].smiles:
                 break
-        r = rxn.Reaction(reactant, product, traj, self.calculators)
+        r = rxn.Reaction(reactant, prods, traj, self.calculators)
         for reaction in self.network:
             if r == reaction:
                 break
         r.characterise(bimolecular_traj=bimolecular)
-        if not r.found_TS and not r.barrierless and len(r.path_minima) > 0:
-            r1,r2 = r.split_reaction(r)
-            self.network.append(r1)
-            self.species.append(r.prod)
-            self.network.append(r2)
-            self.species.append(r2.prod)
-        else:
-            self.network.append(r)
-            self.species.append(r.prod)
+        r.print_to_file()
+        #if not r.found_TS and not r.barrierless and len(r.path_minima) > 0:
+            #r1,r2 = r.split_reaction(r)
+            #self.network.append(r1)
+            #self.species.append(r.prod)
+            #self.network.append(r2)
+            #self.species.append(r2.prod)
+        #else:
+        self.network.append(r)
+        self.master_equation.add_molecule(r.reac[0])
+        self.species.append(r.reac[0])
+        if bimolecular:
+            self.master_equation.add_molecule(r.reac[1])
+            self.species.append(r.reac[1])
+        self.species.append(r.prod[0])
+        self.master_equation.add_molecule(r.prod[0])
+        if bimolecular_product:
+            self.species.append(r.prod[1])
+            self.master_equation.add_molecule(r.prod[1])
+        self.master_equation.add_reaction(r)
         del traj
         gc.collect()
-
-
 
     def run_KME(self,dummy=False):
         time, new_node = self.master_equation.run_stochastic_transition()

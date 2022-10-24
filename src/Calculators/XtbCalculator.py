@@ -65,8 +65,10 @@ from ase.atoms import Atoms
 from ase.units import Hartree, Bohr
 import os
 from ase.optimize.bfgs import BFGS
-from sella import Sella, Constraints
-
+from ase.io import read
+from sella import Sella, Constraints, IRC
+from ase.vibrations import Vibrations
+import src.utility.tools as tl
 
 class XTB(ase_calc.Calculator):
     """ASE calculator for xtb related methods.
@@ -86,7 +88,7 @@ class XTB(ase_calc.Calculator):
         "method": "GFN2-xTB",
         "accuracy": 1.0,
         "max_iterations": 250,
-        "electronic_temperature": 300.0,
+        "electronic_temperature": 1500.0,
         "solvent": "None",
         "cache_api": True,
     }
@@ -277,11 +279,34 @@ class XTB(ase_calc.Calculator):
     def minimise_stable(self,path = os.getcwd(), atoms: Optional[Atoms] = None):
         if atoms is None:
             atoms = self.atoms
-        dyn = BFGS(self.mol)
+        dyn = BFGS(atoms)
         dyn.run(fmax=0.05, steps=50)
 
     def minimise_ts(self,path=os.getcwd(), atoms=None, ratoms=None, patoms=None):
         if atoms is None:
             atoms = self.atoms
-        dyn = Sella(self.mol)
+        dyn = Sella(atoms)
         dyn.run(fmax=0.05, steps=50)
+        ts = atoms.copy()
+        ts2 = atoms.copy()
+        ts._calc = atoms.get_calculator()
+        ts2._calc = atoms.get_calculator()
+        opt = IRC(ts, trajectory='irc.traj', dx=0.1, eta=1e-4, gamma=0.4)
+        try:
+            opt = IRC(ts, trajectory='irc.traj', dx=0.01, eta=1e-4, gamma=0.4)
+            opt.run(fmax=0.1, steps=15, direction='forward')
+            ircf = read('irc.traj',index=':')
+            patoms = ircf[-1]
+        except:
+            ircf = []
+            patoms = atoms.copy()
+        try:
+            opt = IRC(ts2, trajectory='irc.traj', dx=0.01, eta=1e-4, gamma=0.4)
+            opt.run(fmax=0.1, steps=15, direction='reverse')
+            ircr = read('irc.traj',index=':')
+            ratoms = ircr[-1]
+        except:
+            ircr = []
+            ratoms = atoms.copy()
+
+        return ratoms,patoms,ircr,ircf

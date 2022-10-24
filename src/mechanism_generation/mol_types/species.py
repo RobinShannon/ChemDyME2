@@ -36,36 +36,55 @@ class species:
         self.hinderance_trajectories=[]
         self.hinderance_indexes = []
         self.hinderance_angles = []
-        self.rotor_indexes=[]
+        self.rotor_indexes= []
         self.bonds_to_add = []
         self.vdw = False
+        self.bimolecular = False
 
     def characterise(self, bimolecular = False):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
-        self.calculator.set_calculator(self.mol, 'low')
-        self.optimise('Low/', self.mol)
-        self.calculator.set_calculator(self.mol, 'high')
-        if self.calculator.multi_level == True:
-            self.optimise('High/', self.mol)
-            if len(self.mol.get_masses()) > 1:
-                self.calculator.set_calculator(self.mol, 'high')
-                self.get_frequencies('High/', self.mol)
-            self.calculator.set_calculator(self.mol, 'high')
+        if bimolecular:
+            self.calculator.set_calculator(self.fragment_two, 'low')
+            self.optimise('Low/', self.fragment_two)
+            self.calculator.set_calculator(self.fragment_two, 'high')
+            if self.calculator.multi_level == True:
+                self.optimise('High/', self.fragment_two)
+                if len(self.mol.get_masses()) > 1:
+                    self.calculator.set_calculator(self.fragment_two, 'high')
+                    self.get_frequencies('High/', self.fragment_two)
+                self.calculator.set_calculator(self.fragment_two, 'high')
+            else:
+                self.calculator.set_calculator(self.fragment_two, 'low')
+                if len(self.mol.get_masses()) > 1:
+                    self.calculator.set_calculator(self.fragment_two, 'low')
+                    self.get_frequencies('High/', self.fragment_two)
+                self.calculator.set_calculator(self.fragment_two, 'low')
         else:
             self.calculator.set_calculator(self.mol, 'low')
-            if len(self.mol.get_masses()) > 1:
+            self.optimise('Low/', self.mol)
+            self.calculator.set_calculator(self.mol, 'high')
+            if self.calculator.multi_level == True:
+                self.optimise('High/', self.mol)
+                if len(self.mol.get_masses()) > 1:
+                    self.calculator.set_calculator(self.mol, 'high')
+                    self.get_frequencies('High/', self.mol)
+                self.calculator.set_calculator(self.mol, 'high')
+            else:
                 self.calculator.set_calculator(self.mol, 'low')
-                self.get_frequencies('High/', self.mol)
-            self.calculator.set_calculator(self.mol, 'low')
+                if len(self.mol.get_masses()) > 1:
+                    self.calculator.set_calculator(self.mol, 'low')
+                    self.get_frequencies('High/', self.mol)
+                self.calculator.set_calculator(self.mol, 'low')
+
         if bimolecular:
-            self.energy['bimolecular_high'] = self.mol.get_potential_energy() * mol / kJ
+            self.energy['bimolecular_high'] = self.fragment_two.get_potential_energy() * mol / kJ
         else:
             self.energy['high'] = self.mol.get_potential_energy() * mol / kJ
         self.calculator.set_calculator(self.mol, 'single')
         if bimolecular:
-            self.energy['bimolecular_single'] = self.mol.get_potential_energy() * mol / kJ
+            self.energy['bimolecular_single'] = self.fragment_two.get_potential_energy() * mol / kJ
         else:
             try:
                 self.energy['single'] = self.mol.get_potential_energy() * mol / kJ

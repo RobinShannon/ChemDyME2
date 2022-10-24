@@ -233,97 +233,97 @@ def get_rot_tran(coord_true, coord_pred):
 mol = read('MFGeoms/CO[C]=O.xyz')
 
 
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
-dyn = BFGS(mol)
-dyn.run(1e-7, 1000)
-vib = Vibrations(mol)
-vib.clean()
-vib.run()
-vib.summary()
-vib.clean()
-L = vib.modes
-T = get_translational_vectors(mol)
-X,I = get_moments_of_inertia(mol)
-R = get_rotational_vectors(mol, X.T)
+#mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
+#dyn = BFGS(mol)
+#dyn.run(1e-7, 1000)
+#vib = Vibrations(mol)
+#vib.clean()
+#vib.run()
+#vib.summary()
+#vib.clean()
+#L = vib.modes
+#T = get_translational_vectors(mol)
+#X,I = get_moments_of_inertia(mol)
+#R = get_rotational_vectors(mol, X.T)
 
-L[0:3,:] = copy.deepcopy(T)
-L[3:6,:] = copy.deepcopy(R)
-new = L.T
-is_normal = np.dot(new[:,3],new[:,0])
-is_normal = np.dot(new[:,3],new[:,1])
-is_normal = np.dot(new[:,3],new[:,2])
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
-newGS = (gram_schmidt_columns(L.T))
-new[:,6:21] = copy.deepcopy(newGS[:,6:21])
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
+#L[0:3,:] = copy.deepcopy(T)
+#L[3:6,:] = copy.deepcopy(R)
+#new = L.T
+#is_normal = np.dot(new[:,3],new[:,0])
+#is_normal = np.dot(new[:,3],new[:,1])
+#is_normal = np.dot(new[:,3],new[:,2])
+#is_normal = np.dot(new[:,3],new[:,4])
+#is_normal = np.dot(new[:,3],new[:,5])
+#is_normal = np.dot(new[:,3],new[:,6])
+#is_normal = np.dot(new[:,3],new[:,7])
+#is_normal = np.dot(new[:,3],new[:,8])
+#newGS = (gram_schmidt_columns(L.T))
+#new[:,6:21] = copy.deepcopy(newGS[:,6:21])
+#is_normal = np.dot(new[:,3],new[:,4])
+#is_normal = np.dot(new[:,3],new[:,5])
+#is_normal = np.dot(new[:,3],new[:,6])
+#is_normal = np.dot(new[:,3],new[:,7])
+#is_normal = np.dot(new[:,3],new[:,8])
 #new_converted = L.T
-masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_converted = convert_hessian_to_cartesian(new,masses)
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
+#masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
+#new_converted = convert_hessian_to_cartesian(new,masses)
+#is_normal = np.dot(new[:,3],new[:,4])
+#is_normal = np.dot(new[:,3],new[:,5])
+#is_normal = np.dot(new[:,3],new[:,6])
+#is_normal = np.dot(new[:,3],new[:,7])
+#is_normal = np.dot(new[:,3],new[:,8])
 
-np.save('MFGeoms/CO[C]=O_GS.npy', new_converted)
-mode1 = new_converted[:,3].reshape(3,3)
-mode1_traj= []
-com = mol.get_center_of_mass()
-positions = mol.get_positions()
-positions -= com
-mol.set_positions(positions)
-for i in range(0,30):
-    mode1_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode1)
-write('WaterModes/t1.xyz', mode1_traj)
+#np.save('MFGeoms/CO[C]=O_GS.npy', new_converted)
+#mode1 = new_converted[:,3].reshape(3,3)
+#mode1_traj= []
+#com = mol.get_center_of_mass()
+#positions = mol.get_positions()
+#positions -= com
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode1_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode1)
+#write('WaterModes/t1.xyz', mode1_traj)
 
-mode2 = new_converted[:,4].reshape(3,3)
-mode2_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode2_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode2)
-write('WaterModes/t2.xyz', mode2_traj)
+#mode2 = new_converted[:,4].reshape(3,3)
+#mode2_traj= []
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode2_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode2)
+#write('WaterModes/t2.xyz', mode2_traj)
 
-mode3 = new_converted[:,5].reshape(3,3)
-mode3_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode3_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode3)
-write('WaterModes/t3.xyz', mode3_traj)
+#mode3 = new_converted[:,5].reshape(3,3)
+#mode3_traj= []
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode3_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode3)
+#write('WaterModes/t3.xyz', mode3_traj)
 
-mode4 = new_converted[:,6].reshape(3,3)
-mode4_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode4_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode4)
-write('WaterModes/t4.xyz', mode4_traj)
+#mode4 = new_converted[:,6].reshape(3,3)
+#mode4_traj= []
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode4_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode4)
+#write('WaterModes/t4.xyz', mode4_traj)
 
-mode5 = new_converted[:,7].reshape(3,3)
-mode5_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode5_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode5)
-write('WaterModes/t5.xyz', mode5_traj)
+#mode5 = new_converted[:,7].reshape(3,3)
+#mode5_traj= []
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode5_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode5)
+#write('WaterModes/t5.xyz', mode5_traj)
 
-mode6 = new_converted[:,8].reshape(3,3)
-mode6_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode6_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode6)
-write('WaterModes/t6.xyz', mode6_traj)
+#mode6 = new_converted[:,8].reshape(3,3)
+#mode6_traj= []
+#mol.set_positions(positions)
+#for i in range(0,30):
+#    mode6_traj.append(mol.copy())
+#    mol.set_positions(mol.get_positions() + 0.1 * mode6)
+#write('WaterModes/t6.xyz', mode6_traj)
 
 
 
@@ -381,7 +381,7 @@ for run in range(0, 1000):
     pcs = 2
     #collective_variable = CV.Distances(narupa_mol, [[1,3]])
     collective_variable = CV.Distances(narupa_mol, [[5,6]])
-    progress_metric = PM.Line(collective_variable, [0], [1.7])
+    progress_metric = PM.Line(collective_variable, [0], [1.45])
 
     #collective_variable = CV.COM(narupa_mol, [0,1,2,3,4,5], [6,7])
     #progress_metric = PM.Line(collective_variable, [0], 0.5)

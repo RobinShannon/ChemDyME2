@@ -292,7 +292,7 @@ class Adaptive(BXD):
         # reached. If one_direction = True, then stop the adaptive run, otherwise set reverse = True.
         if not self.reverse:
             if self.progress_metric.end_type == 'distance':
-                if projected >= self.progress_metric.full_distance:
+                if projected >= self.progress_metric.end:
                     del self.box_list[-1]
                     if self.one_direction:
                         self.completed_runs += 1

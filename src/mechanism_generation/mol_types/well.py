@@ -21,20 +21,15 @@ class well(species):
         super(well, self).__init__(mol, calculator, dir)
         self.calculator.set_calculator(self.mol, 'low')
         smiles = TL.getSMILES(self.mol, False, False)
-        self.combined_mol = mol.copy()
         self.calculator.set_calculator(self.combined_mol, 'low')
-        self.smiles = smiles[0]
+        if len(smiles) > 1:
+            self.smiles = smiles[0] + 'bi' + smiles[1]
         if name == '':
             name = self.smiles
         self.name = name
         self.hessian = []
         write(str(self.dir) + '/reac.xyz', self.mol)
-        if len(smiles) > 1:
-            self.bimolecular = True
-            self.mol = TL.getMolFromSmile(smiles[0])
-            self.fragment_two = TL.getMolFromSmile(smiles[1])
-            self.characterise( bimolecular=True)
-            self.bi_smiles = smiles[1]
+        self.characterise(bimolecular=False)
 
     def optimise(self, path, mol):
         mol._calc.minimise_stable(path=path, atoms=mol)
@@ -56,4 +51,18 @@ class well(species):
         data['hinderedBonds'] = self.hinderance_indexes
         data['hessian'] = self.hessian
         mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled = coupled, **data)
+        self.cml = mes_mol.cml
+        mes_mol.write_cml('mes.xml')
+
+    def write_bi_cml(self, coupled = False):
+        data = {}
+        data['zpe'] = self.energy['single'] + float(self.zpe)
+        data['vibFreqs'] = self.vibs
+        data['name'] = self.name
+        data['hinderedRotors'] = self.hinderance_potentials
+        data['hinderedAngles'] = self.hinderance_angles
+        data['hinderedBonds'] = self.hinderance_indexes
+        data['hessian'] = self.hessian
+        mes_mol = me_mol.meMolecule(self.mol, role = 'modeled', coupled = coupled, **data)
+        self.cml = mes_mol.cml
         mes_mol.write_cml('mes.xml')

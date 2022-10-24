@@ -282,7 +282,7 @@ class Gaussian(FileIOCalculator):
                 substring = re.search(pattern, data).group(1)
                 for elem in string.whitespace:
                    substring = substring.replace(elem, '')
-                hessian = ' '.join(substring.split(","))
+                hessian = substring.split(",")
         except:
             hessian =[]
         return vibs, zpe, hessian
@@ -336,7 +336,7 @@ class Gaussian(FileIOCalculator):
                 substring = re.search(pattern, data).group(1)
                 for elem in string.whitespace:
                    substring = substring.replace(elem, '')
-                hessian = ' '.join(substring.split(","))
+                hessian = substring.split(",")
         except:
             hessian =[]
         print('finished reading TS vibs')

@@ -1,5 +1,6 @@
 from subprocess import Popen, PIPE
 import os
+import src.master_equation.io as io
 
 # Class to run master equation calculation
 class MasterEq:
@@ -14,6 +15,8 @@ class MasterEq:
         self.ene = 0
         self.prodName = 'none'
         self.visitedList = []
+        self.xml = io.writeTemplate(start_mol='ccc1')
+        io.write_to_file(self.xml)
         try:
             self.MESCommand = os.environ['CHEMDYME_ME_PATH']
         except:
@@ -30,5 +33,14 @@ class MasterEq:
         self.time = float(words[1])
         words = lines[len(lines)-3].split(' ')
         self.prodName = words[1]
+
+    def add_molecule(self, mol):
+        mol.write_cml()
+        io.add_molecule(self.xml,mol.cml)
+
+
+    def add_reaction(self, reac):
+        reac.write_cml()
+        io.add_molecule(self.xml, reac.cml)
 
 

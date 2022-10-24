@@ -2,6 +2,7 @@ import src.utility.connectivity_tools as CT
 import src.utility.tools as TL
 from ase.constraints import FixInternals, FixAtoms, FixBondLength, FixBondLengths
 from ase.optimize.sciopt import SciPyFminBFGS as BFGS
+from ase.optimize import BFGS as BFGS2
 from ase.io import read,write
 import math
 try:
@@ -37,9 +38,11 @@ class ts(species):
             write(str(self.dir) + '/reac.xyz', self.rmol)
             write(str(self.dir) + '/prod.xyz', self.pmol)
             self.bonds_to_add = CT.get_changed_bonds(self.rmol, self.pmol)
-            self.pre_optimise()
+            if len(self.bonds_to_add) != 0:
+                self.pre_optimise()
         else:
             self.bonds_to_add = CT.get_hbond_idxs(self.mol, self.fragments)
+        self.characterise()
 
     def pre_optimise(self):
         self.calculator.set_calculator(self.mol, 'low')
@@ -47,14 +50,19 @@ class ts(species):
         constraints = []
         constraints.append(FixBondLengths(self.bonds_to_add))
         self.mol.set_constraint(constraints)
-        dyn = BFGS(self.mol)
-        dyn.run(fmax=0.05, steps=25)
+        try:
+            dyn = BFGS(self.mol)
+            dyn.run(fmax=0.05, steps=25)
+        except:
+            pass
         del self.mol.constraints
 
     def optimise(self, path, mol):
         self.rmol, self.pmol, irc_for, irc_rev = mol._calc.minimise_ts(path = path, atoms=mol, ratoms= self.rmol, patoms= self.pmol)
         self.mol = mol.copy()
         try:
+            irc_rev.reverse()
+            self.IRC = irc_for + irc_rev
             self.rmol_name = TL.getSMILES(self.rmol,False)
             self.pmol_name = TL.getSMILES(self.pmol,False)
         except:

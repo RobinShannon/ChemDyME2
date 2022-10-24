@@ -8,11 +8,11 @@ import src.utility.tools as TL
 # Class to control connectivity maps / to determine  whether transitions have occured
 class ReactionCriteria:
 
-    def __init__(self, consistant_hit_steps = 10, relaxation_steps = 50):
+    def __init__(self, consistant_hit_steps = 25, relaxation_steps = 100):
         self.criteria_met = False
         self.transition_mol = []
         self.consistant_hit_steps = consistant_hit_steps
-        self.relaxtion_steps = relaxation_steps
+        self.relaxation_steps = relaxation_steps
         self.counter = 0
         self.complete = False
         self.atom_list = []
@@ -27,7 +27,7 @@ class ReactionCriteria:
             self.counter += 1
         else:
             self.counter = 0
-        if self.counter > self.consistant_hit_steps + self.relaxtion_steps:
+        if self.counter > self.consistant_hit_steps + self.relaxation_steps:
             self.product_geom = mol.copy()
             self.complete = self.check_product(mol)
 
@@ -49,7 +49,7 @@ class ReactionCriteria:
 
 class NunezMartinez(ReactionCriteria):
 
-    def __init__(self,mol, consistant_hit_steps = 50, relaxation_steps = 100):
+    def __init__(self,mol, consistant_hit_steps = 25, relaxation_steps = 125):
         super(NunezMartinez, self).__init__(consistant_hit_steps, relaxation_steps)
         self.dRef = CT.refBonds(mol)
         self.C = CT.bondMatrix(self.dRef, mol)
@@ -130,10 +130,10 @@ class NunezMartinez(ReactionCriteria):
         found_product = False
         i = 0
         while i < 15:
-            c_mol = self.atom_list[- int(i * 0.1 * self.relaxtion_steps)].copy()
+            c_mol = self.atom_list[- int(i * 0.1 * self.relaxation_steps)].copy()
             c_mol._calc = mol.get_calculator()
             smiles1 = TL.getSMILES(c_mol, True)
             if len(smiles1) == 2:
-                self.product_geom = self.atom_list[- int(i * 0.1 * self.relaxtion_steps)].copy()
+                self.product_geom = self.atom_list[- int(i * 0.1 * self.relaxation_steps)].copy()
                 return True
             i += 1

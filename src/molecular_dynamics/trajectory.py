@@ -26,7 +26,7 @@ class Trajectory:
                  criteria: Optional[RC.ReactionCriteria] = None, reactive=False):
         self.bxd_list = bxd_list
         self.md_integrator = md_integrator
-        self.mol = mol
+        self.mol = mol.copy()
         self.mol._calc = mol.get_calculator()
         initial_temperature = md_integrator.temperature
         vd.MaxwellBoltzmannDistribution(self.mol, temperature_K= initial_temperature, force_temp=True)
@@ -99,8 +99,10 @@ class Trajectory:
                     self.mol.set_positions(self.md_integrator.old_positions)
                     self.md_integrator.retry_pos(self.mol)
                     break
-
-            forces = self.mol.get_forces()
+            try:
+                forces = self.mol.get_forces()
+            except:
+                pass
             self.md_integrator.md_step_vel(forces, self.mol)
 
             traj.append(self.mol.copy())

@@ -6,6 +6,18 @@ try:
 except:
     import openbabel, pybel
 
+def split_mol(geom):
+    mols=[]
+    smiles = tl.getSMILES(geom, False,False)
+    if len(smiles) > 1:
+        bimolecular = True
+        mols.append(tl.getMolFromSmile(smiles[0]))
+        mols.append(tl.getMolFromSmile(smiles[1]))
+    else:
+        bimolecular = False
+        mols.append(tl.getMolFromSmile(smiles[0]))
+    return bimolecular, mols
+
 
 def center_of_mass_separation(mol, frag):
     """
