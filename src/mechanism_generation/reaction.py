@@ -22,7 +22,7 @@ class Reaction:
         self.barrierless = False
         self.calculator = calculator
         self.reac = reac
-        self.ts= ts.ts(self.ts_points[0], self.calculator,'TS', reac[-1].mol, prod[-1].mol)
+        self.ts= ts.ts(self.ts_points[0], self.calculator,'TS', reac[-1].mol.copy(), prod[-1].mol.copy())
         self.prod = prod
         self.activationEnergy = 0
         self.events_forward = 0
@@ -32,14 +32,20 @@ class Reaction:
         self.path_minima = []
         self.path_energies = []
         self.path_structures = []
-        self.name = self.reac[-1].smiles + '___' + self.prod[-1].smiles
-        self.reverse_name = self.prod[-1].smiles + '___' + self.reac[-1].smiles
+        self.name = self.reac[-1].name + '___' + self.prod[-1].name
+        self.reverse_name = self.prod[-1].name + '___' + self.reac[-1].name
         self.found_TS = False
         self.cml = ''
         self.core = core
 
+    def copy(self):
+        new = Reaction(self.reac.copy(),self.prod.copy(),self.trajectory, None)
+        new.trajectory.mol = None
+        new.trajejectory.mol._calc = None
+        return new
+
     def __eq__(self, other):
-        if self.name is other.name:
+        if self.name == other.name:
             return True
         elif self.name is other.reverse_name:
             return True
@@ -90,8 +96,8 @@ class Reaction:
         :return: List of atoms objects with the partially minimised trajectory
         """
         # extract start and end points along the trajectory
-        reactant = self.reac[-1].mol
-        product = self.prod[-1].mol
+        reactant = self.reac[-1].mol.copy()
+        product = self.prod[-1].mol.copy()
         traj_1 = self.trajectory[:-250:1000]
         traj_2 = self.trajectory[-250:-140:4]
         traj_3 =  self.trajectory[-140::20]
@@ -110,13 +116,15 @@ class Reaction:
             del mol.constraints
             self.path_structures.append(mol)
             self.path_energies.append(mol.get_potential_energy())
-        neb = NEB(self.path_structures, climb=True, allow_shared_calculator=True)
-        optimizer = BFGS(neb, trajectory='neb.traj')
+        neb = NEB(self.path_structures, climb=True, allow_shared_calculator=True, remove_rotation_and_translation=True, method="eb")
+        optimizer = BFGS(neb)
         try:
-            optimizer.run(fmax=0.04, steps = 150)
-            self.path_structures = read('neb.traj',index=':')
-            for n in self.path_structures:
+            optimizer.run(fmax=0.04, steps = 50)
+            self.path_structures=[]
+            self.path_energies=[]
+            for n in neb.images:
                 self.calculator.set_calculator(n, 'low')
+                self.path_structures.append(n.copy())
                 try:
                     self.path_energies.append(n.get_potential_energy())
                 except:
@@ -142,43 +150,46 @@ class Reaction:
             self.barrierless = True
 
     def print_to_file(self):
-        base_path = 'Network/' + str(self.reac[0].smiles)
+        base_path = 'Network/' + str(self.reac[0].name)
         os.makedirs(base_path, exist_ok=True)
         if len(self.reac) > 2 :
-            bi_path = base_path + '/bimolecular_' + str(self.reac[1].smiles)
+            bi_path = base_path + '/bimolecular_' + str(self.reac[1].name)
             os.makedirs(bi_path, exist_ok=True)
-            prod_path = bi_path + '/' +  str(self.prod[0].smiles)
+            prod_path = bi_path + '/' +  str(self.prod[0].name)
         else:
             uni_path = base_path + 'unimolecular_'
             os.makedirs(uni_path, exist_ok=True)
-            prod_path = uni_path + str(self.prod[0].smiles)
+            prod_path = uni_path + str(self.prod[0].name)
         os.makedirs(prod_path, exist_ok=True)
-        TS_path = bi_path + '/TS'
+        TS_path = prod_path + '/TS'
         os.makedirs(TS_path, exist_ok=True)
-        data_path = bi_path + '/data'
+        data_path = prod_path + '/data'
         os.makedirs(data_path, exist_ok=True)
         write(prod_path +'/geometry.xyz', self.prod[0].mol)
         write(data_path + '/optimised_trajectory.xyz', self.path_structures)
         write(data_path + '/trajectory.xyz', self.trajectory)
         write(TS_path+'/TS_geom.xyz', self.ts.mol)
         write(TS_path+'/IRC.xyz',self.ts.IRC)
+        with open(data_path + '/energies.txt', 'w') as f:
+            for ene in self.path_energies:
+                f.write(str(ene)+'\n')
         del self.trajectory
         del self.path_structures
         gc.collect()
 
     def write_cml(self):
         reacs = []
-        reacs.append(self.reac[0].smiles)
+        reacs.append(self.reac[0].name)
         if len(self.reac) > 2:
-            reacs.append(self.reac[1].smiles)
+            reacs.append(self.reac[1].name)
             trans = None
         else:
-            trans = self.ts
+            trans = self.ts.name
         prods = []
-        prods.append(self.prod[0].smiles)
+        prods.append(self.prod[0].name)
         if len(self.prod) >2:
-            prods.append(self.prod[1])
-        mes_reac = me_reac.meReaction()
+            prods.append(self.prod[1].name)
+        mes_reac = me_reac.meReaction(reacs,prods,name=self.name,ts=trans)
         self.cml = mes_reac.cml
 
 

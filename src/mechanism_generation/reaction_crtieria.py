@@ -97,6 +97,7 @@ class NunezMartinez(ReactionCriteria):
         self.C = CT.bondMatrix(self.dRef, mol)
         self.transitionIdices = np.zeros(3)
         self.atom_list = []
+        super(NunezMartinez, self).__init__(self.consistant_hit_steps, self.relaxation_steps)
 
     def ReactionType(self, mol):
         oldbonds = np.count_nonzero(self.C)

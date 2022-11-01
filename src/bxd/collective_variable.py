@@ -191,7 +191,9 @@ class Energy(CollectiveVariable):
 
     def __init__(self, mol):
         super().__init__()
-        self.mol = mol
+        self.mol = mol.copy()
+        self.mol._calc = mol.get_calculator()
+
 
     def get_s(self, mol):
         """
@@ -222,7 +224,8 @@ class Distances(CollectiveVariable):
 
     def __init__(self, mol, distances):
         super().__init__()
-        self.mol = mol
+        self.mol = mol.copy()
+        self.mol._calc = mol.get_calculator()
         self.distances = distances
 
     def get_s(self, mol):
@@ -285,7 +288,8 @@ class COM(CollectiveVariable):
 
     def __init__(self, mol, fragment_1, fragment_2):
         super().__init__()
-        self.mol = mol
+        self.mol = mol.copy()
+        self.mol._calc = mol.get_calculator()
         self.fragment_1 = fragment_1
         self.fragment_2 = fragment_2
         self.mass_1 = 0.0

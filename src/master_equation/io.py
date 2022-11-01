@@ -18,10 +18,12 @@ def writeTemplate(start_mol, temperature = 500 , pressure = 1, end_time = 1):
     title.text = str(start_mol) + ' ChemDyME network ' + date.today().strftime("%b-%d-%Y")
 
     # Molecule list
-    ET.SubElement(mesmer, '{http://www.xml-cml.org/schema}moleculeList')
+    m_ele = ET.Element('moleculeList')
+    mesmer.insert(1, m_ele)
 
     # Reaction list
-    ET.SubElement(mesmer, '{http://www.xml-cml.org/schema}reactionList')
+    r_ele = ET.Element('reactionList')
+    mesmer.insert(2, r_ele)
 
     # Conditions here we assume a N2 bath gas and make a single pressure temperature pair based upon the input
     conditions = ET.SubElement(mesmer, '{http://www.chem.leeds.ac.uk/mesmer}conditions')
@@ -36,7 +38,7 @@ def writeTemplate(start_mol, temperature = 500 , pressure = 1, end_time = 1):
     # initial populations also appear in the conditions element and should be set so that all the population is in the
     # inital reactant. These will be updated as mechanism generation progresses
     initial_populations = ET.SubElement(conditions, '{http://www.chem.leeds.ac.uk/mesmer}InitialPopulation')
-    pop = ET.SubElement(conditions, '{http://www.chem.leeds.ac.uk/mesmer}molecule')
+    pop = ET.SubElement(initial_populations, '{http://www.chem.leeds.ac.uk/mesmer}molecule')
     pop.set('grain','1.0')
     pop.set('population','1.0')
     pop.set('ref',str(start_mol))
@@ -51,7 +53,7 @@ def writeTemplate(start_mol, temperature = 500 , pressure = 1, end_time = 1):
     stoch_end_time.text = str(end_time)
     stoch_axd_limit = ET.SubElement(model_parameters, '{http://www.chem.leeds.ac.uk/mesmer}StochasticAxdLimit')
     stoch_axd_limit.text = '50'
-    grain_size = ET.SubElement(model_parameters, '{http://www.chem.leeds.ac.uk/mesmer}grainLimit')
+    grain_size = ET.SubElement(model_parameters, '{http://www.chem.leeds.ac.uk/mesmer}grainSize')
     grain_size.set('units', 'cm-1')
     grain_size.text = '50'
     max_energy = ET.SubElement(model_parameters, '{http://www.chem.leeds.ac.uk/mesmer}energyAboveTheTopHill')
@@ -77,14 +79,20 @@ def write_to_file(mesmer):
     f.write(mod_xml)
     f.close()
 
+def update_starting_population(mesmer, ene, species):
+    InitialPopulation = mesmer.findall('{http://www.chem.leeds.ac.uk/mesmer}conditions')[0].findall('{http://www.chem.leeds.ac.uk/mesmer}InitialPopulation')[0]
+    mol = InitialPopulation.findall('{http://www.chem.leeds.ac.uk/mesmer}molecule')[0]
+    mol.set('grain',str(ene))
+    mol.set('ref',str(species))
+    write_to_file(mesmer)
 
 def add_molecule(mesmer,cml_mol):
-    mols = mesmer.findall("{http://www.xml-cml.org/schema}moleculeList")[0]
+    mols = mesmer.findall("moleculeList")[0]
     mols.insert(-1,cml_mol)
     write_to_file(mesmer)
 
 def add_reaction(mesmer,cml_reac):
-    reacs = mesmer.findall("{http://www.xml-cml.org/schema}reactionList")[0]
+    reacs = mesmer.findall("reactionList")[0]
     reacs.insert(-1,cml_reac)
     write_to_file(mesmer)
 

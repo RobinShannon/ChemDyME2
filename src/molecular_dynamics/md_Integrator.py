@@ -61,6 +61,23 @@ class MDIntegrator:
     def md_step_vel(self, forces, mol):
         pass
 
+    @abstractmethod
+    def reinitialise(self, mol):
+        self.temperature = self.temperature
+        self.timestep = self.timestep
+        self.masses = mol.get_masses()
+        self.forces = 0
+        self.old_forces = 0
+        self.current_velocities = mol.get_velocities()
+        self.half_step_velocity = mol.get_velocities()
+        self.old_velocities = mol.get_velocities()
+        self.positions = mol.get_positions()
+        self.old_positions = mol.get_positions()
+        self.current_positions = mol.get_positions()
+        self.new_positions = mol.get_positions()
+        self.constrained = False
+
+
 
 class VelocityVerlet(MDIntegrator):
     """

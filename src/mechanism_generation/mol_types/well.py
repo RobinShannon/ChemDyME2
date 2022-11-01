@@ -24,6 +24,8 @@ class well(species):
         self.calculator.set_calculator(self.combined_mol, 'low')
         if len(smiles) > 1:
             self.smiles = smiles[0] + 'bi' + smiles[1]
+        else:
+            self.smiles = smiles[0]
         if name == '':
             name = self.smiles
         self.name = name
@@ -31,19 +33,32 @@ class well(species):
         write(str(self.dir) + '/reac.xyz', self.mol)
         self.characterise(bimolecular=False)
 
+    def copy(self):
+        new = well(self.mol.copy(),self.calculator,dir = self.dir, name = self.name)
+        new.calculator = None
+        new.energy = self.energy
+        return new
+
     def optimise(self, path, mol):
         mol._calc.minimise_stable(path=path, atoms=mol)
         self.mol = mol.copy()
 
     def get_frequencies(self, path, mol):
         if len(mol) ==2:
-            self.bimolecular_vibs, self.bimolecular_zpe, imag, hess = mol._calc.get_frequencies(path, mol, bimolecular=True)
+            self.vibs, self.zpe, imag, hess = mol._calc.get_frequencies(path, mol, bimolecular=True)
         else:
             self.vibs, self.zpe, imag, self.hessian = mol._calc.get_frequencies(path, mol)
 
-    def write_cml(self, coupled = False):
+    def write_cml(self, coupled = False, zero_energy = False):
         data = {}
         data['zpe'] = self.energy['single'] + float(self.zpe)
+        if 'baseline' in self.energy:
+            if 'co' in self.energy:
+                data['zpe'] = (self.energy['single'] + float(self.zpe) + self.energy['co']) - self.energy['baseline']
+            else:
+                data['zpe'] = (self.energy['single'] + float(self.zpe)) - self.energy['baseline']
+        if zero_energy:
+            data['zpe'] = 0
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
@@ -56,7 +71,12 @@ class well(species):
 
     def write_bi_cml(self, coupled = False):
         data = {}
-        data['zpe'] = self.energy['single'] + float(self.zpe)
+        data['zpe'] = (self.energy['single'] + float(self.zpe))
+        if 'baseline' in self.energy:
+            if 'co' in self.energy:
+                data['zpe'] = (self.energy['single'] + float(self.zpe) + self.energy['co']) - self.energy['baseline']
+            else:
+                data['zpe'] = (self.energy['single'] + float(self.zpe)) - self.energy['baseline']
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials

@@ -41,6 +41,13 @@ class species:
         self.vdw = False
         self.bimolecular = False
 
+    def __eq__(self, other):
+        if self.name == other.name:
+            return True
+        else:
+            return False
+
+
     def characterise(self, bimolecular = False):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)

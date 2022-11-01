@@ -38,6 +38,8 @@ class Trajectory:
         self.criteria = criteria
         self.mdsteps = 1
 
+
+
     def run_trajectory(self, max_steps=np.inf):
         """
         Runs a bxd trajectory until either the attached BXDconstraint indicates sufficient information has been
