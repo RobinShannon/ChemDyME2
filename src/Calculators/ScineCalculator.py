@@ -109,16 +109,16 @@ class SparrowCalculator(Calculator):
         s = sum(atoms.get_atomic_numbers())
         if s % 2 != 0:
             self.spin_mult = 2
-            self.unrestricted = True
+            self.unrestricted = 'unrestricted'
         elif is_OO:
             self.spin_mult = 3
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
         else:
             self.spin_mult = 1
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
         atoms.write('temp.xyz')
         system1 = su.core.load_system_into_calculator('temp.xyz', self.method, program='Sparrow',
-                                            molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
+                                            molecular_charge=0, spin_mode=self.unrestricted, spin_multiplicity=self.spin_mult)
         systems = {}
         systems['reac'] = system1
         try:
@@ -143,13 +143,13 @@ class SparrowCalculator(Calculator):
         s = sum(atoms.get_atomic_numbers())
         if s % 2 != 0:
             self.spin_mult = 2
-            self.unrestricted = True
+            self.unrestricted = 'unrestricted'
         elif is_OO:
             self.spin_mult = 3
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
         else:
             self.spin_mult = 1
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
         if atoms is None:
             atoms = self.atoms
         write('temp.xyz',atoms)
@@ -158,7 +158,7 @@ class SparrowCalculator(Calculator):
         irc_for = atoms.copy()
         irc_rev = atoms.copy()
         system1 = su.core.load_system_into_calculator('temp.xyz', self.method, program='Sparrow',
-                                            molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
+                                            molecular_charge=0, spin_mode=self.unrestricted, spin_multiplicity=self.spin_mult)
         systems = {}
         systems['reac'] = system1
         try:
@@ -184,21 +184,21 @@ class SparrowCalculator(Calculator):
         s = sum(reac.get_atomic_numbers())
         if s % 2 != 0:
             self.spin_mult = 2
-            self.unrestricted = True
+            self.unrestricted = 'unrestricted'
         elif is_OO:
             self.spin_mult = 3
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
         else:
             self.spin_mult = 1
-            self.unrestricted = False
+            self.unrestricted = 'restricted'
 
         write('reac.xyz',reac)
         write('prod.xyz', prod)
 
         system1 = su.core.load_system_into_calculator('reac.xyz', self.method, program='Sparrow',
-                                            molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
+                                            molecular_charge=0, spin_mode=self.unrestricted, spin_multiplicity=self.spin_mult)
         system2 = su.core.load_system_into_calculator('prod.xyz', self.method, program='Sparrow',
-                                            molecular_charge=0, unrestricted_calculation=self.unrestricted,
+                                            molecular_charge=0, spin_mode=self.unrestricted,
                                             spin_multiplicity=self.spin_mult)
 
         systems = {}
