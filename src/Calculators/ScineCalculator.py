@@ -117,7 +117,7 @@ class SparrowCalculator(Calculator):
             self.spin_mult = 1
             self.unrestricted = False
         atoms.write('temp.xyz')
-        system1 = scine_readuct.load_system('temp.xyz', self.method, program='Sparrow',
+        system1 = su.core.load_system_into_calculator('temp.xyz', self.method, program='Sparrow',
                                             molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
         systems = {}
         systems['reac'] = system1
@@ -157,7 +157,7 @@ class SparrowCalculator(Calculator):
         pmol=atoms.copy()
         irc_for = atoms.copy()
         irc_rev = atoms.copy()
-        system1 = scine_readuct.load_system('temp.xyz', self.method, program='Sparrow',
+        system1 = su.core.load_system_into_calculator('temp.xyz', self.method, program='Sparrow',
                                             molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
         systems = {}
         systems['reac'] = system1
@@ -195,9 +195,9 @@ class SparrowCalculator(Calculator):
         write('reac.xyz',reac)
         write('prod.xyz', prod)
 
-        system1 = scine_readuct.load_system('reac.xyz', self.method, program='Sparrow',
+        system1 = su.core.load_system_into_calculator('reac.xyz', self.method, program='Sparrow',
                                             molecular_charge=0, unrestricted_calculation=self.unrestricted, spin_multiplicity=self.spin_mult)
-        system2 = scine_readuct.load_system('prod.xyz', self.method, program='Sparrow',
+        system2 = su.core.load_system_into_calculator('prod.xyz', self.method, program='Sparrow',
                                             molecular_charge=0, unrestricted_calculation=self.unrestricted,
                                             spin_multiplicity=self.spin_mult)
 
