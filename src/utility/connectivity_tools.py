@@ -11,8 +11,13 @@ def split_mol(geom):
     smiles = tl.getSMILES(geom, False,False)
     if len(smiles) > 1:
         bimolecular = True
-        mols.append(tl.getMolFromSmile(smiles[0]))
-        mols.append(tl.getMolFromSmile(smiles[1]))
+        if len(smiles[0]) >= len(smiles[1]):
+            mols.append(tl.getMolFromSmile(smiles[0]))
+            mols.append(tl.getMolFromSmile(smiles[1]))
+        else:
+            mols.append(tl.getMolFromSmile(smiles[1]))
+            mols.append(tl.getMolFromSmile(smiles[0]))
+
     else:
         bimolecular = False
         mols.append(tl.getMolFromSmile(smiles[0]))
@@ -121,7 +126,7 @@ def getCOMdel(Mol, frag):
 # Set up a reference matrix for ideal bond length between any two atoms in the system
 # Maps mol_types types onto a grid of stored ideal bond distances stored in the global variables module
 def refBonds(mol):
-    dict = {'CN' : 1.6, 'NC': 1.6, 'HN' : 1.0, 'NH' : 1.0, 'ON' :1.6, 'NO' : 1.6, 'NN' : 1.4, 'CC' : 1.6, 'CH' : 1.12, 'HC' : 1.12, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.12, 'HO' : 1.12, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
+    dict = {'CN' : 1.6, 'NC': 1.6, 'HN' : 1.0, 'NH' : 1.0, 'ON' :1.6, 'NO' : 1.6, 'NN' : 1.4, 'CC' : 1.7, 'CH' : 1.12, 'HC' : 1.12, 'CO' : 1.6, 'OC' : 1.6, 'OH' : 1.12, 'HO' : 1.12, 'OO' : 1.6, 'HH' : 1.0, 'CF' : 1.4, 'FC' : 1.4, 'OF' : 1.4, 'FO' : 1.4, 'HF' : 1.1, 'FH' : 1.1, 'FF' : 1.4 }
     size =len(mol.get_positions())
     symbols = mol.get_chemical_symbols()
     dRef = np.zeros((size,size))

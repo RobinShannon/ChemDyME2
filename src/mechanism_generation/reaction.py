@@ -153,13 +153,13 @@ class Reaction:
         base_path = 'Network/' + str(self.reac[0].name)
         os.makedirs(base_path, exist_ok=True)
         if len(self.reac) > 2 :
-            bi_path = base_path + '/bimolecular_' + str(self.reac[1].name)
+            bi_path = base_path + '/bimolecular_' + str(self.reac[0].name)
             os.makedirs(bi_path, exist_ok=True)
             prod_path = bi_path + '/' +  str(self.prod[0].name)
         else:
-            uni_path = base_path + 'unimolecular_'
+            uni_path = base_path + 'unimolecular_' + str(self.reac[0].name)
             os.makedirs(uni_path, exist_ok=True)
-            prod_path = uni_path + str(self.prod[0].name)
+            prod_path = uni_path + '/' + str(self.prod[0].name)
         os.makedirs(prod_path, exist_ok=True)
         TS_path = prod_path + '/TS'
         os.makedirs(TS_path, exist_ok=True)

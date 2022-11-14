@@ -1,6 +1,5 @@
 import copy
 
-#from src.Calculators.ScineCalculator import SparrowCalculator as SP
 
 class calculator_manager:
     def __init__(self, trajectory = None, low = None, high = None, single_point = None,

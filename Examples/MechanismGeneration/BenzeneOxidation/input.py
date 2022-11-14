@@ -20,7 +20,7 @@ reaction_criteria = RC.NunezMartinez(mol)
 
 master_eq = ME.MasterEq(start_mol='c1ccccc1')
 
-calculator_manager = CM.calculator_manager(trajectory = XTB(method="GFN2-xTB"), low = XTB(method="GFN2-xTB"), high = XTB(method="GFN2-xTB"), single_point = XTB(method="GFN2-xTB"), calc_hindered_rotors=True)
+calculator_manager = CM.calculator_manager(trajectory = XTB(method="GFN1-xTB"), low = XTB(method="GFN1-xTB"), high = XTB(method="GFN1-xTB"), single_point = XTB(method="GFN2-xTB"), calc_hindered_rotors=True)
 
-Mechanism = Mech.ReactionNetwork(mol,reaction_criteria,master_eq,calculator_manager,md, bimolecular_start=True, start_frag_indicies=[[0,1,2,3,4,5,6,7,8,9,10,11],[12,13]])
+Mechanism = Mech.ReactionNetwork(mol,reaction_criteria,master_eq,calculator_manager,md, bimolecular_start=True, start_frag_indicies=[[0,1,2,3,4,5,6,7,8,9,10,11],[12,13]], bimolecular_bath={"O=O":1E5})
 Mechanism.run()

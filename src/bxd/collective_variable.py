@@ -1,7 +1,9 @@
 from abc import abstractmethod
 import numpy as np
-from src.utility import cython_utils
-
+try:
+    from src.utility import cython_utils
+except:
+    pass
 
 class CollectiveVariable(object):
     """

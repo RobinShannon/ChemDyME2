@@ -1,9 +1,8 @@
 import numpy
 
-try:
-    import src.bxd.collective_variable as CV
-except:
-    pass
+
+import src.bxd.collective_variable as CV
+from ase.constraints import Hookean
 import scipy
 import src.bxd.ProgressMetric as PM
 import src.molecular_dynamics.md_Integrator as MD
@@ -230,7 +229,7 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-mol = read('MFGeoms/CO[C]=O.xyz')
+#mol = read('MFGeoms/CO[C]=O.xyz')
 
 
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=mol))
@@ -374,17 +373,24 @@ f4 =open("vibresults4.txt", 'a')
 for run in range(0, 1000):
     # The general set-up here is identical to the adaptive run to ensure the converging run samples the same path
     #narupa_mol = read('water', index=0)
+    del narupa_mol.constraints
     temp = read('GlyoxalGeoms/glyoxal.xyz')
     narupa_mol.set_positions(temp.get_positions())
+    c = Hookean(a1=0, a2=1, rt=1.55, k=5.)
+    c1 = Hookean(a1=0, a2=5, rt=1.1, k=7.)
+    c2 = Hookean(a1=1, a2=3, rt=1.5, k=7.)
+    c3 = Hookean(a1=6, a2=7, rt=1.1, k=7.)
+    narupa_mol.set_constraint([c,c1,c2,c3])
+
     ##dyn = Langevin(narupa_mol, .5 * units.fs, 291, 1)
     #dyn.run(1000)
     pcs = 2
     #collective_variable = CV.Distances(narupa_mol, [[1,3]])
-    collective_variable = CV.Distances(narupa_mol, [[5,6]])
-    progress_metric = PM.Line(collective_variable, [0], [1.45])
+    collective_variable = CV.Distances(narupa_mol, [[6,3]])
+    progress_metric = PM.Line(collective_variable, [0], [1.4])
 
     #collective_variable = CV.COM(narupa_mol, [0,1,2,3,4,5], [6,7])
-    #progress_metric = PM.Line(collective_variable, [0], 0.5)
+    #progress_metric = PM.Line(collective_variable, [0], [0.5])
 
     bxd = BXD.Fixed(progress_metric)
     loggers = []
@@ -395,13 +401,13 @@ for run in range(0, 1000):
     file = 'geom.xyz'
     gfile = open('gtemp.xyz', 'a')
     lf3 = lambda var: str(write(file,var.mol, append=True))
-    tf3 = lambda var: var.mdsteps % 1 == 0
+    tf3 = lambda var: var.mdsteps % 50 == 0
     log3 = lg.MDLogger( logging_function=lf3, triggering_function=tf3, outpath=gfile)
     loggers.append(log3)
 
 
-    md = MD.Langevin(narupa_mol, temperature=500, timestep=0.5, friction=0.01)
-    reaction_criteria = RC.NunezMartinez(narupa_mol, consistant_hit_steps = 10, relaxation_steps = 1)
+    md = MD.Langevin(narupa_mol, temperature=300, timestep=0.5, friction=0.01)
+    reaction_criteria = RC.NunezMartinez(narupa_mol, consistant_hit_steps = 100, relaxation_steps = 10)
     bxd_trajectory = Traj.Trajectory(narupa_mol, [bxd], md, loggers = loggers, criteria = reaction_criteria, reactive=True)
     bxd_trajectory.run_trajectory(max_steps=10000000)
 
@@ -409,7 +415,7 @@ for run in range(0, 1000):
     dyn = VelocityVerlet(bxd_trajectory.mol, 0.05 * units.fs)
 
     velocities = []
-
+    del narupa_mol.constraints
     for i in range(0,1000):
         dyn.run(200)
         velocities.append(narupa_mol.get_velocities())

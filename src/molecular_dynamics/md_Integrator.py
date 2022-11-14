@@ -244,6 +244,30 @@ class Langevin(MDIntegrator):
         self.c5 = timestep**1.5 * self.sigma / (2 * np.sqrt(3))
         self.c4 = self.friction / 2. * self.c5
 
+    def reinitialise(self, mol):
+        self.temperature = self.temperature
+        self.timestep = self.timestep
+        self.masses = mol.get_masses()
+        self.forces = 0
+        self.old_forces = 0
+        self.current_velocities = mol.get_velocities()
+        self.half_step_velocity = mol.get_velocities()
+        self.old_velocities = mol.get_velocities()
+        self.positions = mol.get_positions()
+        self.old_positions = mol.get_positions()
+        self.current_positions = mol.get_positions()
+        self.new_positions = mol.get_positions()
+        self.constrained = False
+        self.sigma = np.sqrt(2 * self.temperature * units.kB * self.friction / self.masses)
+        self.c1 = self.timestep / 2. - self.timestep * self.timestep * self.friction / 8.
+        self.c2 = self.timestep * self.friction / 2 - self.timestep * self.timestep * self.friction * self.friction / 8.
+        self.c3 = np.sqrt(self.timestep) * self.sigma / 2. - self.timestep**1.5 * self.friction * self.sigma / 8.
+        self.c5 = self.timestep**1.5 * self.sigma / (2 * np.sqrt(3))
+        self.c4 = self.friction / 2. * self.c5
+        self.xi = 0
+        self.eta = 0
+        self.BXDforce = 0
+
     # Modify the stored velocities to satisfy a single bxd constraint
     def constrain1(self, del_phi):
         """

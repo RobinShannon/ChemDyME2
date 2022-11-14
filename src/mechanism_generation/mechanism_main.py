@@ -83,7 +83,7 @@ class ReactionNetwork:
             if self.bimolecular_bath:
                 lifetime = self.run_KME(dummy=True)
                 for item in self.bimolecular_bath.items():
-                    if isinstance(item[1],float and 1/item[1]) < lifetime:
+                    if isinstance(item[1],float) and 1/item[1] < lifetime:
                         bi_reacs = []
                         bath = Tl.getMolFromSmile(item)
                         combine_geometry = CT.get_bi_xyz(item, reacs[0])
@@ -155,6 +155,9 @@ class ReactionNetwork:
             prods[0].energy['co'] = prods[1].energy['single'] + float(prods[1].zpe)
         else:
             prods.append(stable.well(product_geometry.copy(), self.calculators))
+
+        if reactant[0] == prods[0]:
+            return
 
         prods[0].energy['baseline'] = reactant[0].energy['baseline']
         if 'co' in reactant[0].energy and not bimolecular:

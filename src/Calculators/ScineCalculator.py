@@ -5,7 +5,8 @@ import os
 import numpy as np
 from ase import Atoms
 from ase.calculators.calculator import Calculator, all_changes
-from scine_sparrow import Calculation
+import scine_utilities as su
+import scine_sparrow
 from ase.vibrations import Vibrations
 import src.utility.tools as tl
 from ase.io import write, read
@@ -36,7 +37,8 @@ class SparrowCalculator(Calculator):
     def calculate(self, atoms: Optional[Atoms] = None,
                   properties=('energy', 'forces'),
                   system_changes=all_changes):
-        self.calc = Calculation(method=self.method)
+        manager = su.core.ModuleManager()
+        self.calc = manager.get('calculator', self.method)
         if atoms is None:
             atoms = self.atoms
         if atoms is None:
@@ -56,12 +58,24 @@ class SparrowCalculator(Calculator):
                 self.spin_mult = 1
                 self.unrestricted = False
             t1 = time.clock()
-
-            self.calc.set_elements(sym)
+            structure = su.AtomCollection()
+            elements = []
+            for s in sym:
+                if s =='H':
+                    ele = su.ElementType.H
+                elif s =='O':
+                    ele = su.ElementType.O
+                elif s == 'C':
+                    ele = su.ElementType.C
+                elements.append(ele)
+            structure.elements = elements
             settings = {}
             settings['spin_multiplicity'] = self.spin_mult
             settings['unrestricted_calculation'] = self.unrestricted
-            self.calc.set_settings(settings)
+            self.calc.settings(settings)
+            self.calc.structure = structure
+            self.calc.set_required_properties([su.Property.Energy,
+                                                su.Property.Gradients])
         self.has_atoms = False
         self._calculate_sparrow(atoms, properties)
         t2 = time.clock()
@@ -73,7 +87,7 @@ class SparrowCalculator(Calculator):
 
     def _calculate_sparrow(self, atoms: Atoms, properties: Collection[str]):
         positions = atoms.positions
-        self.calc.set_positions(positions)
+        self.calc.structure.positions = positions
         if 'energy' in properties:
             energy_hartree = self.calc.calculate_energy()
             self.results['energy'] = energy_hartree * EV_PER_HARTREE
