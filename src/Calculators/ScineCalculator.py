@@ -122,9 +122,10 @@ class SparrowCalculator(Calculator):
         systems = {}
         systems['reac'] = system1
         try:
-            systems, success = scine_readuct.run_opt_task(systems, ['reac'], output = ['reac_opt'], optimizer ='bfgs', allow_unconverged = True)
+            systems, success = scine_readuct.run_opt_task(systems, ['reac'], output = ['reac_opt'], optimizer ='bfgs', stop_on_error = False)
             atoms.set_positions(systems['reac_opt'].positions * ANG_PER_BOHR)
         except:
+            print('error with readuct opt')
             pass
         os.remove('temp.xyz')
         os.chdir(current_dir)
@@ -162,7 +163,7 @@ class SparrowCalculator(Calculator):
         systems = {}
         systems['reac'] = system1
         try:
-            systems, success = scine_readuct.run_tsopt_task(systems, ['reac'], output= ['ts_opt'], optimizer='ef',  allow_unconverged = False)
+            systems, success = scine_readuct.run_tsopt_task(systems, ['reac'], output= ['ts_opt'], optimizer='ef',  stop_on_error = False)
             atoms.set_positions(systems['ts_opt'].positions * ANG_PER_BOHR)
             systems, success = scine_readuct.run_irc_task(systems, ['ts_opt'], output=['forward','reverse'], convergence_max_iterations =5000, allow_unconverged=True)
             rmol.set_positions(systems['forward'].positions * ANG_PER_BOHR)
