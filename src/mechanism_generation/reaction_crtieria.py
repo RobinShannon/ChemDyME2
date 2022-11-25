@@ -8,7 +8,7 @@ import src.utility.tools as TL
 # Class to control connectivity maps / to determine  whether transitions have occured
 class ReactionCriteria:
 
-    def __init__(self, consistant_hit_steps = 25, relaxation_steps = 100):
+    def __init__(self, consistant_hit_steps = 5, relaxation_steps = 10):
         self.criteria_met = False
         self.transition_mol = []
         self.consistant_hit_steps = consistant_hit_steps

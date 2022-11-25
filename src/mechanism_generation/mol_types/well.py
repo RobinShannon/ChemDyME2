@@ -35,6 +35,7 @@ class well(species):
 
     def copy(self):
         new = well(self.mol.copy(),self.calculator,dir = self.dir, name = self.name)
+        new.mol = self.mol.copy()
         new.calculator = None
         new.energy = self.energy
         return new

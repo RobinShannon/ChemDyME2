@@ -17,31 +17,39 @@ class Reaction:
     Class designed to store the stationary points and barrier information for a particular reactive event.
     """
     def __init__(self,reac, prod, trajectory, calculator, core = 1):
-        self.trajectory = trajectory.criteria.atom_list
-        self.ts_points = trajectory.criteria.transition_mol
-        self.barrierless = False
-        self.calculator = calculator
         self.reac = reac
-        self.ts= ts.ts(self.ts_points[0], self.calculator,'TS', reac[-1].mol.copy(), prod[-1].mol.copy())
         self.prod = prod
+        self.name = self.reac[-1].name + '___' + self.prod[-1].name
+        self.calculator = calculator
+        if not trajectory == None:
+            self.trajectory = trajectory.criteria.atom_list
+            self.ts_points = trajectory.criteria.transition_mol
+            self.ts = ts.ts(self.ts_points[-1], self.calculator, 'TS', reac[-1].mol.copy(), prod[-1].mol.copy(),
+                            name='TS' + self.name)
+        self.barrierless = False
         self.activationEnergy = 0
         self.events_forward = 0
         self.events_reverse = 0
-        self.calculator = calculator
         self.path_maxima = []
         self.path_minima = []
         self.path_energies = []
         self.path_structures = []
-        self.name = self.reac[-1].name + '___' + self.prod[-1].name
         self.reverse_name = self.prod[-1].name + '___' + self.reac[-1].name
         self.found_TS = False
         self.cml = ''
         self.core = core
 
     def copy(self):
-        new = Reaction(self.reac.copy(),self.prod.copy(),self.trajectory, None)
-        new.trajectory.mol = None
-        new.trajejectory.mol._calc = None
+        new_reac = []
+        for r in self.reac:
+            new_reac.append(r.copy())
+        new_prod = []
+        for p in self.prod:
+            new_prod.append(p.copy())
+        new = Reaction(new_reac,new_prod, None, None)
+        new.calculator = None
+        new.ts = self.ts.copy()
+        new.ts_points = []
         return new
 
     def __eq__(self, other):
@@ -56,15 +64,17 @@ class Reaction:
         self.found_TS = self.check_TS()
         self.get_mep(bimolecular_traj)
         self.examine_mep()
+
         if not self.found_TS:
-            for i in range(1,len(self.ts_points)-1):
+            for i in range(1,len(self.path_maxima)-1):
                 try:
-                    ts_guess = ts.ts(self.ts_points[i], self.calculator)
+                    ts_guess = ts.ts(self.path_maxima[i], self.calculator, 'TS', self.reac[-1].mol.copy(), self.prod[-1].mol.copy(), name='TS'+self.name)
                     if self.check_TS():
                         self.ts = ts_guess
                         break
                 except:
                     pass
+
 
     def check_TS(self):
         if self.ts.real_saddle:
@@ -146,8 +156,8 @@ class Reaction:
                 self.path_maxima.append(i)
             elif self.path_energies[i] < self.path_energies[i-1] and self.path_energies[i] < self.path_energies[i+1]:
                 self.path_minima.append(i)
-        if len(self.path_maxima) == 0:
-            self.barrierless = True
+            self.activationEnergy = (max(self.path_energies)-self.path_energies[0])*96.48
+
 
     def print_to_file(self):
         base_path = 'Network/' + str(self.reac[0].name)
@@ -157,7 +167,7 @@ class Reaction:
             os.makedirs(bi_path, exist_ok=True)
             prod_path = bi_path + '/' +  str(self.prod[0].name)
         else:
-            uni_path = base_path + 'unimolecular_' + str(self.reac[0].name)
+            uni_path = base_path + '/unimolecular_' + str(self.reac[0].name)
             os.makedirs(uni_path, exist_ok=True)
             prod_path = uni_path + '/' + str(self.prod[0].name)
         os.makedirs(prod_path, exist_ok=True)
@@ -178,18 +188,24 @@ class Reaction:
         gc.collect()
 
     def write_cml(self):
+        ea = 0
         reacs = []
         reacs.append(self.reac[0].name)
         if len(self.reac) > 2:
             reacs.append(self.reac[1].name)
             trans = None
+            if self.check_TS():
+                ea = self.activationEnergy
+            else:
+                self.barrierless = True
         else:
             trans = self.ts.name
+            self.barrierless = False
         prods = []
         prods.append(self.prod[0].name)
         if len(self.prod) >2:
             prods.append(self.prod[1].name)
-        mes_reac = me_reac.meReaction(reacs,prods,name=self.name,ts=trans)
+        mes_reac = me_reac.meReaction(reacs,prods,name=self.name,ts=trans, ea = ea)
         self.cml = mes_reac.cml
 
 

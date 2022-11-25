@@ -23,7 +23,7 @@ class MasterEq:
         except:
             self.MESCommand = '/Users/chmrsh/Documents/MacMESMER/mesmer'
 
-    def run_stochastic_transition(self):
+    def run_stochastic_transition(self, dummy=False):
         p = Popen([self.MESCommand,'file.xml'], stdout=PIPE, stderr=PIPE )
         stdout, stderr = p.communicate()
         out = stderr.decode("utf-8")
@@ -36,7 +36,8 @@ class MasterEq:
             words = lines[len(lines)-3].split(' ')
             self.prodName = words[1]
             self.visitedList.append(self.prodName)
-            io.update_starting_population(self.xml,self.ene,self.prodName)
+            if not dummy:
+                io.update_starting_population(self.xml,self.ene,self.prodName)
             return True
         except:
             return False

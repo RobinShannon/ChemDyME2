@@ -7,7 +7,7 @@ import src.molecular_dynamics.md_Integrator as MD
 import src.bxd.bxd_constraint as BXD
 import src.molecular_dynamics.trajectory as Traj
 import src.molecular_dynamics.md_logger as lg
-import src.MechanismGeneration.reaction_crtieria as RC
+import src.mechanism_generation.reaction_crtieria as RC
 import src.utility.tools as Tl
 from copy import deepcopy
 import numpy as np
@@ -111,10 +111,11 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-
-#for i, mol in enumerate(ircfull):
-    #list = generate_displacements(mol.copy(), 0.025, rand_dis=True, seccond_order=False)
-    #write('testMF2_CH_' + str(i) + '.xyz', list)
+ircfull = read('IRC1.log', index =':')
+write('ircout.xyz',ircfull)
+for i, mol in enumerate(ircfull):
+    list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
+    write('testGlyIRC2' + str(i) + '.xyz', list)
 
 
 FormIRC = read('FormGeoms/FullPath.xyz',':')

@@ -119,6 +119,7 @@ class species:
     def get_bxde_dos(self):
         pass
 
+
     def conformer_search(self, mol, directory='conformers'):
         current_dir = os.getcwd()
         os.makedirs(self.dir, exist_ok=True)

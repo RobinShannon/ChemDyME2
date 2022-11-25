@@ -1,0 +1,16 @@
+ME_transition:	Time = 3.20542e-07	Product = c1ccccc1
+ME_transition:	Time = 1.72484e-07	Product = c1ccccc1
+ME_transition:	Time = 1.01053e-07	Product = OC1[CH][CH][CH][CH][CH]1
+ME_transition:	Time = 3.28617e-08	Product = O[CH]1[CH]C=CC=C1
+ME_transition:	Time = 1.5461e-07	Product = O[CH]1[CH]C=CC=C1
+ME_transition:	Time = 3.67186e-07	Product = [C]1=CC=CC=C1
+ME_transition:	Time = 1.59919e-07	Product = O[CH]1[CH][CH][CH]C=C1
+ME_transition:	Time = 5.03525e-07	Product = [C]1=CC=CC=C1
+ME_transition:	Time = 1.03318e-08	Product = O[CH]1[CH][CH][CH]C=C1
+ME_transition:	Time = 2.41284e-08	Product = OC1[CH][CH][CH][CH][CH]1
+ME_transition:	Time = 2.34942e-07	Product = O[CH]1[CH][CH][CH]C=C1
+ME_transition:	Time = 1.60342e-10	Product = O[CH]1[CH]C=CC=C1
+ME_transition:	Time = 9.82192e-08	Product = O[CH]1[CH][CH]C=C[CH]1
+ME_transition:	Time = 3.92542e-08	Product = O[CH]1[CH][CH][CH]C=C1
+ME_transition:	Time = 2.04307e-07	Product = O[CH]1[CH][CH]C=C[CH]1
+ME_transition:	Time = 3.47409e-07	Product = O[CH]1[CH][CH]C=C[CH]1

@@ -19,8 +19,8 @@ import src.mechanism_generation.mol_types.well as stable
 class ReactionNetwork:
 
     def __init__(self, starting_species, reaction_criteria, master_equation, calculators, md_integrator,
-                 adaptive_bxd_steps = 5000, bxd_epsilon = 0.95, bimolecular_start = False, bimolecular_bath = {},
-                 cores = 1, iterations = 4, reaction_trials = 4, start_frag_indicies = [], max_com_seperation = 1.7, path = os.getcwd()):
+                 adaptive_bxd_steps = 5000, bxd_epsilon = 0.9, bimolecular_start = False, bimolecular_bath = {},
+                 cores = 1, iterations = 1, reaction_trials = 1, start_frag_indicies = [], max_com_seperation = 1.7, path = os.getcwd()):
 
         self.start = starting_species
         self.master_equation = master_equation
@@ -46,6 +46,10 @@ class ReactionNetwork:
             os.mkdir(self.path + '/Raw')
         if not os.path.exists(self.path + '/Network'):
             os.mkdir(self.path + '/Network')
+        if not os.path.exists(self.path + '/Species'):
+            os.mkdir(self.path + '/Species')
+        if not os.path.exists(self.path + '/Reactions'):
+            os.mkdir(self.path + '/Reactions')
 
     def __getstate__(self):
         odict = self.__dict__.copy()
@@ -107,9 +111,21 @@ class ReactionNetwork:
             reacs[0].node_visits += 1
             reacs[0].calculator = self.calculators
             self.bimolecular_start = False
+            mainsumfile.write('ME_transition:\tTime = ' + str(self.master_equation.time) + '\tProduct = ' + self.master_equation.current_node +'\n')
+            mainsumfile.flush()
             #with open('mech.pkl', 'wb') as outp:  # Overwrites any existing file.
                 #pickle.dump(self, outp, pickle.HIGHEST_PROTOCOL)
-
+            for s in self.species:
+                if not os.path.exists( 'Species/' + str(s.name) + '.pkl'):
+                    with open('Species/' + str(s.name) + '.pkl', 'wb') as outp:  # Overwrites any existing file.
+                        pickle.dump(s, outp, pickle.HIGHEST_PROTOCOL)
+            for r in self.network:
+                if not os.path.exists( 'Reactions/' + str(r.name) + '.pkl'):
+                    with open('Reactions/' + str(r.name) + '.pkl', 'wb') as outp:# Overwrites any existing file.
+                        try:
+                            pickle.dump(r, outp, pickle.HIGHEST_PROTOCOL)
+                        except:
+                            pass
 
 
     def run_single_generation(self, reactant, bimolecular=False, bath=None):
@@ -172,28 +188,33 @@ class ReactionNetwork:
                 return
         r.characterise(bimolecular_traj=bimolecular)
         r.print_to_file()
-
-        self.network.append(r)
+        r.ts.energy['baseline'] = reactant[0].energy['baseline']
+        if 'co' in reactant[0].energy and not bimolecular:
+            r.ts.energy['baseline'] += reactant[0].energy['co']
+        self.network.append(r.copy())
         if r.reac[0] not in self.species:
             self.master_equation.add_molecule(r.reac[0])
             self.species.append(reactant[0].copy())
+
             if bimolecular:
                 self.master_equation.add_molecule(r.reac[1].copy(), bi = True)
                 self.species.append(reactant[1].copy())
 
         self.species.append(r.prod[0].copy())
         self.master_equation.add_molecule(r.prod[0])
+        self.master_equation.add_reaction(r)
+        if not r.barrierless:
+            self.master_equation.add_molecule(r.ts)
         if bimolecular_product:
             self.species.append(r.prod[1].copy())
             self.master_equation.add_molecule(r.prod[1], bi = True)
-        self.master_equation.add_reaction(r)
         del traj
         gc.collect()
 
     def run_KME(self,dummy=False):
         run_properly = False
         while not run_properly:
-            run_properly = self.master_equation.run_stochastic_transition()
+            run_properly = self.master_equation.run_stochastic_transition(dummy)
         if not dummy:
             self.master_equation.current_node = self.master_equation.prodName
             self.mechanism_run_time += self.master_equation.time

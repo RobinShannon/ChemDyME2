@@ -25,6 +25,7 @@ import random
 from sella import Sella
 from ase.optimize import BFGS
 import math
+import os
 import copy
 #from src.Calculators.XtbCalculator import XTB
 import src.utility.connectivity_tools as CT
@@ -329,7 +330,7 @@ def get_rot_tran(coord_true, coord_pred):
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
 write('GlyoxalGeoms/GlyoxalPaths.xyz',GlyIRC)
 narupa_mol = GlyIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-1620000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-320000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 for i in GlyIRC:
     narupa_mol.set_positions(i.get_positions())
@@ -384,10 +385,9 @@ for run in range(0, 1000):
 
     ##dyn = Langevin(narupa_mol, .5 * units.fs, 291, 1)
     #dyn.run(1000)
-    pcs = 2
     #collective_variable = CV.Distances(narupa_mol, [[1,3]])
     collective_variable = CV.Distances(narupa_mol, [[6,3]])
-    progress_metric = PM.Line(collective_variable, [0], [1.4])
+    progress_metric = PM.Line(collective_variable, [0], [1.5])
 
     #collective_variable = CV.COM(narupa_mol, [0,1,2,3,4,5], [6,7])
     #progress_metric = PM.Line(collective_variable, [0], [0.5])
@@ -398,6 +398,7 @@ for run in range(0, 1000):
     tf1 = lambda var: var.mdsteps % 1000 == 0
     log1 = lg.MDLogger( logging_function=lf1, triggering_function=tf1)
     loggers.append(log1)
+    os.remove("geom.xyz")
     file = 'geom.xyz'
     gfile = open('gtemp.xyz', 'a')
     lf3 = lambda var: str(write(file,var.mol, append=True))

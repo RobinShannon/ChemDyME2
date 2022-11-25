@@ -3,6 +3,7 @@
 from typing import Optional, Collection
 import os
 import numpy as np
+import copy
 from ase import Atoms
 from ase.calculators.calculator import Calculator, all_changes
 import scine_utilities as su
@@ -25,7 +26,7 @@ class SparrowCalculator(Calculator):
     """
     implemented_properties = ['energy', 'forces']
 
-    def __init__(self, atoms: Optional[Atoms] = None, method='PM6', triplet=False, **kwargs):
+    def __init__(self, atoms: Optional[Atoms] = None, method='AM1', triplet=False, **kwargs):
         super().__init__(**kwargs)
         self.atoms = atoms
         self.method = method
@@ -50,15 +51,15 @@ class SparrowCalculator(Calculator):
             s = sum(atoms.get_atomic_numbers())
             if s % 2 != 0:
                 self.spin_mult = 2
-                self.unrestricted = True
+                self.unrestricted = 'unrestricted'
             elif is_O or is_OO or self.triplet:
                 self.spin_mult = 3
-                self.unrestricted = False
+                self.unrestricted = 'restricted'
             else:
                 self.spin_mult = 1
-                self.unrestricted = False
+                self.unrestricted = 'restricted'
             t1 = time.clock()
-            structure = su.AtomCollection()
+            self.structure = su.AtomCollection()
             elements = []
             for s in sym:
                 if s =='H':
@@ -68,12 +69,12 @@ class SparrowCalculator(Calculator):
                 elif s == 'C':
                     ele = su.ElementType.C
                 elements.append(ele)
-            structure.elements = elements
-            settings = {}
-            settings['spin_multiplicity'] = self.spin_mult
-            settings['unrestricted_calculation'] = self.unrestricted
-            self.calc.settings(settings)
-            self.calc.structure = structure
+            self.structure.elements = elements
+            self.calc.settings['spin_multiplicity'] = self.spin_mult
+            self.calc.settings['spin_mode'] = self.unrestricted
+            self.calc.settings['electronic_temperature'] =0.0
+            log = su.core.Log()
+            self.calc.log = log
             self.calc.set_required_properties([su.Property.Energy,
                                                 su.Property.Gradients])
         self.has_atoms = False
@@ -86,14 +87,15 @@ class SparrowCalculator(Calculator):
 
 
     def _calculate_sparrow(self, atoms: Atoms, properties: Collection[str]):
-        positions = atoms.positions
-        self.calc.structure.positions = positions
+        self.structure.positions = copy.deepcopy(atoms.positions) * su.BOHR_PER_ANGSTROM
+        self.calc.structure = copy.deepcopy(self.structure)
+        res =self.calc.calculate()
+        if np.isnan(res.energy):
+            res = self.calc.calculate()
         if 'energy' in properties:
-            energy_hartree = self.calc.calculate_energy()
-            self.results['energy'] = energy_hartree * EV_PER_HARTREE
+            self.results['energy'] = res.energy * EV_PER_HARTREE
         if 'forces' in properties:
-            gradients_hartree_bohr = np.array(self.calc.calculate_gradients())
-            self.results['forces'] = - gradients_hartree_bohr * EV_PER_HARTREE / ANG_PER_BOHR
+            self.results['forces'] = -res.gradients * EV_PER_HARTREE / ANG_PER_BOHR
         return
 
     def minimise_stable(self,path = os.getcwd(), atoms: Optional[Atoms] = None):
@@ -164,12 +166,17 @@ class SparrowCalculator(Calculator):
         systems['reac'] = system1
         try:
             systems, success = scine_readuct.run_tsopt_task(systems, ['reac'], output= ['ts_opt'], optimizer='ef',  stop_on_error = False)
+            if not success:
+                systems, success = scine_readuct.run_tsopt_task(systems, ['reac'], output=['ts_opt'], optimizer='bofill',stop_on_error=False)
+            if not success:
+                systems, success = scine_readuct.run_tsopt_task(systems, ['reac'], output=['ts_opt'], optimizer='dimer',
+                                                                stop_on_error=False)
             atoms.set_positions(systems['ts_opt'].positions * ANG_PER_BOHR)
-            systems, success = scine_readuct.run_irc_task(systems, ['ts_opt'], output=['forward','reverse'], convergence_max_iterations =5000, allow_unconverged=True)
+            systems, success = scine_readuct.run_irc_task(systems, ['ts_opt'], output=['forward','reverse'], convergence_max_iterations =5000, stop_on_error = False)
             rmol.set_positions(systems['forward'].positions * ANG_PER_BOHR)
             pmol.set_positions(systems['reverse'].positions * ANG_PER_BOHR)
-            irc_for = read('forward/forward.irc.forward.trj.xyz', ':')
-            irc_rev = read('reverse/reverse.irc.backward.trj.xyz', ':')
+            irc_for = read('forward/forward.irc.forward.trj.xyz', '::100')
+            irc_rev = read('reverse/reverse.irc.backward.trj.xyz', '::100')
         except:
             pass
         os.remove('temp.xyz')

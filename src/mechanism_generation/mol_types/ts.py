@@ -68,13 +68,24 @@ class ts(species):
         except:
             pass
 
+    def copy(self):
+        new = ts(self.mol.copy(),self.calculator,dir = self.dir, reac=self.rmol.copy(),prod=self.pmol.copy(), name = self.name)
+        new.mol = self.mol.copy()
+        new.rmol = self.rmol.copy()
+        new.pmol = self.pmol.copy()
+        new.calculator = None
+        new.energy = self.energy
+        return new
+
     def get_frequencies(self, path, mol):
         self.vibs, self.zpe, self.imaginary_frequency, self.hessian = mol._calc.get_frequencies(path, mol, TS=True)
 
 
-    def write_cml(self, coupled = False):
+    def write_cml(self, coupled = False, zero_energy=False):
         data = {}
         data['zpe'] = self.energy['single'] + float(self.zpe)
+        if 'baseline' in self.energy:
+            data['zpe'] = (self.energy['single'] + float(self.zpe)) - self.energy['baseline']
         data['vibFreqs'] = self.vibs
         data['name'] = self.name
         data['hinderedRotors'] = self.hinderance_potentials
@@ -84,6 +95,7 @@ class ts(species):
         data['hessian'] = self.hessian
         data['newBonds'] = self.bonds_to_add
         mes_mol = me_mol.meMolecule(self.mol, role = 'ts', coupled = coupled, **data)
+        self.cml = mes_mol.cml
         mes_mol.write_cml('mes.xml')
 
     def conformer_search(self, mol, directory='conformers'):
