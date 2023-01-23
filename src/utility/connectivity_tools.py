@@ -320,7 +320,7 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
 
 
     if len(rotors) ==2 and combine:
-        if rotors[1][2] == rotors[0][1]:
+        if rotors[1][2] == rotors[0][0]:
             rotors[0][0] = rotors[1][0]
             rotors[0][1] = rotors[1][1]
             excluded = rotors[1][2]
