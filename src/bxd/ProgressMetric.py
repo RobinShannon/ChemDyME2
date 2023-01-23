@@ -39,6 +39,7 @@ class ProgressMetric(object):
             self.end = collective_variable.get_s(end_point)
         else:
             self.end = np.asarray(end_point)
+        self.full_distance = 0
         self.end_type = end_type
         # Keeps track of whether the bxd trajectory is going in a forward or reverse direction
         self.bxd_reverse = False
@@ -100,7 +101,6 @@ class Curve(ProgressMetric):
         self.percentage_along_segment = 0
         if end_type =='distance':
             self.full_distance = self.path.total_distance[-1]
-
 
     @staticmethod
     def distance_to_segment(s, segment_end, segment_start):
@@ -288,6 +288,7 @@ class Line(ProgressMetric):
         self.max_distance_from_path = max_distance_from_path
         self.line = self.end - self.start
         self.distance_from_path = 0
+        self.full_distance = np.linalg.norm(self.end - self.start)
 
     def project_point_on_path(self, s):
         """

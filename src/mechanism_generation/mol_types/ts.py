@@ -42,7 +42,7 @@ class ts(species):
                 self.pre_optimise()
         else:
             self.bonds_to_add = CT.get_hbond_idxs(self.mol, self.fragments)
-        self.characterise()
+
 
     def pre_optimise(self):
         self.calculator.set_calculator(self.mol, 'low')
@@ -224,6 +224,7 @@ class ts(species):
             self.hinderance_indexes.append([b[1],b[2]])
             write('hindered_rotor' + str(count) + '.xyz', hinderance_traj)
             np.savetxt("hindered_rotor_energies" +str(count)+ ".txt", self.hinderance_potentials, delimiter ="\n")
+        os.chdir(current_dir)
 
 
     def write_hindered_rotors(self,mol, rigid=False, increment = 10, directory="hindered_rotor", partial = False):
@@ -264,7 +265,7 @@ class ts(species):
                         pass
                 dihed += float(increment)
                 self.calculator.set_calculator(hmol, 'high')
-                hmol._calc.minimise_ts_write(dihedral=b, path = "Hind"+str(count), title="H" +str(i), atoms= hmol, rigid=rigid)
+                hmol._calc.minimise_ts_write(dihedral=self.rotatable_bonds, path = "Hind"+str(count), title="H" +str(i), atoms= hmol, rigid=rigid)
                 self.calculator.set_calculator(hmol, 'low')
                 hinderance_traj.append(hmol.copy())
             write('test'+str(count)+'.xyz', hinderance_traj)

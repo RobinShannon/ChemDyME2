@@ -20,15 +20,16 @@ class calculator_manager:
         if level == 'trajectory':
             self.trajectory.__dict__ = copy.deepcopy(self.trajectory_original)
             mol._calc = self.trajectory
+            mol._calc.reinitialize(mol.copy())
         if level == 'low':
             self.low.__dict__ = copy.deepcopy(self.low_original)
             mol.calc = self.low
-            #mol._calc.reinitialize(mol.copy())
+            mol._calc.reinitialize(mol.copy())
         if level == 'high':
             self.high.__dict__ = copy.deepcopy(self.high_original)
             mol.calc = self.high
-            #mol._calc.reinitialize(mol.copy())
+            mol._calc.reinitialize(mol.copy())
         if level == 'single':
             self.single_point.__dict__ = copy.deepcopy(self.single_point_original)
             mol.calc = self.single_point
-            #mol._calc.reinitialize(mol.copy())
+            mol._calc.reinitialize(mol.copy())

@@ -346,7 +346,7 @@ class species:
         write("min.xyz", minimum)
 
 
-    def read_hindered_files(self, path):
+    def read_hindered_files(self, path, index=-1):
         os.chdir(path)
         os.chdir('hindered_rotor')
         rotors =len([f for f in os.listdir(".") if os.path.isdir(f)])
@@ -358,7 +358,7 @@ class species:
             hinderance_angles = []
             dihedral = tl.read_mod_redundant('H0.com')
             for j in range(0,steps):
-                hind_mol = read("H" +str(j)+ ".log")
+                hind_mol = read("H" +str(j)+ ".log", index=index)
                 try:
                     ene = hind_mol.get_potential_energy()
                 except:

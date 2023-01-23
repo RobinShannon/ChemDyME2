@@ -111,17 +111,17 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-ircfull = read('IRC1.log', index =':')
-write('ircout.xyz',ircfull)
+ircfull = read('Traj5.xyz', index='160:760:10')
+
 for i, mol in enumerate(ircfull):
     list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
-    write('testGlyIRC2' + str(i) + '.xyz', list)
+    write('water_region' + str(i) + '.xyz', list)
 
 
 FormIRC = read('FormGeoms/FullPath.xyz',':')
 
 narupa_mol = FormIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-960000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-9000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 for i in FormIRC:
     narupa_mol.set_positions(i.get_positions())

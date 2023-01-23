@@ -131,6 +131,17 @@ class Gaussian(FileIOCalculator):
     def reinitialize(self, atoms):
         self.atoms = atoms
         self.results = {}
+        sym = atoms.get_chemical_symbols()
+        is_O = len(sym) == 1 and sym[0] == 'O'
+        is_OO = len(sym) == 2 and sym[0] == 'O' and sym[1] == 'O'
+        s = sum(atoms.get_atomic_numbers())
+        if s % 2 != 0:
+            self.parameters['mult'] = 2
+        elif is_O or is_OO:
+            self.parameters['mult']
+        else:
+            self.parameters['mult']
+
 
     def write_input(self, atoms, properties=None, system_changes=None):
         FileIOCalculator.write_input(self, atoms, properties, system_changes)
@@ -350,5 +361,7 @@ class Gaussian(FileIOCalculator):
         return string1+xyz1+string2+xyz2
 
     def get_modred_lines(self,dihedral):
-        string = 'D ' + str(dihedral[0]+1) + " " + str(dihedral[1]+1) + " " + str(dihedral[2]+1) + " " + str(dihedral[3]+1) +" F\n"
+        string = ""
+        for d in dihedral:
+            string += 'D ' + str(d[0]+1) + " " + str(d[1]+1) + " " + str(d[2]+1) + " " + str(d[3]+1) +" F\n"
         return string
