@@ -323,13 +323,13 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
         print(str(rotors[0]))
         print(str(rotors[1]))
         if rotors[1][2] == rotors[0][0]:
-            rotors[0][0] = rotors[1][0]
-            rotors[0][1] = rotors[1][1]
+            rotors[0][0] = rotors[1][3]
+            rotors[0][1] = rotors[1][2]
             excluded = rotors[1][2]
             print('case1' +str(rotors[0]))
         else:
-            rotors[0][2] = rotors[1][2]
-            rotors[0][3] = rotors[1][3]
+            rotors[0][0] = rotors[1][0]
+            rotors[0][1] = rotors[1][1]
             excluded = rotors[0][2]
             print('case2' + str(rotors[0]))
         del rotors[-1]
