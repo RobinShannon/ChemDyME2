@@ -443,9 +443,9 @@ class species:
         baseline = mol.get_potential_energy()
         steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         rot_array_2D = []
-        for i in range(0,steps):
+        for i in range(0,int(steps)):
             arr = []
-            for j in range(0,steps):
+            for j in range(0,int(steps)):
                 mol = read("H" + str(i) + '_' + str(j) + ".log")
                 ene = (mol.get_potential_energy() - baseline)
                 arr.append(ene)
