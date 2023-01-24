@@ -377,3 +377,114 @@ class species:
             np.savetxt("angles.txt", hinderance_angles, delimiter="\n")
             os.chdir('../')
         os.chdir('../')
+
+
+    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None):
+        current_dir = os.getcwd()
+        os.makedirs(self.dir, exist_ok=True)
+        os.chdir(self.dir)
+        os.makedirs(directory, exist_ok=True)
+        os.chdir(directory)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        self.rotor_indexes = rotatable_bonds
+        distances = []
+        for bond in self.bonds_to_add:
+            dist = mol.get_distance(bond[0],bond[1])
+            distances.append(dist)
+
+        if rotors_to_exclude != None:
+            del rotatable_bonds[rotors_to_exclude]
+            del coId[rotors_to_exclude]
+        diheds=[]
+        for b in rotatable_bonds:
+            dihed = mol.get_dihedral(*b)
+            diheds.append(dihed)
+
+        os.makedirs('MultiHind', exist_ok=True)
+        hmol = mol.copy()
+        rng = 360.0 / float(increment)
+        if len(rotatable_bonds) > 2:
+            for i in range(0, int(rng)):
+                for j in range(0, int(rng)):
+                    for l in range(0, int(rng)):
+                        hmol.set_dihedral(rotatable_bonds[0][0], rotatable_bonds[0][1], rotatable_bonds[0][2],
+                                          rotatable_bonds[0][3], diheds[0], indices=coId[0])
+                        hmol.set_dihedral(rotatable_bonds[1][0], rotatable_bonds[1][1], rotatable_bonds[1][2],
+                                          rotatable_bonds[1][3], diheds[1], indices=coId[1])
+                        hmol.set_dihedral(rotatable_bonds[2][0], rotatable_bonds[2][1], rotatable_bonds[2][2],
+                                          rotatable_bonds[2][3], diheds[2], indices=coId[2])
+                        hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                     title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
+                                                     rigid=True)
+                        diheds[2] += float(increment)
+                    diheds[1] += float(increment)
+                diheds[0] += float(increment)
+        elif len(rotatable_bonds) == 2:
+            for j in range(0, int(rng)):
+                for l in range(0, int(rng)):
+                    hmol.set_dihedral(rotatable_bonds[0][0], rotatable_bonds[0][1], rotatable_bonds[0][2],
+                                      rotatable_bonds[0][3], diheds[0], indices=coId[0])
+                    hmol.set_dihedral(rotatable_bonds[1][0], rotatable_bonds[1][1], rotatable_bonds[1][2],
+                                      rotatable_bonds[1][3], diheds[1], indices=coId[1])
+                    hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                 title="H" + str(j) + '_' + str(l), atoms=hmol,
+                                                 rigid=True)
+                    diheds[1] += float(increment)
+                diheds[0] += float(increment)
+
+        os.chdir(current_dir)
+
+    def read_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None):
+        current_dir = os.getcwd()
+        os.makedirs(self.dir, exist_ok=True)
+        os.chdir(self.dir)
+        os.makedirs(directory, exist_ok=True)
+        os.chdir(directory)
+        rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        self.rotor_indexes = rotatable_bonds
+        distances = []
+        for bond in self.bonds_to_add:
+            dist = mol.get_distance(bond[0],bond[1])
+            distances.append(dist)
+
+        if rotors_to_exclude != None:
+            del rotatable_bonds[rotors_to_exclude]
+            del coId[rotors_to_exclude]
+        diheds=[]
+        for b in rotatable_bonds:
+            dihed = mol.get_dihedral(*b)
+            diheds.append(dihed)
+
+        os.makedirs('MultiHind', exist_ok=True)
+        hmol = mol.copy()
+        rng = 360.0 / float(increment)
+        if len(rotatable_bonds) > 2:
+            for i in range(0, int(rng)):
+                for j in range(0, int(rng)):
+                    for l in range(0, int(rng)):
+                        hmol.set_dihedral(rotatable_bonds[0][0], rotatable_bonds[0][1], rotatable_bonds[0][2],
+                                          rotatable_bonds[0][3], diheds[0], indices=coId[0])
+                        hmol.set_dihedral(rotatable_bonds[1][0], rotatable_bonds[1][1], rotatable_bonds[1][2],
+                                          rotatable_bonds[1][3], diheds[1], indices=coId[1])
+                        hmol.set_dihedral(rotatable_bonds[2][0], rotatable_bonds[2][1], rotatable_bonds[2][2],
+                                          rotatable_bonds[2][3], diheds[2], indices=coId[2])
+                        hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                     title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
+                                                     rigid=True)
+                        diheds[2] += float(increment)
+                    diheds[1] += float(increment)
+                diheds[0] += float(increment)
+        elif len(rotatable_bonds) == 2:
+            for j in range(0, int(rng)):
+                for l in range(0, int(rng)):
+                    hmol.set_dihedral(rotatable_bonds[0][0], rotatable_bonds[0][1], rotatable_bonds[0][2],
+                                      rotatable_bonds[0][3], diheds[0], indices=coId[0])
+                    hmol.set_dihedral(rotatable_bonds[1][0], rotatable_bonds[1][1], rotatable_bonds[1][2],
+                                      rotatable_bonds[1][3], diheds[1], indices=coId[1])
+                    hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                 title="H" + str(j) + '_' + str(l), atoms=hmol,
+                                                 rigid=True)
+                    diheds[1] += float(increment)
+                diheds[0] += float(increment)
+
+        os.chdir(current_dir)
