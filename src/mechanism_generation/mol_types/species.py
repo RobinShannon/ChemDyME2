@@ -402,6 +402,7 @@ class species:
 
         os.makedirs('MultiHind', exist_ok=True)
         hmol = mol.copy()
+        self.calculator.set_calculator(hmol, 'high')
         rng = 360.0 / float(increment)
         if len(rotatable_bonds) > 2:
             for i in range(0, int(rng)):
