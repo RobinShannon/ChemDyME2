@@ -57,10 +57,10 @@ def fitFourier2D(energies,angles,coeffs):
             c22.append(c2)
             c33.append(c3)
             c44.append(c4)
-        cs.append(c11)
-        cs.append(c22)
-        cs.append(c33)
-        cs.append(c44)
+    cs.append(c11)
+    cs.append(c22)
+    cs.append(c33)
+    cs.append(c44)
     return cs
 
 def fitFourier3D(energies,angles,coeffs):
