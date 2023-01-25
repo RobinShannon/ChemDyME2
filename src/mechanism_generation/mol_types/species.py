@@ -445,7 +445,7 @@ class species:
         rot_array_2D = []
         ene_arr_1D =[]
         angle_arr_1D = []
-        dihedrals = tl.read_mod_redundant('H0_0.com')
+        dihedrals = tl.read_mod_redundant2d('H0_0.com')
         for i in range(0,int(steps)):
             arr = []
             for j in range(0,int(steps)):
