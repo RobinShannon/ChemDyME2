@@ -439,8 +439,8 @@ class species:
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
-        mol = read("H0_0.log")
-        baseline = mol.get_potential_energy()
+        nmol = read("H0_0.log")
+        baseline = nmol.get_potential_energy()
         steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         rot_array_2D = []
         ene_arr_1D =[]
