@@ -52,7 +52,7 @@ def fitFourier2D(energies,angles,coeffs):
             c2 *= 1 / np.pi**2
             c3 *= 1 / np.pi**2
             c4 *= 1 / np.pi**2
-
+            print(str(i))
             c11.append(c1)
             c22.append(c2)
             c33.append(c3)
