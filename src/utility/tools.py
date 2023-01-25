@@ -33,11 +33,11 @@ def convertMolToGauss(mol):
 
 def fitFourier2D(energies,angles,coeffs):
     cs = []
+    c11 = []
+    c22 = []
+    c33 = []
+    c44 = []
     for i in range(0,coeffs):
-        c11 = []
-        c22 = []
-        c33 = []
-        c44 = []
         for j in (0,coeffs):
             c1 = 0
             c2 = 0
