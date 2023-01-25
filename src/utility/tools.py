@@ -38,7 +38,7 @@ def fitFourier2D(energies,angles,coeffs):
     c33 = []
     c44 = []
     for i in range(0,coeffs):
-        for j in (0,coeffs):
+        for j in range(0,coeffs):
             c1 = 0
             c2 = 0
             c3 = 0
