@@ -461,7 +461,7 @@ class species:
         coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, 5)
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
-        np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ')
+        np.savetxt('coeffs1.txt', coeffs, delimiter=' ')
         np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ')
         np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ')
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ')
