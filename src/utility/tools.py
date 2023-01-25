@@ -206,6 +206,7 @@ def read_mod_redundant2d(file):
         seccond_last.pop(0)
         seccond_last.pop(-1)
         diheds.append(seccond_last)
+    return diheds
 
 def getSpinMult(mol, name, trip = False):
     #Babel incorrectly guessing spin multiplicity from trajectory snapshots
