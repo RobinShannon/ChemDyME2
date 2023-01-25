@@ -450,7 +450,7 @@ class species:
             arr = []
             for j in range(0,int(steps)):
                 mol = read("H" + str(i) + '_' + str(j) + ".log")
-                ene = (mol.get_potential_energy() - baseline)
+                ene = (mol.get_potential_energy() - baseline) * (mol / kJ)
                 arr.append(ene)
                 ene_arr_1D.append(ene)
                 a =[]
@@ -461,8 +461,8 @@ class species:
         coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, 5)
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
-        np.savetxt('coeffs1.txt', coeffs, delimiter=' ')
-        np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ')
-        np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ')
-        np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ')
+        np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
