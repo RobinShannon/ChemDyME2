@@ -48,12 +48,11 @@ def fitFourier2D(energies,angles,coeffs):
                 c2 += e * np.cos(i * a[0]) * np.sin(j * a[1])
                 c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
                 c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
-            if j == 0:
-                c1 /= 2
-                c2 /= 2
-                c3 /= 2
-                if i == 0:
-                    c1 /= 2
+            c1 *= 1 / np.pi**2
+            c2 *= 1 / np.pi**2
+            c3 *= 1 / np.pi**2
+            c4 *= 1 / np.pi**2
+
             c11.append(c1)
             c22.append(c2)
             c33.append(c3)
@@ -199,13 +198,13 @@ def read_mod_redundant2d(file):
         last_line=last_line.split(' ')
         last_line.pop(0)
         last_line.pop(-1)
-        diheds.append(last_line)
         seccond_last = lines[-4]
         seccond_last=seccond_last.strip("FD\n")
         seccond_last=seccond_last.split(' ')
         seccond_last.pop(0)
         seccond_last.pop(-1)
         diheds.append(seccond_last)
+        diheds.append(last_line)
     return diheds
 
 def getSpinMult(mol, name, trip = False):
