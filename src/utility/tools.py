@@ -27,9 +27,83 @@ def convertMolToGauss(mol):
     obConversion = openbabel.OBConversion()
     obConversion.SetInAndOutFormats("xyz", "gjf")
     gjf = (obConversion.WriteString(BABmol))
-    # Just get molecular coordinates in gaussian form, dont trust obabel to get the righ spin multiplicity
+    # Just get molecular coordinates in gaussian form, dont trust obabel to get the right spin multiplicity
     gjf = gjf.split('\n')[5:]
     return '\n'.join(gjf)
+
+def fitFourier2D(energies,angles,coeffs):
+    cs = []
+    for i in range(0,coeffs):
+        c11 = []
+        c22 = []
+        c33 = []
+        c44 = []
+        for j in (0,coeffs):
+            c1 = 0
+            c2 = 0
+            c3 = 0
+            c4 = 0
+            for e,a in zip(energies,angles):
+                c1 += e * np.cos(i*a[0]) * np.cos(j*a[1])
+                c2 += e * np.cos(i * a[0]) * np.sin(j * a[1])
+                c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
+                c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
+            if j == 0:
+                c1 /= 2
+                c2 /= 2
+                c3 /= 2
+                if i == 0:
+                    c1 /= 2
+            c11.append(c1)
+            c22.append(c2)
+            c33.append(c3)
+            c44.append(c4)
+        cs.append(c11)
+        cs.append(c22)
+        cs.append(c33)
+        cs.append(c44)
+    return cs
+
+def fitFourier3D(energies,angles,coeffs):
+    cs = []
+    for i in range(0,coeffs):
+        c111 = []
+        c222 = []
+        c333 = []
+        c444 = []
+        for j in (0,coeffs):
+            c11 = []
+            c22 = []
+            c33 = []
+            c44 = []
+            for k in (0, coeffs):
+                c1 = 0
+                c2 = 0
+                c3 = 0
+                c4 = 0
+                for e,a in zip(energies,angles):
+                    c1 += e * np.cos(i*a[0]) * np.cos(j*a[1]) * np.cos(j*a[2])
+                    c2 += e * np.cos(i * a[0]) * np.cos(j * a[1]) * np.sin(j * a[2])
+                    c1 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.sin(j * a[2])
+                    c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
+                    c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
+            if j == 0:
+                c1 /= 2
+                c2 /= 2
+                c3 /= 2
+                if i == 0:
+                    c1 /= 2
+            c11.append(c1)
+            c22.append(c2)
+            c33.append(c3)
+            c44.append(c4)
+        cs.append(c11)
+        cs.append(c22)
+        cs.append(c33)
+        cs.append(c44)
+
+
+
 
 # Function takes a molecule in ASE format, converts it into an OBmol and then returns a SMILES string as a name
 def getSMILES(mol, opt, partialOpt = False):

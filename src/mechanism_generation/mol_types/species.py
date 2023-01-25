@@ -443,14 +443,26 @@ class species:
         baseline = mol.get_potential_energy()
         steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         rot_array_2D = []
+        ene_arr_1D =[]
+        angle_arr_1D = []
+        dihedrals = tl.read_mod_redundant('H0_0.com')
         for i in range(0,int(steps)):
             arr = []
             for j in range(0,int(steps)):
                 mol = read("H" + str(i) + '_' + str(j) + ".log")
                 ene = (mol.get_potential_energy() - baseline)
                 arr.append(ene)
+                ene_arr_1D.append(ene)
+                a =[]
+                a.append(mol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,int(dihedrals[0][3]) - 1))
+                a.append(mol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1))
+                angle_arr_1D.append(a)
             rot_array_2D.append(arr)
-
+        coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, 5)
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
+        np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ')
+        np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ')
+        np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ')
+        np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ')
         os.chdir('../')
