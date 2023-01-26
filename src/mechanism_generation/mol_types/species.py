@@ -458,10 +458,10 @@ class species:
                 a.append(np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1)))
                 angle_arr_1D.append(a)
             rot_array_2D.append(arr)
-        coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D,10)
+        coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D,50)
         check = []
         for a,e in zip(angle_arr_1D,ene_arr_1D):
-            fit_ene = tl.Fourier2D(coeffs,a, 10)
+            fit_ene = tl.Fourier2D(coeffs,a, 50)
             check.append([fit_ene,e])
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
