@@ -74,7 +74,7 @@ def fitFourier2Dsimp(energies,angles,coeffs):
     W = []
     for i in range(0,size):
         for j in range(0,size):
-            W.append(W1_1[i] * W1_1[j] )
+            W.append(W1_1[j])
 
 
     print(str(W))
