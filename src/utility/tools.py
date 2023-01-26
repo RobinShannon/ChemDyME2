@@ -69,10 +69,9 @@ def fitFourier2Dsimp(energies,angles,coeffs):
     c33 = []
     c44 = []
 
-    W1_1 = [1]*21
-    W1_1[2::2] = 4
-    W1_1[3::2] = 2
-    W1_1[-1] = 2
+    W1_1 = [1]*2
+    W1_1[::2] = 2
+    W1_1[1::2] = 4
     W = []
     for i in range(0,np.sqrt(len(energies))):
         row = []
