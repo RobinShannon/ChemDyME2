@@ -62,6 +62,51 @@ def fitFourier2D(energies,angles,coeffs):
     cs.append(c44)
     return cs
 
+def fitFourier2Dsimp(energies,angles,coeffs):
+    cs = []
+    c11 = []
+    c22 = []
+    c33 = []
+    c44 = []
+
+    W1_1 = [1]*21
+    W1_1[2::2] = 4
+    W1_1[3::2] = 2
+    W1_1[-1] = 2
+    W = []
+    for i in range(0,np.sqrt(len(energies))):
+        row = []
+        for j in range(0, np.sqrt(len(energies))):
+            row.append(W1_1[i] * W1_1[j] )
+        W.append(row)
+
+    print(str(W))
+
+    for i in range(0,coeffs):
+        for j in range(0,coeffs):
+            c1 = 0
+            c2 = 0
+            c3 = 0
+            c4 = 0
+            for e,a in zip(energies,angles):
+                c1 += e * np.cos(i*a[0]) * np.cos(j*a[1]) * W[i][j]
+                c2 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * W[i][j]
+                c3 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * W[i][j]
+                c4 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * W[i][j]
+            c1 *= 4 / ( 9 * len(energies))
+            c2 *= 4 / (9 * len(energies))
+            c3 *= 4 / (9 * len(energies))
+            c4 *= 4 / (9 * len(energies))
+            c11.append(c1)
+            c22.append(c2)
+            c33.append(c3)
+            c44.append(c4)
+    cs.append(c11)
+    cs.append(c22)
+    cs.append(c33)
+    cs.append(c44)
+    return cs
+
 def Fourier2D(coeffs, angles,number_of_c):
     pot = 0.0
     pot += coeffs[0][0] / 4.0;
