@@ -466,6 +466,7 @@ class species:
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
         np.savetxt('coeffs1.txt', coeffs, delimiter=' ', fmt='%4.4f')
+        np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
         np.savetxt('comparison.txt', check, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
