@@ -63,7 +63,7 @@ def fitFourier2D(energies,angles,coeffs):
     cs.append(c44)
     return cs
 
-def Fourier2D(angles,coeffs, number_of_c):
+def Fourier2D(coeffs, angles,number_of_c):
     pot = 0.0
     pot += coeffs[0][0] / 4.0;
     for i in range(0,number_of_c) :
