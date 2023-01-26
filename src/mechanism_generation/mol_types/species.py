@@ -463,7 +463,10 @@ class species:
         chi = 0
         for a,e in zip(angle_arr_1D,ene_arr_1D):
             fit_ene = tl.Fourier2D(coeffs,a, f_coeffs)
-            chi += abs(fit_ene - e) / e
+            try:
+                chi += abs(fit_ene - e) / fit_ene
+            except:
+                pass
             check.append([fit_ene,e])
         print(str(chi))
         os.chdir('../')
