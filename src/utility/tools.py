@@ -48,11 +48,10 @@ def fitFourier2D(energies,angles,coeffs):
                 c2 += e * np.cos(i * a[0]) * np.sin(j * a[1])
                 c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
                 c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
-            c1 *= 4 / coeffs**2
-            c2 *= 4 / coeffs**2
-            c3 *= 4 / coeffs**2
-            c4 *= 4 / coeffs**2
-            print(str(i))
+            c1 *= 4 / len(energies)
+            c2 *= 4 / len(energies)
+            c3 *= 4 / len(energies)
+            c4 *= 4 / len(energies)
             c11.append(c1)
             c22.append(c2)
             c33.append(c3)
