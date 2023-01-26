@@ -70,13 +70,12 @@ def fitFourier2Dsimp(energies,angles,coeffs):
     c44 = []
     size = int(np.sqrt(len(energies)))
     W1_1 = [2]*size
-    W1_1[1::2] = [4]* int(size/2)
+    W1_1[1::2] = [4]*int(size/2)
     W = []
     for i in range(0,size):
-        row = []
         for j in range(0,size):
-            row.append(W1_1[i] * W1_1[j] )
-        W.append(row)
+            W.append(W1_1[i] * W1_1[j] )
+
 
     print(str(W))
 
@@ -86,11 +85,11 @@ def fitFourier2Dsimp(energies,angles,coeffs):
             c2 = 0
             c3 = 0
             c4 = 0
-            for e,a in zip(energies,angles):
-                c1 += e * np.cos(i*a[0]) * np.cos(j*a[1]) * W[i][j]
-                c2 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * W[i][j]
-                c3 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * W[i][j]
-                c4 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * W[i][j]
+            for e,a,w in zip(energies,angles,W):
+                c1 += e * np.cos(i*a[0]) * np.cos(j*a[1]) * w
+                c2 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * w
+                c3 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * w
+                c4 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * w
             c1 *= 4 / ( 9 * len(energies))
             c2 *= 4 / (9 * len(energies))
             c3 *= 4 / (9 * len(energies))
