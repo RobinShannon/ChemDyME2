@@ -464,7 +464,7 @@ class species:
         for a,e in zip(angle_arr_1D,ene_arr_1D):
             fit_ene = tl.Fourier2D(coeffs,a, f_coeffs)
             try:
-                chi += abs(fit_ene - e) / fit_ene
+                chi += abs(fit_ene - e) / ene
             except:
                 pass
             check.append([fit_ene,e])
