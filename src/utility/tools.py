@@ -77,9 +77,9 @@ def Fourier2D(coeffs, angles,number_of_c):
         for j in range(1,number_of_c):
             twoDIndex = (j * number_of_c) + i;
             pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1])) / 2.0;
-            pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
-            pot += (coeffs[0][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1])) / 2.0;
-            pot += (coeffs[0][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
+            pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
+            pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1])) / 2.0;
+            pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
     return pot
 
 def fitFourier3D(energies,angles,coeffs):
