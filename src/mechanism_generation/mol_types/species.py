@@ -435,7 +435,7 @@ class species:
 
         os.chdir(current_dir)
 
-    def read_multi_dimensional_torsion2D(self,path, increment = 18, directory="hindered_rotor", rotors_to_exclude = None):
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -458,11 +458,14 @@ class species:
                 a.append(np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1)))
                 angle_arr_1D.append(a)
             rot_array_2D.append(arr)
-        coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D,50)
+        coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D, f_coeffs)
         check = []
+        chi = 0
         for a,e in zip(angle_arr_1D,ene_arr_1D):
-            fit_ene = tl.Fourier2D(coeffs,a, 50)
+            fit_ene = tl.Fourier2D(coeffs,a, f_coeffs)
+            chi += abs(fit_ene - e) / e
             check.append([fit_ene,e])
+        print(str(chi))
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
         np.savetxt('coeffs1.txt', coeffs, delimiter=' ', fmt='%4.4f')

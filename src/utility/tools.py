@@ -106,21 +106,21 @@ def fitFourier2Dsimp(energies,angles,coeffs):
 
 def Fourier2D(coeffs, angles,number_of_c):
     pot = 0.0
-    pot += coeffs[0][0] / 4.0;
+    pot += coeffs[0][0] / 4.0
     for i in range(1,number_of_c) :
-        pot += (coeffs[0][i] * np.cos(i * angles[0]) + coeffs[1][i] * np.sin(i) * angles[0]) / 2.0;
+        pot += (coeffs[0][i] * np.cos(i * angles[0]) + coeffs[1][i] * np.sin(i) * angles[0]) / 2.0
 
     for i in range(1,number_of_c):
-        oneDIndex = i * number_of_c;
-        pot += (coeffs[0][oneDIndex] * np.cos(i * angles[1]) + coeffs[2][oneDIndex] * np.sin(i * angles[1])) / 2.0;
+        oneDIndex = i * number_of_c
+        pot += (coeffs[0][oneDIndex] * np.cos(i * angles[1]) + coeffs[2][oneDIndex] * np.sin(i * angles[1])) / 2.0
 
     for i in range(1, number_of_c):
         for j in range(1,number_of_c):
-            twoDIndex = (i * number_of_c) + j;
-            pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1])) / 2.0;
-            pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
-            pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1])) / 2.0;
-            pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1])) / 2.0;
+            twoDIndex = (i * number_of_c) + j
+            pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
+            pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
+            pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]))
+            pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]))
     return pot
 
 def fitFourier3D(energies,angles,coeffs):
