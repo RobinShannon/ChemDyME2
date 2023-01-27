@@ -379,7 +379,7 @@ class species:
         os.chdir('../')
 
 
-    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid=True):
+    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid = False, ts =False):
         current_dir = os.getcwd()
         print(str(rigid))
         os.makedirs(self.dir, exist_ok=True)
@@ -415,7 +415,12 @@ class species:
                                           rotatable_bonds[1][3], diheds[1], indices=coId[1])
                         hmol.set_dihedral(rotatable_bonds[2][0], rotatable_bonds[2][1], rotatable_bonds[2][2],
                                           rotatable_bonds[2][3], diheds[2], indices=coId[2])
-                        hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                        if ts:
+                            hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                     title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
+                                                     rigid=rigid)
+                        else:
+                            hmol._calc.minimise_stable_write(dihedral=rotatable_bonds, path="MultiHind",
                                                      title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
                                                      rigid=rigid)
                         diheds[2] += float(increment)
@@ -428,9 +433,14 @@ class species:
                                       rotatable_bonds[0][3], diheds[0], indices=coId[0])
                     hmol.set_dihedral(rotatable_bonds[1][0], rotatable_bonds[1][1], rotatable_bonds[1][2],
                                       rotatable_bonds[1][3], diheds[1], indices=coId[1])
-                    hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                    if ts:
+                        hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
                                                  title="H" + str(j) + '_' + str(l), atoms=hmol,
-                                                 rigid=True)
+                                                 rigid=rigid)
+                    else:
+                        hmol._calc.minimise_stable_write(dihedral=rotatable_bonds, path="MultiHind",
+                                                     title="H" + str(j) + '_' + str(l), atoms=hmol,
+                                                     rigid=rigid)
                     diheds[1] += float(increment)
                 diheds[0] += float(increment)
 
