@@ -462,7 +462,12 @@ class species:
             arr = []
             traj =[]
             for j in range(0,int(steps)):
-                hmol = read("H" + str(i) + '_' + str(j) + ".log")
+                try:
+                    hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-1)
+                    ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
+                except:
+                    hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-2)
+                    ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
                 ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
                 arr.append(ene)
                 ene_arr_1D.append(ene)
