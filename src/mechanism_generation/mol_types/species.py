@@ -483,8 +483,8 @@ class species:
             write('../T'+str(i)+'.xyz',traj)
             rot_array_2D.append(arr)
         for i in range(0,int(steps+1)):
-            ene_arr_1D.append(ene_arr_1D.append[i])
-            angle_arr_1D.append(angle_arr_1D.append[i])
+            ene_arr_1D.append(ene_arr_1D[i])
+            angle_arr_1D.append(angle_arr_1D[i])
         print(np.sqrt(len(ene_arr_1D)))
         coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D, f_coeffs)
         check = []
