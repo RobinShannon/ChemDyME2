@@ -210,7 +210,7 @@ class Gaussian(FileIOCalculator):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
-
+        print(str(rigid))
 
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)

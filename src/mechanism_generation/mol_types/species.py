@@ -381,6 +381,7 @@ class species:
 
     def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid=True):
         current_dir = os.getcwd()
+        print(str(rigid))
         os.makedirs(self.dir, exist_ok=True)
         os.chdir(self.dir)
         os.makedirs(directory, exist_ok=True)
