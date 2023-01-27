@@ -68,21 +68,17 @@ def fitFourier2Dsimp(energies,angles,coeffs):
     c22 = []
     c33 = []
     c44 = []
-    size = int(np.sqrt(len(energies)))
-    W1 = [4]*size
-    W1[1::2] = [8] * int((size/2))
+    size = int(np.sqrt(len(energies))-2)
+    W1 = [4]*int(size)
+    W1[1::2] = [2] * int((size/2))
+    W1.append(1)
+    W1.insert(0,1)
     print(str(W1))
-    W2 = [i * 2 for i in W1]
-    print(str(W2))
+
     W = []
-    for i in range(0,size):
-        for j in range(0,size):
-            if i % 2 == 0:
-                W.append(W1[j])
-            else:
-                W.append(W2[j])
-
-
+    for i in range(0,size+2):
+        for j in range(0,size+2):
+            W.append(W1[i]*W1[j])
     print(str(W))
 
     for i in range(0,coeffs):

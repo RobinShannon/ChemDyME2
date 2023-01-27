@@ -461,6 +461,7 @@ class species:
         for i in range(0,int(steps)):
             arr = []
             traj =[]
+            angle = []
             for j in range(0,int(steps)):
                 try:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-1)
@@ -474,10 +475,16 @@ class species:
                 a =[]
                 a.append(np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1)))
                 a.append(np.radians(hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,int(dihedrals[0][3]) - 1)))
+                angle.append(a)
                 angle_arr_1D.append(a)
                 traj.append(hmol.copy())
+            ene_arr_1D.append(arr[0])
+            angle_arr_1D.append(angle[0])
             write('../T'+str(i)+'.xyz',traj)
             rot_array_2D.append(arr)
+        for i in range(0,steps+1):
+            ene_arr_1D.append(ene_arr_1D.append[i])
+            angle_arr_1D.append(angle_arr_1D.append[i])
         coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D, f_coeffs)
         check = []
         chi = 0
