@@ -447,10 +447,10 @@ class species:
         angle_arr_1D = []
         dihedrals = tl.read_mod_redundant2d('H0_0.com')
         print(dihedrals)
-        for i in range(0,int(steps-1)):
+        for i in range(0,int(steps)):
             arr = []
             traj =[]
-            for j in range(0,int(steps-1)):
+            for j in range(0,int(steps)):
                 hmol = read("H" + str(i) + '_' + str(j) + ".log")
                 ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
                 arr.append(ene)
