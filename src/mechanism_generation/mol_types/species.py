@@ -469,7 +469,7 @@ class species:
                 except:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-2)
                     ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
-                ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
+
                 arr.append(ene)
                 ene_arr_1D.append(ene)
                 a =[]
@@ -487,7 +487,7 @@ class species:
             ene_arr_1D.append(ene_arr_1D[i])
             angle_arr_1D.append(angle_arr_1D[i])
         print(np.sqrt(len(ene_arr_1D)))
-        coeffs=tl.fitFourier2Dsimp(ene_arr_1D, angle_arr_1D, f_coeffs)
+        coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, f_coeffs)
         check = []
         chi = 0
         for a,e in zip(angle_arr_1D,ene_arr_1D):
