@@ -191,7 +191,7 @@ class Gaussian(FileIOCalculator):
             if rigid:
                 write(str(title) + '.com', atoms, format='gaussian-in', addsec=str(mod), **self.parameters)
             else:
-                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant)',addsec=str(mod), **self.parameters)
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant, loose)',addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
             lines.pop(-4)
@@ -215,7 +215,7 @@ class Gaussian(FileIOCalculator):
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)
             if not rigid:
-                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant)', addsec=str(mod), **self.parameters)
+                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,loose)', addsec=str(mod), **self.parameters)
             else:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
