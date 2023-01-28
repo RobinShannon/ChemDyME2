@@ -134,7 +134,7 @@ def Fourier2Dalt(coeffs, angles,number_of_c):
     pot = 0
     for i in range(0, number_of_c):
         for j in range(0,number_of_c):
-            twoDIndex = (j * number_of_c) + i
+            twoDIndex = (i * number_of_c) + j
             pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
             pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
             pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]))
