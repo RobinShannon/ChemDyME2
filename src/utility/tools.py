@@ -39,6 +39,11 @@ def fitFourier2D(energies,angles,coeffs):
     c44 = []
     for i in range(0,coeffs):
         for j in range(0,coeffs):
+            k = 1
+            if i == 0 and j == 0:
+                k = 4
+            elif i == 0 or j == 0:
+                k = 2
             c1 = 0
             c2 = 0
             c3 = 0
@@ -48,10 +53,10 @@ def fitFourier2D(energies,angles,coeffs):
                 c2 += e * np.cos(i * a[0]) * np.sin(j * a[1])
                 c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
                 c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
-            c1 *= 4 / len(energies)
-            c2 *= 4 / len(energies)
-            c3 *= 4 / len(energies)
-            c4 *= 4 / len(energies)
+            c1 *= (4 * k) / len(energies)
+            c2 *= (4 * k) / len(energies)
+            c3 *= (4 * k) / len(energies)
+            c4 *= (4 * k) / len(energies)
             c11.append(c1)
             c22.append(c2)
             c33.append(c3)
@@ -118,6 +123,17 @@ def Fourier2D(coeffs, angles,number_of_c):
 
     for i in range(1, number_of_c):
         for j in range(1,number_of_c):
+            twoDIndex = (j * number_of_c) + i
+            pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
+            pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
+            pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]))
+            pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]))
+    return pot
+
+def Fourier2Dalt(coeffs, angles,number_of_c):
+    pot = 0
+    for i in range(0, number_of_c):
+        for j in range(0,number_of_c):
             twoDIndex = (j * number_of_c) + i
             pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
             pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
