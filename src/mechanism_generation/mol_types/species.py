@@ -479,8 +479,8 @@ class species:
                 angle.append(a)
                 angle_arr_1D.append(a)
                 traj.append(hmol.copy())
-            ene_arr_1D.append(arr[0])
-            angle_arr_1D.append(angle[0])
+            #ene_arr_1D.append(arr[0])
+            #angle_arr_1D.append(angle[0])
             write('../T'+str(i)+'.xyz',traj)
             rot_array_2D.append(arr)
         for i in range(0,int(steps+1)):
