@@ -482,7 +482,7 @@ class species:
             angle_arr_1D.append(angle[0])
             write('../T'+str(i)+'.xyz',traj)
             rot_array_2D.append(arr)
-        for i in range(0,int(steps)):
+        for i in range(0,int(steps+1)):
             ene_arr_1D.append(ene_arr_1D[i])
             angle_arr_1D.append(angle_arr_1D[i])
         print(np.sqrt(len(ene_arr_1D)))
