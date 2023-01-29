@@ -483,19 +483,19 @@ class species:
             #angle_arr_1D.append(angle[0])
             write('../T'+str(i)+'.xyz',traj)
             rot_array_2D.append(arr)
-        for i in range(0,int(steps)):
-            ene_arr_1D.append(ene_arr_1D[i])
-            angle_arr_1D.append(angle_arr_1D[i])
+        #for i in range(0,int(steps)):
+            #ene_arr_1D.append(ene_arr_1D[i])
+            #angle_arr_1D.append(angle_arr_1D[i])
         print(np.sqrt(len(ene_arr_1D)))
         coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, f_coeffs)
         check = []
         chi = 0
         for a,e in zip(angle_arr_1D,ene_arr_1D):
             fit_ene = tl.Fourier2Dalt(coeffs,a, f_coeffs)
-            try:
-                chi += abs(fit_ene - e) / e
-            except:
-                pass
+            if e != 0:
+                chi += abs(fit_ene - e) / (e * 0.1)
+            else:
+                chi += abs(fit_ene - e) / 1
             check.append([fit_ene,e])
         print(str(chi))
         os.chdir('../')
