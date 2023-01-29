@@ -88,6 +88,11 @@ def fitFourier2Dsimp(energies,angles,coeffs):
 
     for i in range(0,coeffs):
         for j in range(0,coeffs):
+            k = 1
+            if i == 0 and j == 0:
+                k = 4
+            elif i == 0 or j == 0:
+                k = 2
             c1 = 0
             c2 = 0
             c3 = 0
@@ -97,10 +102,10 @@ def fitFourier2Dsimp(energies,angles,coeffs):
                 c2 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * w
                 c3 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * w
                 c4 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * w
-            c1 *= 4 / ( 9 * (len(energies)))
-            c2 *= 4 / ( 9 * (len(energies)))
-            c3 *= 4 / ( 9 * (len(energies)))
-            c4 *= 4 / ( 9 * (len(energies)))
+            c1 *= (4 * k) / ( 9 * (len(energies)))
+            c2 *= (4 * k) / ( 9 * (len(energies)))
+            c3 *= (4 * k) / ( 9 * (len(energies)))
+            c4 *= (4 * k) / ( 9 * (len(energies)))
             c11.append(c1)
             c22.append(c2)
             c33.append(c3)
