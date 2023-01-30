@@ -14,7 +14,7 @@ import numpy as np
 import glob
 from ase.io import read
 import src.utility.tools as tl
-from ase.units import kJ, mol
+from ase.units import kJ, mol, invcm
 import pickle
 
 class species:
@@ -465,10 +465,10 @@ class species:
             for j in range(0,int(steps)):
                 try:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-1)
-                    ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
+                    ene = (hmol.get_potential_energy() - baseline) * (invcm)
                 except:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-2)
-                    ene = (hmol.get_potential_energy() - baseline) * (mol / kJ)
+                    ene = (hmol.get_potential_energy() - baseline) * (invcm)
 
                 arr.append(ene)
                 ene_arr_1D.append(ene)
