@@ -159,13 +159,13 @@ def fitFourier3D(energies,angles,coeffs):
     for i in range(0,coeffs):
         for j in range(0,coeffs):
             for k in range(0,coeffs):
-                l = 8
+                l = 16
                 if i == 0 and j == 0 and k == 0:
-                    l = 1
-                elif (i == 0 and j == 0) or (i == 0 and k == 0) or (j == 0 and k == 0):
                     l = 2
-                elif (i == 0 ) or (k == 0) or (j == 0):
+                elif (i == 0 and j == 0) or (i == 0 and k == 0) or (j == 0 and k == 0):
                     l = 4
+                elif (i == 0 ) or (k == 0) or (j == 0):
+                    l = 8
                 c1 = 0
                 c2 = 0
                 c3 = 0
@@ -184,14 +184,14 @@ def fitFourier3D(energies,angles,coeffs):
                     c7 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.cos( k * a[2])
                     c8 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.sin( k * a[2])
 
-                c1 *= l / 21**3
-                c2 *= l / 21**3
-                c3 *= l / 21**3
-                c4 *= l / 21**3
-                c5 *= l / 21**3
-                c6 *= l / 21**3
-                c7 *= l / 21**3
-                c8 *= l / 21**3
+                c1 *= l / len(energies)
+                c2 *= l / len(energies)
+                c3 *= l / len(energies)
+                c4 *= l / len(energies)
+                c5 *= l / len(energies)
+                c6 *= l / len(energies)
+                c7 *= l / len(energies)
+                c8 *= l / len(energies)
                 c11.append(c1)
                 c22.append(c2)
                 c33.append(c3)
