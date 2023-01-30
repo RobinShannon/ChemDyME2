@@ -473,8 +473,8 @@ class species:
                 arr.append(ene)
                 ene_arr_1D.append(ene)
                 a =[]
-                a.append(np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1)))
                 a.append(np.radians(hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,int(dihedrals[0][3]) - 1)))
+                a.append(np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,int(dihedrals[1][3]) - 1)))
                 angle.append(a)
                 angle_arr_1D.append(a)
                 traj.append(hmol.copy())
@@ -490,7 +490,7 @@ class species:
         check = []
         chi = 0
         for a,e in zip(angle_arr_1D,ene_arr_1D):
-            fit_ene = tl.Fourier2Dalt(coeffs,a, f_coeffs)
+            fit_ene = tl.Fourier2D(coeffs,a, f_coeffs)
             if e != 0:
                 chi += abs(fit_ene - e) / (e * 0.1)
             else:
