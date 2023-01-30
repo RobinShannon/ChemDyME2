@@ -89,9 +89,9 @@ def fitFourier2Dsimp(energies,angles,coeffs):
 
     for i in range(0,coeffs):
         for j in range(0,coeffs):
-            k = 1
+            k = 4
             if i == 0 and j == 0:
-                k = 4
+                k = 1
             elif i == 0 or j == 0:
                 k = 2
             c1 = 0
