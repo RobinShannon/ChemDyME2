@@ -516,7 +516,7 @@ class species:
         steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         ene_arr_1D =[]
         angle_arr_1D = []
-        dihedrals = tl.read_mod_redundant2d('H0_0_0.com')
+        dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
         print(dihedrals)
         for i in range(0,int(steps)):
             for j in range(0,int(steps)):

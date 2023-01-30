@@ -316,6 +316,30 @@ def read_mod_redundant2d(file):
         diheds.append(last_line)
     return diheds
 
+def read_mod_redundant3d(file):
+    diheds = []
+    with open(file,'r') as f:
+        lines = f.readlines()
+        last_line = lines[-3]
+        last_line=last_line.strip("FD\n")
+        last_line=last_line.split(' ')
+        last_line.pop(0)
+        last_line.pop(-1)
+        seccond_last = lines[-4]
+        seccond_last=seccond_last.strip("FD\n")
+        seccond_last=seccond_last.split(' ')
+        seccond_last.pop(0)
+        seccond_last.pop(-1)
+        third_last = lines[-5]
+        third_last=seccond_last.strip("FD\n")
+        third_last=seccond_last.split(' ')
+        third_last.pop(0)
+        third_last.pop(-1)
+        diheds.append(third_last)
+        diheds.append(seccond_last)
+        diheds.append(last_line)
+    return diheds
+
 def getSpinMult(mol, name, trip = False):
     #Babel incorrectly guessing spin multiplicity from trajectory snapshots
     #If molecule is O2 or O assume triplet rather than singlet
