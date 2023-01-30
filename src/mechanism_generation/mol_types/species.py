@@ -513,7 +513,7 @@ class species:
         os.chdir('MultiHind')
         nmol = read("H0_0_0.log")
         baseline = nmol.get_potential_energy()
-        steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
+        steps = np.sqrt(np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')])))
         ene_arr_1D =[]
         angle_arr_1D = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
