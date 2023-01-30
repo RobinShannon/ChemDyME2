@@ -506,3 +506,61 @@ class species:
         np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
+
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5):
+        os.chdir(path)
+        os.chdir('hindered_rotor')
+        os.chdir('MultiHind')
+        nmol = read("H0_0.log")
+        baseline = nmol.get_potential_energy()
+        steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
+        ene_arr_1D =[]
+        angle_arr_1D = []
+        dihedrals = tl.read_mod_redundant2d('H0_0.com')
+        print(dihedrals)
+        for i in range(0,int(steps)):
+            for j in range(0,int(steps)):
+                for k in range(0,int(steps)):
+                    try:
+                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str('k')+ ".log", index=-1)
+                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
+                    except:
+                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str('k')+ ".log", index=-2)
+                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
+                    ene_arr_1D.append(ene)
+                    a = []
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
+                                          int(dihedrals[0][3]) - 1)))
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,
+                                          int(dihedrals[1][3]) - 1)))
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
+                                          int(dihedrals[2][3]) - 1)))
+                    angle_arr_1D.append(a)
+
+        coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, f_coeffs)
+        check = []
+        chi = 0
+        for a,e in zip(angle_arr_1D,ene_arr_1D):
+            fit_ene = tl.Fourier3D(coeffs,a, f_coeffs)
+            if e != 0:
+                chi += abs(fit_ene - e) / (e * 0.1)
+            else:
+                chi += abs(fit_ene - e) / 1
+            check.append([fit_ene,e])
+        print(str(chi))
+        os.chdir('../')
+
+        np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
+        np.savetxt('comparison.txt', check, delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs5.txt', coeffs[5][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs6.txt', coeffs[6][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs7.txt', coeffs[7][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs7.txt', coeffs[8][:], delimiter=' ', fmt='%4.4f')
+        os.chdir('../')

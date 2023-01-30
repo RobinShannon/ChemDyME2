@@ -117,26 +117,8 @@ def fitFourier2Dsimp(energies,angles,coeffs):
     cs.append(c44)
     return cs
 
+
 def Fourier2D(coeffs, angles,number_of_c):
-    pot = 0.0
-    pot += coeffs[0][0] / 4.0
-    for i in range(1,number_of_c) :
-        oneDIndex = i * number_of_c
-        pot += (coeffs[0][oneDIndex] * np.cos(i * angles[0]) + coeffs[1][oneDIndex] * np.sin(i * angles[1])) / 2.0
-
-    for i in range(1,number_of_c):
-        pot += (coeffs[2][i] * np.cos(i * angles[0]) + coeffs[3][i] * np.sin(i * angles[1])) / 2.0
-
-    for i in range(1, number_of_c):
-        for j in range(1,number_of_c):
-            twoDIndex = (j * number_of_c) + i
-            pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
-            pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
-            pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]))
-            pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]))
-    return pot
-
-def Fourier2Dalt(coeffs, angles,number_of_c):
     pot = 0
     for i in range(0, number_of_c):
         for j in range(0,number_of_c):
@@ -147,43 +129,86 @@ def Fourier2Dalt(coeffs, angles,number_of_c):
             pot += (coeffs[3][twoDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]))
     return pot
 
+def Fourier3D(coeffs, angles,number_of_c):
+    pot = 0
+    for i in range(0, number_of_c):
+        for j in range(0,number_of_c):
+            for k in range(0,number_of_c):
+                threeDIndex = (i * number_of_c**2) + ( j * number_of_c ) + k
+                pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
+                pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
+                pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
+                pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
+                pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
+                pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
+                pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
+                pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
+
+    return pot
+
 def fitFourier3D(energies,angles,coeffs):
     cs = []
+    c11 = []
+    c22 = []
+    c33 = []
+    c44 = []
+    c55 = []
+    c66 = []
+    c77 = []
+    c88 = []
     for i in range(0,coeffs):
-        c111 = []
-        c222 = []
-        c333 = []
-        c444 = []
-        for j in (0,coeffs):
-            c11 = []
-            c22 = []
-            c33 = []
-            c44 = []
-            for k in (0, coeffs):
+        for j in range(0,coeffs):
+            for k in range(0,coeffs):
+                l = 8
+                if i == 0 and j == 0 and k == 0:
+                    l = 1
+                elif (i == 0 and j == 0) or (i == 0 and k == 0) or (j == 0 and k == 0):
+                    l = 2
+                elif (i == 0 ) or (k == 0) or (j == 0):
+                    l = 4
                 c1 = 0
                 c2 = 0
                 c3 = 0
                 c4 = 0
+                c5 = 0
+                c6 = 0
+                c7 = 0
+                c8 = 0
                 for e,a in zip(energies,angles):
-                    c1 += e * np.cos(i*a[0]) * np.cos(j*a[1]) * np.cos(j*a[2])
-                    c2 += e * np.cos(i * a[0]) * np.cos(j * a[1]) * np.sin(j * a[2])
-                    c1 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.sin(j * a[2])
-                    c3 += e * np.sin(i * a[0]) * np.cos(j * a[1])
-                    c4 += e * np.sin(i * a[0]) * np.sin(j * a[1])
-            if j == 0:
-                c1 /= 2
-                c2 /= 2
-                c3 /= 2
-                if i == 0:
-                    c1 /= 2
-            c11.append(c1)
-            c22.append(c2)
-            c33.append(c3)
-            c44.append(c4)
-        cs.append(c11)
-        cs.append(c22)
-        cs.append(c33)
-        cs.append(c44)
+                    c1 += e * np.cos(i * a[0]) * np.cos(j* a[1])  * np.cos( k * a[2])
+                    c2 += e * np.cos(i * a[0]) * np.cos(j * a[1]) * np.sin( k * a[2])
+                    c3 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.cos( k * a[2])
+                    c4 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.sin( k * a[2])
+                    c5 += e * np.sin(i * a[0]) * np.cos(j* a[1])  * np.cos( k * a[2])
+                    c6 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * np.sin( k * a[2])
+                    c7 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.cos( k * a[2])
+                    c8 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.sin( k * a[2])
+
+                c1 *= l / len(energies)
+                c2 *= l / len(energies)
+                c3 *= l / len(energies)
+                c4 *= l / len(energies)
+                c5 *= l / len(energies)
+                c6 *= l / len(energies)
+                c7 *= l / len(energies)
+                c8 *= l / len(energies)
+                c11.append(c1)
+                c22.append(c2)
+                c33.append(c3)
+                c44.append(c4)
+                c55.append(c5)
+                c66.append(c6)
+                c77.append(c7)
+                c88.append(c8)
+    cs.append(c11)
+    cs.append(c22)
+    cs.append(c33)
+    cs.append(c44)
+    cs.append(c55)
+    cs.append(c66)
+    cs.append(c77)
+    cs.append(c88)
+    return cs
 
 
 
