@@ -331,8 +331,8 @@ def read_mod_redundant3d(file):
         seccond_last.pop(0)
         seccond_last.pop(-1)
         third_last = lines[-5]
-        third_last=seccond_last.strip("FD\n")
-        third_last=seccond_last.split(' ')
+        third_last=third_last.strip("FD\n")
+        third_last=third_last.split(' ')
         third_last.pop(0)
         third_last.pop(-1)
         diheds.append(third_last)
