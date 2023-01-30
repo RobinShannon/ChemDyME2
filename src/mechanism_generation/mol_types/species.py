@@ -511,12 +511,12 @@ class species:
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
-        nmol = read("H0_0.log")
+        nmol = read("H0_0_0.log")
         baseline = nmol.get_potential_energy()
         steps = np.sqrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         ene_arr_1D =[]
         angle_arr_1D = []
-        dihedrals = tl.read_mod_redundant2d('H0_0.com')
+        dihedrals = tl.read_mod_redundant2d('H0_0_0.com')
         print(dihedrals)
         for i in range(0,int(steps)):
             for j in range(0,int(steps)):
