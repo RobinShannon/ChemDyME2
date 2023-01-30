@@ -507,7 +507,7 @@ class species:
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
 
-    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5):
+    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 5):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
