@@ -522,10 +522,10 @@ class species:
             for j in range(0,int(steps)):
                 for k in range(0,int(steps)):
                     try:
-                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str('k')+ ".log", index=-1)
+                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str(k)+ ".log", index=-1)
                         ene = (hmol.get_potential_energy() - baseline) / (invcm)
                     except:
-                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str('k')+ ".log", index=-2)
+                        hmol = read("H" + str(i) + '_' + str(j) + '-' + str(k)+ ".log", index=-2)
                         ene = (hmol.get_potential_energy() - baseline) / (invcm)
                     ene_arr_1D.append(ene)
                     a = []
