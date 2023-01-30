@@ -125,7 +125,7 @@ def Fourier2D(coeffs, angles,number_of_c):
         pot += (coeffs[0][oneDIndex] * np.cos(i * angles[0]) + coeffs[1][oneDIndex] * np.sin(i * angles[1])) / 2.0
 
     for i in range(1,number_of_c):
-        pot += (coeffs[0][i] * np.cos(i * angles[0]) + coeffs[2][i] * np.sin(i * angles[1])) / 2.0
+        pot += (coeffs[2][i] * np.cos(i * angles[0]) + coeffs[3][i] * np.sin(i * angles[1])) / 2.0
 
     for i in range(1, number_of_c):
         for j in range(1,number_of_c):
