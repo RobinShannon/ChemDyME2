@@ -131,9 +131,9 @@ def Fourier2D(coeffs, angles,number_of_c):
 
 def Fourier3D(coeffs, angles,number_of_c):
     pot = 0
-    for i in range(0, number_of_c):
-        for j in range(0,number_of_c):
-            for k in range(0,number_of_c):
+    for i in range(0, number_of_c[0]):
+        for j in range(0,number_of_c[1]):
+            for k in range(0,number_of_c[2]):
                 threeDIndex = (i * number_of_c**2) + ( j * number_of_c ) + k
                 pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
                 pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
@@ -156,10 +156,10 @@ def fitFourier3D(energies,angles,coeffs):
     c66 = []
     c77 = []
     c88 = []
-    for i in range(0,coeffs):
-        for j in range(0,coeffs):
-            for k in range(0,coeffs):
-                l = 6
+    for i in range(0,coeffs[0]):
+        for j in range(0,coeffs[1]):
+            for k in range(0,coeffs[2]):
+                l = 8
                 if i == 0 and j == 0 and k == 0:
                     l = 1
                 elif (i == 0 and j == 0) or (i == 0 and k == 0) or (j == 0 and k == 0):
