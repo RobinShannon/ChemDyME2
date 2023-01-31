@@ -37,8 +37,8 @@ def fitFourier2D(energies,angles,coeffs):
     c22 = []
     c33 = []
     c44 = []
-    for i in range(0,coeffs):
-        for j in range(0,coeffs):
+    for i in range(0,coeffs[0]):
+        for j in range(0,coeffs[1]):
             k = 4
             if i == 0 and j == 0:
                 k = 1
@@ -120,9 +120,9 @@ def fitFourier2Dsimp(energies,angles,coeffs):
 
 def Fourier2D(coeffs, angles,number_of_c):
     pot = 0
-    for i in range(0, number_of_c):
-        for j in range(0,number_of_c):
-            twoDIndex = (i * number_of_c) + j
+    for i in range(0, number_of_c[0]):
+        for j in range(0,number_of_c[1]):
+            twoDIndex = (i * number_of_c[1]) + j
             pot += (coeffs[0][twoDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]))
             pot += (coeffs[1][twoDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]))
             pot += (coeffs[2][twoDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]))
