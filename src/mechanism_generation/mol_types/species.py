@@ -561,7 +561,7 @@ class species:
         print(str(chi))
         os.chdir('../')
         for i,ar in enumerate(ene_arr_2Ds):
-            np.savetxt('coeffs'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
+            np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
         np.savetxt('comparison.txt', check, delimiter=' ', fmt='%4.4f')
