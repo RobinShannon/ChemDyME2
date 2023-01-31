@@ -507,7 +507,7 @@ class species:
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
 
-    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 5):
+    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 5, index=-1):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -517,19 +517,23 @@ class species:
         print(steps)
         ene_arr_1D =[]
         angle_arr_1D = []
+        ene_arr_2Ds = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
         print(dihedrals)
         for i in range(0,int(steps)):
+            ene_arr_2D = []
             for j in range(0,int(steps)):
+                arr = []
                 for k in range(0,int(steps)):
                     try:
-                        hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-1)
+                        hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=index)
                         ene = (hmol.get_potential_energy() - baseline) / (invcm)
                     except:
                         hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-2)
                         ene = (hmol.get_potential_energy() - baseline) / (invcm)
                     ene_arr_1D.append(ene)
                     a = []
+                    arr.append(ene)
                     a.append(np.radians(
                         hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
                                           int(dihedrals[0][3]) - 1)))
@@ -540,6 +544,8 @@ class species:
                         hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
                                           int(dihedrals[2][3]) - 1)))
                     angle_arr_1D.append(a)
+                ene_arr_2D.append(arr)
+            ene_arr_2Ds.append(ene_arr_2D)
 
         coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, f_coeffs)
         print(len(ene_arr_1D))
@@ -554,7 +560,8 @@ class species:
             check.append([fit_ene,e])
         print(str(chi))
         os.chdir('../')
-
+        for i,ar in enumerate(ene_arr_2Ds):
+            np.savetxt('coeffs'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
         np.savetxt('comparison.txt', check, delimiter=' ', fmt='%4.4f')
