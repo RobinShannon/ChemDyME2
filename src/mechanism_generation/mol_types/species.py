@@ -446,7 +446,7 @@ class species:
 
         os.chdir(current_dir)
 
-    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5):
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -464,7 +464,7 @@ class species:
             angle = []
             for j in range(0,int(steps)):
                 try:
-                    hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-1)
+                    hmol = read("H" + str(i) + '_' + str(j) + ".log", index=index)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
                 except:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-2)
