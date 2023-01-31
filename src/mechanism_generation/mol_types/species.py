@@ -546,25 +546,33 @@ class species:
                     angle_arr_1D.append(a)
                 ene_arr_2D.append(arr)
             ene_arr_2Ds.append(ene_arr_2D)
+        min_chi = np.inf
+        min_check =[]
+        for i in range(1,11):
+            for j in range(1,11):
+                for k in range(1,11):
+                    coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
+                    check = []
+                    chi = 0
+                    for a, e in zip(angle_arr_1D, ene_arr_1D):
+                        fit_ene = tl.Fourier3D(coeffs, a, [i,j,k])
+                        if e != 0:
+                            chi += abs(fit_ene - e) / (e * 0.1)
+                        else:
+                            chi += abs(fit_ene - e) / 1
+                        check.append([fit_ene, e])
+                    if chi < min_chi:
+                        min_chi = chi
+                        min_check = check
 
-        coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, f_coeffs)
-        print(len(ene_arr_1D))
-        check = []
-        chi = 0
-        for a,e in zip(angle_arr_1D,ene_arr_1D):
-            fit_ene = tl.Fourier3D(coeffs,a, f_coeffs)
-            if e != 0:
-                chi += abs(fit_ene - e) / (e * 0.1)
-            else:
-                chi += abs(fit_ene - e) / 1
-            check.append([fit_ene,e])
-        print(str(chi))
+                    print(str(chi))
+                    print(str(i)+str(j)+str(k))
         os.chdir('../')
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
-        np.savetxt('comparison.txt', check, delimiter=' ', fmt='%4.4f')
+        np.savetxt('comparison.txt', min_check, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
