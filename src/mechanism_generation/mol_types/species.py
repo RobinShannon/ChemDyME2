@@ -566,7 +566,7 @@ class species:
                         min_check = check
 
                     print(str(chi))
-                    print(str(i)+str(j)+str(k))
+                    print(str(i)+' '+str(j)+' '+str(k))
         os.chdir('../')
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
