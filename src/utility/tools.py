@@ -139,7 +139,7 @@ def Fourier3D(coeffs, angles,number_of_c):
                 pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
                 pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
                 pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
-                if i < number_of_c[0]-1 and j < number_of_c[1]-1 and k < number_of_c[2]-3:
+                if k < number_of_c[2]-2:
                     pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
                     pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
                     pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
