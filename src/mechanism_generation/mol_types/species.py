@@ -532,7 +532,7 @@ class species:
                     except:
                         hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-2)
                         ene = (hmol.get_potential_energy()) / (invcm)
-                    ene_arr_1D.append(ene)
+                    ene_arr_1D_temp.append(ene)
                     if ene < min_ene:
                         min_ene = ene
                         min_mol = hmol.copy()
