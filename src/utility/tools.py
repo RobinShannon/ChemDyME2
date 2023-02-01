@@ -168,7 +168,7 @@ def fitFourier3D(energies,angles,coeffs):
     for i in range(0,coeffs[0]):
         for j in range(0,coeffs[1]):
             for k in range(0,coeffs[2]):
-                l = 8
+                l = 6
                 if i == 0 and j == 0 and k == 0:
                     l = 1
                 elif (i == 0 and j == 0) or (i == 0 and k == 0) or (j == 0 and k == 0):
