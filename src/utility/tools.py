@@ -131,33 +131,31 @@ def Fourier2D(coeffs, angles,number_of_c):
 
 def Fourier3D(coeffs, angles,number_of_c, sin, cos):
     pot = 0
-    l1 = 2*np.pi/number_of_c[0]
-    l2 = 2*np.pi/number_of_c[1]
-    l3 = 2*np.pi/number_of_c[2]
+
     for i in range(0, number_of_c[0]):
         for j in range(0,number_of_c[1]):
             for k in range(0,number_of_c[2]):
                 threeDIndex = (i * number_of_c[2]*number_of_c[1]) + ( j * number_of_c[2] ) + k
                 if cos[2] is True and cos[1] is True and cos[0] is True:
-                    pot += (coeffs[0][threeDIndex] * np.cos(l1*i * angles[0]) * np.cos(l2*j * angles[1]) + np.cos(l3*k * angles[2]))
+                    pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
                 if sin[2] is True and cos[0] is True and cos[1] is True:
-                    pot += (coeffs[1][threeDIndex] * np.cos(l1*i * angles[0]) * np.cos(l2*j * angles[1]) + np.sin(l3*k * angles[2]))
+                    pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
                 if sin[1] is True and cos[0] is True and cos[2] is True:
-                    pot += (coeffs[2][threeDIndex] * np.cos(l1*i * angles[0]) * np.sin(l2*j * angles[1]) + np.cos(l3* k * angles[2]))
+                    pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
                 if sin[0] is True and cos[2] is True and cos[1] is True:
-                    pot += (coeffs[4][threeDIndex] * np.sin(l1*i * angles[0]) * np.cos(l2*j * angles[1]) + np.cos(l3*k * angles[2]))
+                    pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
                 if sin[0] is True and sin[1] is True and cos[2] is True:
-                    pot += (coeffs[6][threeDIndex] * np.sin(l1*i * angles[0]) * np.sin(l2*j * angles[1]) + np.cos(l3*k * angles[2]))
+                    pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
                 if sin[1] is True and sin[2] is True and cos[0] is True:
-                    pot += (coeffs[3][threeDIndex] * np.cos(l1*i * angles[0]) * np.sin(l2*j * angles[1]) + np.sin(l3*k * angles[2]))
+                    pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
                 if sin[0] is True and sin[2] is True and cos[1] is True+6:
-                    pot += (coeffs[5][threeDIndex] * np.sin(l1*i * angles[0]) * np.cos(l2*j * angles[1]) + np.sin(l3*k * angles[2]))
+                    pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
                 if sin[2] is True and sin[1] is True and sin[0] is True:
-                    pot += (coeffs[7][threeDIndex] * np.sin(l1*i * angles[0]) * np.sin(l2*j * angles[1]) + np.sin(l3*k * angles[2]))
+                    pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
 
     return pot
 
-def fitFourier3D(energies,angles,coeffs,number_of_c):
+def fitFourier3D(energies,angles,coeffs):
     cs = []
     c11 = []
     c22 = []
@@ -167,9 +165,6 @@ def fitFourier3D(energies,angles,coeffs,number_of_c):
     c66 = []
     c77 = []
     c88 = []
-    l1 = 2*np.pi/number_of_c[0]
-    l2 = 2*np.pi/number_of_c[1]
-    l3 = 2*np.pi/number_of_c[2]
     for i in range(0,coeffs[0]):
         for j in range(0,coeffs[1]):
             for k in range(0,coeffs[2]):
