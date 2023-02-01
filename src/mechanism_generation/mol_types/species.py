@@ -556,9 +556,9 @@ class species:
         min_chi = np.inf
         min_check =[]
         min_cos = []
-        for i in range(1,f_coeffs):
-            for j in range(1,f_coeffs):
-                for k in range(1,f_coeffs):
+        for i in range(2,f_coeffs):
+            for j in range(2,f_coeffs):
+                for k in range(2,f_coeffs):
                     coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
                     check = []
                     chi = 0
