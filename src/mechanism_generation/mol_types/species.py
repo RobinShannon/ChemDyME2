@@ -507,7 +507,7 @@ class species:
         np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
 
-    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True]):
+    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True]):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -563,7 +563,7 @@ class species:
                     check = []
                     chi = 0
                     for a, e in zip(angle_arr_1D, ene_arr_1D):
-                        fit_ene = tl.Fourier3D(coeffs, a, [i,j,k], sin)
+                        fit_ene = tl.Fourier3D(coeffs, a, [i,j,k], sin, cos)
                         if e != 0:
                             chi += abs(fit_ene - e) / (20)
                         else:
