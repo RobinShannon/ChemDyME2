@@ -511,11 +511,12 @@ class species:
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
-        nmol = read("H0_0_0.log")
-        baseline = nmol.get_potential_energy()
+        min_mol = None
+        min_idxs = []
+        min_ene = np.inf
         steps = np.cbrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
         print(steps)
-        ene_arr_1D =[]
+        ene_arr_1D_temp =[]
         angle_arr_1D = []
         ene_arr_2Ds = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
@@ -527,11 +528,15 @@ class species:
                 for k in range(0,int(steps)):
                     try:
                         hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=index)
-                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
+                        ene = (hmol.get_potential_energy()) / (invcm)
                     except:
                         hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-2)
-                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
+                        ene = (hmol.get_potential_energy()) / (invcm)
                     ene_arr_1D.append(ene)
+                    if ene < min_ene:
+                        min_ene = ene
+                        min_mol = hmol.copy()
+                        min_idxs = [i,j,k]
                     a = []
                     arr.append(ene)
                     a.append(np.radians(
@@ -546,11 +551,14 @@ class species:
                     angle_arr_1D.append(a)
                 ene_arr_2D.append(arr)
             ene_arr_2Ds.append(ene_arr_2D)
+        ene_arr_1D = [x - min_ene for x in ene_arr_1D_temp]
+
         min_chi = np.inf
         min_check =[]
-        for i in range(1,8):
-            for j in range(1,8):
-                for k in range(1,8):
+        min_cos = []
+        for i in range(1,6):
+            for j in range(1,6):
+                for k in range(1,6):
                     coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
                     check = []
                     chi = 0
@@ -564,10 +572,14 @@ class species:
                     if chi < min_chi:
                         min_chi = chi
                         min_check = check
+                        min_cos = [i,j,k]
 
                     print(str(chi))
                     print(str(i)+' '+str(j)+' '+str(k))
         os.chdir('../')
+        print('minimum chi = ' + str(min_chi))
+        print('idxs = ' + str(min_cos) )
+        write('newMin.xyz', min_mol)
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')

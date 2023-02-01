@@ -136,13 +136,14 @@ def Fourier3D(coeffs, angles,number_of_c):
             for k in range(0,number_of_c[2]):
                 threeDIndex = (i * number_of_c[2]*number_of_c[1]) + ( j * number_of_c[2] ) + k
                 pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
-                pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
-                pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
-                pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
-                pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
-                pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
-                pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
-                pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
+                if i < number_of_c[0]/2 and j < number_of_c[1]/2 and k < number_of_c[2]/2:
+                    pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
+                    pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
+                    pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
+                    pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.cos(k * angles[2]))
+                    pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) + np.sin(k * angles[2]))
+                    pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.cos(k * angles[2]))
+                    pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) + np.sin(k * angles[2]))
 
     return pot
 
