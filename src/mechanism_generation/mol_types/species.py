@@ -548,9 +548,9 @@ class species:
             ene_arr_2Ds.append(ene_arr_2D)
         min_chi = np.inf
         min_check =[]
-        for i in range(1,12):
-            for j in range(i,9):
-                for k in range(j,9):
+        for i in range(1,9):
+            for j in range(1,9):
+                for k in range(1,9):
                     coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
                     check = []
                     chi = 0
