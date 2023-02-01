@@ -520,6 +520,13 @@ class species:
         angle_arr_1D = []
         ene_arr_2Ds = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
+        hmol = read("H0_0_0.log", index=index)
+        a1 = np.radians(hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
+                              int(dihedrals[0][3]) - 1))
+        a2 = np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,
+                              int(dihedrals[1][3]) - 1))
+        a3 = np.radians(hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
+                              int(dihedrals[2][3]) - 1))
         print(dihedrals)
         for i in range(0,int(steps)):
             ene_arr_2D = []
@@ -541,13 +548,13 @@ class species:
                     arr.append(ene)
                     a.append(np.radians(
                         hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
-                                          int(dihedrals[0][3]) - 1)))
+                                          int(dihedrals[0][3]) - 1))-a1)
                     a.append(np.radians(
                         hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,
-                                          int(dihedrals[1][3]) - 1)))
+                                          int(dihedrals[1][3]) - 1))-a2)
                     a.append(np.radians(
                         hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
-                                          int(dihedrals[2][3]) - 1)))
+                                          int(dihedrals[2][3]) - 1))-a3)
                     angle_arr_1D.append(a)
                 ene_arr_2D.append(arr)
             ene_arr_2Ds.append(ene_arr_2D)

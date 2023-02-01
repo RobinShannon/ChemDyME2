@@ -157,7 +157,7 @@ def Fourier3D(coeffs, angles,number_of_c, sin, cos):
 
     return pot
 
-def fitFourier3D(energies,angles,coeffs):
+def fitFourier3D(energies,angles,coeffs,number_of_c):
     cs = []
     c11 = []
     c22 = []
@@ -167,9 +167,9 @@ def fitFourier3D(energies,angles,coeffs):
     c66 = []
     c77 = []
     c88 = []
-    l1 = 2*np.pi/coeffs[0]
-    l2 = 2*np.pi/coeffs[1]
-    l3 = 2*np.pi/coeffs[2]
+    l1 = 2*np.pi/number_of_c[0]
+    l2 = 2*np.pi/number_of_c[1]
+    l3 = 2*np.pi/number_of_c[2]
     for i in range(0,coeffs[0]):
         for j in range(0,coeffs[1]):
             for k in range(0,coeffs[2]):
@@ -189,14 +189,14 @@ def fitFourier3D(energies,angles,coeffs):
                 c7 = 0
                 c8 = 0
                 for e,a in zip(energies,angles):
-                    c1 += e * np.cos(l1*i * a[0]) * np.cos(l2*j* a[1])  * np.cos(l3*k * a[2])
-                    c2 += e * np.cos(l1*i * a[0]) * np.cos(l2*j * a[1]) * np.sin(l3*k * a[2])
-                    c3 += e * np.cos(l1*i * a[0]) * np.sin(l2*j * a[1]) * np.cos(l3*k * a[2])
-                    c4 += e * np.cos(l1*i * a[0]) * np.sin(l2*j * a[1]) * np.sin(l3*k * a[2])
-                    c5 += e * np.sin(l1*i * a[0]) * np.cos(l2*j* a[1])  * np.cos(l3*k * a[2])
-                    c6 += e * np.sin(l1*i * a[0]) * np.cos(l2*j * a[1]) * np.sin(l3*k * a[2])
-                    c7 += e * np.sin(l1*i * a[0]) * np.sin(l2*j * a[1]) * np.cos(l3*k * a[2])
-                    c8 += e * np.sin(l1*i * a[0]) * np.sin(l2*j * a[1]) * np.sin(l3*k * a[2])
+                    c1 += e * np.cos(i * a[0]) * np.cos(j* a[1])  * np.cos( k * a[2])
+                    c2 += e * np.cos(i * a[0]) * np.cos(j * a[1]) * np.sin( k * a[2])
+                    c3 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.cos( k * a[2])
+                    c4 += e * np.cos(i * a[0]) * np.sin(j * a[1]) * np.sin( k * a[2])
+                    c5 += e * np.sin(i * a[0]) * np.cos(j* a[1])  * np.cos( k * a[2])
+                    c6 += e * np.sin(i * a[0]) * np.cos(j * a[1]) * np.sin( k * a[2])
+                    c7 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.cos( k * a[2])
+                    c8 += e * np.sin(i * a[0]) * np.sin(j * a[1]) * np.sin( k * a[2])
 
                 c1 *= l / (len(energies))
                 c2 *= l / (len(energies))
