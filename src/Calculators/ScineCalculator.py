@@ -58,7 +58,7 @@ class SparrowCalculator(Calculator):
             else:
                 self.spin_mult = 1
                 self.unrestricted = 'restricted'
-            t1 = time.clock()
+
             self.structure = su.AtomCollection()
             elements = []
             for s in sym:
@@ -79,7 +79,7 @@ class SparrowCalculator(Calculator):
                                                 su.Property.Gradients])
         self.has_atoms = False
         self._calculate_sparrow(atoms, properties)
-        t2 = time.clock()
+
 
     def reinitialize(self, atoms):
         self.atoms = atoms

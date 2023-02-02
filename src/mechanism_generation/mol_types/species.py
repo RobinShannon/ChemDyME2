@@ -528,9 +528,9 @@ class species:
         a3 = np.radians(hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
                               int(dihedrals[2][3]) - 1))
         print(dihedrals)
-        for i in range(0,int(steps)):
+        for i in range(2,int(steps),2):
             ene_arr_2D = []
-            for j in range(0,int(steps)):
+            for j in range(0,int(steps),2):
                 arr = []
                 for k in range(0,int(steps)):
                     try:
@@ -571,7 +571,7 @@ class species:
                     chi = 0
                     for a, e in zip(angle_arr_1D, ene_arr_1D):
                         fit_ene = tl.Fourier3D(coeffs, a, [i,j,k], sin, cos)
-                        chi += abs(fit_ene - e) / (50)
+                        chi += abs(fit_ene - e) / (80)
                         check.append([fit_ene, e])
                     if chi < min_chi:
                         min_chi = chi
