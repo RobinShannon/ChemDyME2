@@ -136,22 +136,14 @@ def Fourier3D(coeffs, angles,number_of_c, sin, cos):
         for j in range(0,number_of_c[1]):
             for k in range(0,number_of_c[2]):
                 threeDIndex = (i * number_of_c[2]*number_of_c[1]) + ( j * number_of_c[2] ) + k
-                if cos[2] is True and cos[1] is True and cos[0] is True:
-                    pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) * np.cos(k * angles[2]))
-                if sin[2] is True and cos[0] is True and cos[1] is True:
-                    pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) * np.sin(k * angles[2]))
-                if sin[1] is True and cos[0] is True and cos[2] is True:
-                    pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) * np.cos(k * angles[2]))
-                if sin[0] is True and cos[2] is True and cos[1] is True:
-                    pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) * np.cos(k * angles[2]))
-                if sin[0] is True and sin[1] is True and cos[2] is True:
-                    pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) * np.cos(k * angles[2]))
-                if sin[1] is True and sin[2] is True and cos[0] is True:
-                    pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) * np.sin(k * angles[2]))
-                if sin[0] is True and sin[2] is True and cos[1] is True+6:
-                    pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) * np.sin(k * angles[2]))
-                if sin[2] is True and sin[1] is True and sin[0] is True:
-                    pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) * np.sin(k * angles[2]))
+                pot += (coeffs[0][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) * np.cos(k * angles[2]))
+                pot += (coeffs[1][threeDIndex] * np.cos(i * angles[0]) * np.cos(j * angles[1]) * np.sin(k * angles[2]))
+                pot += (coeffs[2][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) * np.cos(k * angles[2]))
+                pot += (coeffs[4][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) * np.cos(k * angles[2]))
+                pot += (coeffs[6][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) * np.cos(k * angles[2]))
+                pot += (coeffs[3][threeDIndex] * np.cos(i * angles[0]) * np.sin(j * angles[1]) * np.sin(k * angles[2]))
+                pot += (coeffs[5][threeDIndex] * np.sin(i * angles[0]) * np.cos(j * angles[1]) * np.sin(k * angles[2]))
+                pot += (coeffs[7][threeDIndex] * np.sin(i * angles[0]) * np.sin(j * angles[1]) * np.sin(k * angles[2]))
 
     return pot
 
