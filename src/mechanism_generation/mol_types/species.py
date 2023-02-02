@@ -571,10 +571,7 @@ class species:
                     chi = 0
                     for a, e in zip(angle_arr_1D, ene_arr_1D):
                         fit_ene = tl.Fourier3D(coeffs, a, [i,j,k], sin, cos)
-                        if e != 0:
-                            chi += abs(fit_ene - e) / (20)
-                        else:
-                            chi += abs(fit_ene - e) / 1
+                        chi += abs(fit_ene - e) / (50)
                         check.append([fit_ene, e])
                     if chi < min_chi:
                         min_chi = chi
