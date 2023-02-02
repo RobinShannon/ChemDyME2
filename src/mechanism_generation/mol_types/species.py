@@ -528,7 +528,7 @@ class species:
         a3 = np.radians(hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
                               int(dihedrals[2][3]) - 1))
         print(dihedrals)
-        for i in range(2,int(steps)):
+        for i in range(0,int(steps)):
             ene_arr_2D = []
             for j in range(0,int(steps)):
                 arr = []
@@ -563,10 +563,10 @@ class species:
         min_chi = np.inf
         min_check =[]
         min_cos = []
-        for i in range(2,f_coeffs):
-            for j in range(2,f_coeffs):
-                for k in range(2,f_coeffs):
-                    coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
+        for i in range(1,f_coeffs):
+            for j in range(1,f_coeffs):
+                for k in range(1,f_coeffs):
+                    coeffs=tl.fitFourier3D(ene_arr_1D[::2], angle_arr_1D[::2], [i,j,k])
                     check = []
                     chi = 0
                     for a, e in zip(angle_arr_1D, ene_arr_1D):
@@ -584,6 +584,7 @@ class species:
         print('minimum chi = ' + str(min_chi))
         print('idxs = ' + str(min_cos) )
         write('newMin.xyz', min_mol)
+        np.savetxt('full_array.txt', ene_arr_2Ds, delimiter=' ', fmt='%4.4f')
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
