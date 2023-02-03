@@ -498,7 +498,7 @@ class species:
                 check = []
                 chi = 0
                 for a, e in zip(angle_arr_1D, ene_arr_1D):
-                    fit_ene = tl.Fourier3D(coeffs, a, [i,j])
+                    fit_ene = tl.Fourier2D(coeffs, a, [i,j])
                     chi += abs(fit_ene - e) / (80)
                     check.append([fit_ene, e])
                 if chi < min_chi:
