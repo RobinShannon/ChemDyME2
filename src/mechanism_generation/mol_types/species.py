@@ -491,7 +491,9 @@ class species:
         min_check =[]
         min_coeffs = []
         min_cos = []
+        chi_surface2d = []
         for i in range(1,f_coeffs):
+            chi_surface = []
             for j in range(1,f_coeffs):
                 coeffs=tl.fitFourier2D(ene_arr_1D[::2], angle_arr_1D[::2], [i,j])
                 check = []
@@ -505,11 +507,14 @@ class species:
                     min_check = check
                     min_coeffs = coeffs
                     min_cos = [i,j]
+                chi_surface.append(chi)
+            chi_surface2d.append(chi_surface)
 
             print(str(chi))
             print(str(i)+' '+str(j))
         os.chdir('../')
         np.savetxt('multi1.txt', rot_array_2D, delimiter='\t')
+        np.savetxt('chi_surface.txt', chi_surface2d, delimiter='\t')
         np.savetxt('coeffs1.txt', min_coeffs, delimiter=' ', fmt='%4.4f')
         np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
         np.savetxt('comparison.txt', min_check, delimiter=' ', fmt='%4.4f')
