@@ -486,7 +486,6 @@ class species:
             #ene_arr_1D.append(ene_arr_1D[i])
             #angle_arr_1D.append(angle_arr_1D[i])
         print(np.sqrt(len(ene_arr_1D)))
-        coeffs=tl.fitFourier2D(ene_arr_1D, angle_arr_1D, f_coeffs)
         min_chi = np.inf
         min_check =[]
         min_coeffs = []
