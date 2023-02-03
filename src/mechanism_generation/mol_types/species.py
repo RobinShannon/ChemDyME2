@@ -583,7 +583,7 @@ class species:
         for i in range(1,f_coeffs):
             for j in range(1,f_coeffs):
                 for k in range(1,f_coeffs):
-                    coeffs=tl.fitFourier3D(ene_arr_1D[::2], angle_arr_1D[::2], [i,j,k])
+                    coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [i,j,k])
                     check = []
                     chi = 0
                     for a, e in zip(angle_arr_1D, ene_arr_1D):
