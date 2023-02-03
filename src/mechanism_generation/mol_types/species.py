@@ -579,6 +579,7 @@ class species:
         min_chi = np.inf
         min_check =[]
         min_cos = []
+        min_coeffs = []
         for i in range(1,f_coeffs):
             for j in range(1,f_coeffs):
                 for k in range(1,f_coeffs):
@@ -593,6 +594,7 @@ class species:
                         min_chi = chi
                         min_check = check
                         min_cos = [i,j,k]
+                        min_coeffs = coeffs
 
                     print(str(chi))
                     print(str(i)+' '+str(j)+' '+str(k))
@@ -605,14 +607,14 @@ class species:
         np.savetxt('full_array.txt', arr_reshaped, delimiter=' ', fmt='%4.4f')
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs1.txt', coeffs[0][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs1.txt', min_coeffs[0][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
         np.savetxt('comparison.txt', min_check, delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs2.txt', coeffs[1][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs3.txt', coeffs[2][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs4.txt', coeffs[3][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs5.txt', coeffs[4][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs6.txt', coeffs[5][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs7.txt', coeffs[6][:], delimiter=' ', fmt='%4.4f')
-        np.savetxt('coeffs8.txt', coeffs[7][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs2.txt', min_coeffs[1][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs3.txt', min_coeffs[2][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs4.txt', min_coeffs[3][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs5.txt', min_coeffs[4][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs6.txt', min_coeffs[5][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs7.txt', min_coeffs[6][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs8.txt', min_coeffs[7][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
