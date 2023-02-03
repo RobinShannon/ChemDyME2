@@ -584,8 +584,8 @@ class species:
         print('minimum chi = ' + str(min_chi))
         print('idxs = ' + str(min_cos) )
         write('newMin.xyz', min_mol)
-
-        arr_reshaped = ene_arr_2Ds(arr.shape[0], -1)
+        array_2D = np.asarray(ene_arr_2Ds)
+        arr_reshaped = array_2D(array_2D.shape[0], -1)
         np.savetxt('full_array.txt', arr_reshaped, delimiter=' ', fmt='%4.4f')
         for i,ar in enumerate(ene_arr_2Ds):
             np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
