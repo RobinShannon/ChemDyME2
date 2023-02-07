@@ -363,7 +363,7 @@ class Gaussian(FileIOCalculator):
 
     def get_modred_lines(self,dihedral):
         string = ""
-        if len(dihedral[0]) == 0:
+        if isinstance(dihedral[0], list):
             for d in dihedral:
                 string += 'D ' + str(d[0]+1) + " " + str(d[1]+1) + " " + str(d[2]+1) + " " + str(d[3]+1) +" F\n"
         else:
