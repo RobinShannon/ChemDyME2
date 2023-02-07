@@ -18,7 +18,7 @@ from ase.optimize import BFGS as bfgs
 from ase.vibrations import Vibrations
 from ase.io import write
 #from src.Calculators.NNCalculator import NNCalculator
-
+from src.Calculators.ScineCalculator import  SparrowCalculator as SP
 from ase.vibrations import Vibrations
 from ase.md.verlet import VelocityVerlet
 from ase import units
@@ -250,9 +250,9 @@ for i in range(0,len(s1)):
         print(s1[i].get_potential_energy())
         s1pruned.append(s1[i].copy())
 write('OH2.xyz', s1pruned)
-mol = read('H2O2/ho2.xyz')
+mol = read('H2O2/water.xyz')
 
-mol.set_calculator(xtb(method="GFN2xTB", electronic_temperature=1500))
+mol.set_calculator(SP(method='PM6'))
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
 dyn = BFGS(mol)
 dyn.run(1e-7, 500)
