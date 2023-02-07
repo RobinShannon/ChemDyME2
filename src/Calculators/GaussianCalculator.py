@@ -186,7 +186,6 @@ class Gaussian(FileIOCalculator):
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         print(str(dihedral))
-
         if dihedral != None:
             mod = self.get_modred_lines(dihedral)
             if rigid:
@@ -364,6 +363,9 @@ class Gaussian(FileIOCalculator):
 
     def get_modred_lines(self,dihedral):
         string = ""
-        for d in dihedral:
-            string += 'D ' + str(d[0]+1) + " " + str(d[1]+1) + " " + str(d[2]+1) + " " + str(d[3]+1) +" F\n"
+        if len(dihedral[0]) == 0:
+            for d in dihedral:
+                string += 'D ' + str(d[0]+1) + " " + str(d[1]+1) + " " + str(d[2]+1) + " " + str(d[3]+1) +" F\n"
+        else:
+            string += 'D ' + str(dihedral[0] + 1) + " " + str(dihedral[1] + 1) + " " + str(dihedral[2] + 1) + " " + str(dihedral[3] + 1) + " F\n"
         return string
