@@ -138,9 +138,10 @@ class Gaussian(FileIOCalculator):
         if s % 2 != 0:
             self.parameters['mult'] = 2
         elif is_O or is_OO:
-            self.parameters['mult']
+            self.parameters['mult'] = 3
         else:
-            self.parameters['mult']
+            self.parameters['mult'] = 1
+        print('Reinitialising gaussian calculator. Multiplicity = ' + str(self.parameters['mult']))
 
 
     def write_input(self, atoms, properties=None, system_changes=None):

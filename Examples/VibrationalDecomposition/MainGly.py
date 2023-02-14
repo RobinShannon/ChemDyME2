@@ -252,7 +252,7 @@ for i in range(0,len(s1)):
 write('OH2.xyz', s1pruned)
 mol = read('H2O2/water.xyz')
 
-mol.set_calculator(SP(method='PM6'))
+mol.set_calculator(SP(method='AM1'))
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
 dyn = BFGS(mol)
 dyn.run(1e-7, 500)
@@ -313,7 +313,7 @@ is_normal = np.dot(new[:,3],new[:,6])
 is_normal = np.dot(new[:,3],new[:,7])
 is_normal = np.dot(new[:,3],new[:,8])
 
-np.save('H2O2/ho2.npy', new_converted)
+np.save('H2O2/wateram1.npy', new_converted)
 
 mode1 = new_converted[:,0].reshape(3,3)
 mode1_traj= []
