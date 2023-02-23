@@ -1,5 +1,6 @@
 # Copyright (c) Intangible Realities Lab, University Of Bristol. All rights reserved.
 # Licensed under the GPL. See License.txt in the project root for license information.
+import sys
 from typing import Optional, Collection
 import os
 import numpy as np
@@ -13,9 +14,39 @@ import src.utility.tools as tl
 from ase.io import write, read
 import scine_readuct
 import time
+from contextlib import contextmanager
 
 EV_PER_HARTREE = 27.2114
 ANG_PER_BOHR = 0.529177
+
+@contextmanager
+def stdout_redirected(to=os.devnull):
+    '''
+    import os
+
+    with stdout_redirected(to=filename):
+        print("from Python")
+        os.system("echo non-Python applications are also supported")
+    '''
+    fd = sys.stdout.fileno()
+
+    ##### assert that Python and C stdio write using the same file descriptor
+    ####assert libc.fileno(ctypes.c_void_p.in_dll(libc, "stdout")) == fd == 1
+
+    def _redirect_stdout(to):
+        sys.stdout.close() # + implicit flush()
+        os.dup2(to.fileno(), fd) # fd writes to 'to' file
+        sys.stdout = os.fdopen(fd, 'w') # Python writes to fd
+
+    with os.fdopen(os.dup(fd), 'w') as old_stdout:
+        with open(to, 'w') as file:
+            _redirect_stdout(to=file)
+        try:
+            yield # allow code to be run with the redirected stdout
+        finally:
+            _redirect_stdout(to=old_stdout) # restore stdout.
+                                            # buffering and flags such as
+                                            # CLOEXEC may be different
 
 class SparrowCalculator(Calculator):
     """
@@ -78,12 +109,21 @@ class SparrowCalculator(Calculator):
             self.calc.set_required_properties([su.Property.Energy,
                                                 su.Property.Gradients])
         self.has_atoms = False
-        self._calculate_sparrow(atoms, properties)
+        with stdout_redirected():
+            self._calculate_sparrow(atoms, properties)
 
 
     def reinitialize(self, atoms):
         self.atoms = atoms
         self.results = {}
+
+    def redirect_stdout(self):
+        sys.stdout.flush()
+        newstdout = os.dup(1)
+        devnull = os.open(os.devnull, os.O_WRONLY)
+        os.dup2(devnull,1)
+        os.close(devnull)
+        sys.stdout = os.fdopen(newstdout,'w')
 
 
     def _calculate_sparrow(self, atoms: Atoms, properties: Collection[str]):

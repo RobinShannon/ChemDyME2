@@ -122,7 +122,7 @@ class BXD:
         else:
             return False
 
-    def close(self, temp_dir, mol):
+    def close(self, temp_dir):
         pass
 
 

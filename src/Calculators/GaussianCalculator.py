@@ -195,7 +195,8 @@ class Gaussian(FileIOCalculator):
                 write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant, loose)',addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
-            lines.pop(-4)
+            pop_point = -4 - len(dihedral)
+            lines.pop(pop_point)
             f.close()
             f=open(str(title) + '.com','w')
             f.writelines(lines)
@@ -205,6 +206,13 @@ class Gaussian(FileIOCalculator):
                 write(str(title) + '.com', atoms, format='gaussian-in', **self.parameters)
             else:
                 write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall)', **self.parameters)
+        os.chdir(current_dir)
+
+    def projected_frequency(self, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None):
+        current_dir = os.getcwd()
+        os.makedirs(path, exist_ok=True)
+        os.chdir(path)
+        write(str(title) + '.com', atoms, format='gaussian-in', extra='frequency=(projected)', **self.parameters)
         os.chdir(current_dir)
 
     def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
