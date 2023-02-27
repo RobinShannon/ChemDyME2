@@ -121,7 +121,7 @@ class Trajectory:
                 if bxd.complete():
                     bxd_complete = True
                     for bxd in self.bxd_list:
-                        bxd.close('temp')
+                        bxd.close('temp',self.mol)
             if bxd_complete or self.mdsteps > max_steps or self.criteria is not None and self.criteria.complete:
                 keep_going = False
                 write('temp.xyz', traj)

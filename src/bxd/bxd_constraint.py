@@ -429,6 +429,7 @@ class Adaptive(BXD):
         :param mol: ASE atoms object containing final geometry
         :return:
         """
+        os.makedirs(temp_dir, exist_ok=True)
         box_geoms = open(temp_dir + '/box_geoms.xyz', 'w')
         furthest_geom = open(temp_dir + '/furthest_geometry.xyz', 'w')
         end_geom = open(temp_dir + '/final_geometry.xyz', 'w')
