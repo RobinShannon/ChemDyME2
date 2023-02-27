@@ -622,3 +622,99 @@ class species:
         np.savetxt('coeffs7.txt', min_coeffs[6][:], delimiter=' ', fmt='%4.4f')
         np.savetxt('coeffs8.txt', min_coeffs[7][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
+
+    def read_multi_dimensional_torsion3D_2(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True]):
+        os.chdir(path)
+        os.chdir('hindered_rotor')
+        os.chdir('MultiHind')
+        min_mol = None
+        min_idxs = []
+        min_ene = np.inf
+        steps = np.cbrt(len([f for f in os.listdir(".") if f.endswith('.log')]))
+        print(steps)
+        ene_arr_1D_temp =[]
+        angle_arr_1D = []
+        ene_arr_2Ds = []
+        dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
+        hmol = read("H0_0_0.log", index=index)
+        a1 = np.radians(hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
+                              int(dihedrals[0][3]) - 1))
+        a2 = np.radians(hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,
+                              int(dihedrals[1][3]) - 1))
+        a3 = np.radians(hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
+                              int(dihedrals[2][3]) - 1))
+        print(dihedrals)
+        for i in range(0,int(steps)):
+            ene_arr_2D = []
+            for j in range(0,int(steps)):
+                arr = []
+                for k in range(0,int(steps)):
+                    try:
+                        hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=index)
+                        ene = (hmol.get_potential_energy()) / (invcm)
+                    except:
+                        try:
+                            hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-2)
+                            ene = (hmol.get_potential_energy()) / (invcm)
+                        except:
+                            print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
+                            ene = ene_arr_1D_temp[-1]
+                    ene_arr_1D_temp.append(ene)
+                    if ene < min_ene:
+                        min_ene = ene
+                        min_mol = hmol.copy()
+                        min_idxs = [i,j,k]
+                    a = []
+                    arr.append(ene)
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[0][0]) - 1, int(dihedrals[0][1]) - 1, int(dihedrals[0][2]) - 1,
+                                          int(dihedrals[0][3]) - 1)))
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[1][0]) - 1, int(dihedrals[1][1]) - 1, int(dihedrals[1][2]) - 1,
+                                          int(dihedrals[1][3]) - 1)))
+                    a.append(np.radians(
+                        hmol.get_dihedral(int(dihedrals[2][0]) - 1, int(dihedrals[2][1]) - 1, int(dihedrals[2][2]) - 1,
+                                          int(dihedrals[2][3]) - 1)))
+                    angle_arr_1D.append(a)
+                ene_arr_2D.append(arr)
+            ene_arr_2Ds.append(ene_arr_2D)
+        ene_arr_1D = [x - min_ene for x in ene_arr_1D_temp]
+
+        min_chi = np.inf
+        min_check =[]
+        min_cos = []
+        min_coeffs = []
+        coeffs=tl.fitFourier3D(ene_arr_1D, angle_arr_1D, [f_coeffs,f_coeffs,f_coeffs])
+        check = []
+        chi = 0
+        for a, e in zip(angle_arr_1D, ene_arr_1D):
+            fit_ene = tl.Fourier3D(coeffs, a, [f_coeffs,f_coeffs,f_coeffs], sin, cos)
+            chi += abs(fit_ene - e) / (80)
+            check.append([fit_ene, e])
+        if chi < min_chi:
+            min_chi = chi
+            min_check = check
+            min_cos = [f_coeffs,f_coeffs,f_coeffs]
+            min_coeffs = coeffs
+
+        print(str(chi))
+        os.chdir('../')
+        print('minimum chi = ' + str(min_chi))
+        print('idxs = ' + str(min_cos) )
+        write('newMin.xyz', min_mol)
+        array_2D = np.asarray(ene_arr_2Ds)
+        arr_reshaped = array_2D.reshape(array_2D.shape[0], -1)
+        np.savetxt('full_array.txt', arr_reshaped, delimiter=' ', fmt='%4.4f')
+        for i,ar in enumerate(ene_arr_2Ds):
+            np.savetxt('array'+str(i)+'.txt', ar, delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs1.txt', min_coeffs[0][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('angles.txt', angle_arr_1D, delimiter=' ', fmt='%4.4f')
+        np.savetxt('comparison.txt', min_check, delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs2.txt', min_coeffs[1][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs3.txt', min_coeffs[2][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs4.txt', min_coeffs[3][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs5.txt', min_coeffs[4][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs6.txt', min_coeffs[5][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs7.txt', min_coeffs[6][:], delimiter=' ', fmt='%4.4f')
+        np.savetxt('coeffs8.txt', min_coeffs[7][:], delimiter=' ', fmt='%4.4f')
+        os.chdir('../')
