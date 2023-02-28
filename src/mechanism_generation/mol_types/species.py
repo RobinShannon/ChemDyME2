@@ -659,6 +659,12 @@ class species:
                         except:
                             print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             ene = ene_arr_1D_temp[-1]
+                    try:
+                        if (ene_arr_1D_temp[-1] > 1.5 * ene_arr_1D_temp[-2] ) and (ene_arr_1D_temp[-1] > 1.5 * ene):
+                            diff = ene - ene_arr_1D_temp[-2]
+                            ene_arr_1D_temp[-1] = ene_arr_1D_temp[-2] + (diff / 2)
+                    except:
+                        pass
                     ene_arr_1D_temp.append(ene)
                     if ene < min_ene:
                         min_ene = ene
