@@ -215,14 +215,14 @@ class Gaussian(FileIOCalculator):
         write(str(title) + '.com', atoms, format='gaussian-in', extra='frequency=(projected)', **self.parameters)
         os.chdir(current_dir)
 
-    def minimise_ts_write(self, dihedral=None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
+    def minimise_ts_write(self, dihedral=None, bonds = None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         print(str(rigid))
 
         if dihedral != None:
-            mod = self.get_modred_lines(dihedral)
+            mod = self.get_modred_lines(dihedral,bonds)
             if not rigid:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,loose)', addsec=str(mod), **self.parameters)
             else:
@@ -370,11 +370,19 @@ class Gaussian(FileIOCalculator):
         xyz2 = tl.convertMolToGauss(ts)
         return string1+xyz1+string2+xyz2
 
-    def get_modred_lines(self,dihedral):
+    def get_modred_lines(self,dihedral,bonds):
         string = ""
         if isinstance(dihedral[0], list):
             for d in dihedral:
-                string += 'D ' + str(d[0]+1) + " " + str(d[1]+1) + " " + str(d[2]+1) + " " + str(d[3]+1) +" F\n"
+                string += 'D ' + str(d[0] + 1) + " " + str(d[1] + 1) + " " + str(d[2] + 1) + " " + str(
+                    d[3] + 1) + " F\n"
         else:
-            string += 'D ' + str(dihedral[0] + 1) + " " + str(dihedral[1] + 1) + " " + str(dihedral[2] + 1) + " " + str(dihedral[3] + 1) + " F\n"
+            string += 'D ' + str(dihedral[0] + 1) + " " + str(dihedral[1] + 1) + " " + str(dihedral[2] + 1) + " " + str(
+                dihedral[3] + 1) + " F\n"
+        if isinstance(bonds[0], list):
+            for b in bonds:
+                string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
+        elif bonds != None:
+            string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " " +  " F\n"
+
         return string
