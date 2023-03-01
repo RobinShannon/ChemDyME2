@@ -387,6 +387,6 @@ class Gaussian(FileIOCalculator):
             for b in bonds:
                 string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
         elif bonds != None:
-            string += 'B ' + str(bonds[0] + 1) + " " + str(bonds[1] + 1) +  " F\n"
+            string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n"
 
         return string
