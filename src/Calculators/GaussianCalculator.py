@@ -215,21 +215,24 @@ class Gaussian(FileIOCalculator):
         write(str(title) + '.com', atoms, format='gaussian-in', extra='frequency=(projected)', **self.parameters)
         os.chdir(current_dir)
 
-    def minimise_ts_write(self, dihedral=None, bonds = None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
+    def minimise_ts_write(self, dihedral=None, fixed_bonds = None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
         print(str(rigid))
 
         if dihedral != None:
-            mod = self.get_modred_lines(dihedral,bonds)
+            mod = self.get_modred_lines(dihedral,fixed_bonds)
             if not rigid:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,loose)', addsec=str(mod), **self.parameters)
             else:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
-            pop_point = -4 - (len(dihedral)+len(bonds))
+            try:
+                pop_point = -4 - (len(dihedral)+len(fixed_bonds))
+            except:
+                pop_point = -4 - len(dihedral)
             lines.pop(pop_point)
             f.close()
             f=open(str(title) + '.com','w')
@@ -379,10 +382,10 @@ class Gaussian(FileIOCalculator):
         else:
             string += 'D ' + str(dihedral[0] + 1) + " " + str(dihedral[1] + 1) + " " + str(dihedral[2] + 1) + " " + str(
                 dihedral[3] + 1) + " F\n"
-        if isinstance(bonds[0], list):
+        if bonds!= None and isinstance(bonds[0], list):
             for b in bonds:
                 string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
         elif bonds != None:
-            string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " " +  " F\n"
+            string += 'B ' + str(bonds[0] + 1) + " " + str(bonds[1] + 1) + " " +  " F\n"
 
         return string
