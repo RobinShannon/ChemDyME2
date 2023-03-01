@@ -265,6 +265,7 @@ class ts(species):
                         pass
                 dihed += float(increment)
                 self.calculator.set_calculator(hmol, 'high')
+                print(self.bonds_to_add)
                 hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, fixed_bonds=self.bonds_to_add, path = "Hind"+str(count), title="H" +str(i), atoms= hmol, rigid=rigid)
                 self.calculator.set_calculator(hmol, 'low')
                 hinderance_traj.append(hmol.copy())
