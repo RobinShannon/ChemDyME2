@@ -416,7 +416,7 @@ class species:
                         hmol.set_dihedral(rotatable_bonds[2][0], rotatable_bonds[2][1], rotatable_bonds[2][2],
                                           rotatable_bonds[2][3], diheds[2], indices=coId[2])
                         if ts:
-                            hmol._calc.minimise_ts_write(dihedral=rotatable_bonds, path="MultiHind",
+                            hmol._calc.minimise_ts_write(dihedral=rotatable_bonds,fixed_bonds=self.bonds_to_add, path="MultiHind",
                                                      title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
                                                      rigid=rigid)
                         else:
