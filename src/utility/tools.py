@@ -322,7 +322,9 @@ def read_mod_redundant3d(file):
 
     with open(file,'r') as f:
         lines = f.readlines()
-        if 'B' in lines[-3]:
+        print(lines[-3])
+        if "B" in lines[-3]:
+            print("True")
             start = -3
         else:
             start = -4
