@@ -326,7 +326,6 @@ def read_mod_redundant3d(file):
             start = -3
         else:
             start = -4
-        lines = f.readlines()
         last_line = lines[int(start)]
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')
