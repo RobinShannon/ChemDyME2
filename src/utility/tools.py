@@ -327,17 +327,17 @@ def read_mod_redundant3d(file):
         else:
             start = -4
         lines = f.readlines()
-        last_line = lines[start]
+        last_line = lines[int(start)]
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')
         last_line.pop(0)
         last_line.pop(-1)
-        seccond_last = lines[start -1]
+        seccond_last = lines[int(start) -1]
         seccond_last=seccond_last.strip("FD\n")
         seccond_last=seccond_last.split(' ')
         seccond_last.pop(0)
         seccond_last.pop(-1)
-        third_last = lines[start -2]
+        third_last = lines[int(start) -2]
         third_last=third_last.strip("FD\n")
         third_last=third_last.split(' ')
         third_last.pop(0)
