@@ -534,7 +534,7 @@ class Converging(BXD):
                           "bound_hits" at the top boundary
     """
     def __init__(self, progress_metric, bound_file="bounds_out.txt", geom_file='box_geoms.xyz', bound_hits=100,
-                 read_from_file=False, convert_fixed_boxes=False, box_width=0, number_of_boxes=0,
+                 read_from_file=True, convert_fixed_boxes=False, box_width=0, number_of_boxes=0,
                  boxes_to_converge=None, print_directory='Converging_Data', converge_ends=True, bxd_iterations = 1):
         super(Converging, self).__init__(progress_metric, bxd_iterations = bxd_iterations)
         self.bound_file = bound_file
