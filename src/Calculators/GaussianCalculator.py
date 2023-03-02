@@ -223,7 +223,9 @@ class Gaussian(FileIOCalculator):
 
         if dihedral != None:
             mod = self.get_modred_lines(dihedral,fixed_bonds)
-            if not rigid:
+            if not rigid and fixed_bonds == None:
+                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in',extra='opt=(calcall,modredundant)', addsec=str(mod), **self.parameters)
+            elif not rigid:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,loose)', addsec=str(mod), **self.parameters)
             else:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', addsec=str(mod), **self.parameters)
