@@ -319,19 +319,25 @@ def read_mod_redundant2d(file):
 
 def read_mod_redundant3d(file):
     diheds = []
+
     with open(file,'r') as f:
         lines = f.readlines()
-        last_line = lines[-3]
+        if 'B' in lines[-3]:
+            start = -3
+        else:
+            start = -4
+        lines = f.readlines()
+        last_line = lines[start]
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')
         last_line.pop(0)
         last_line.pop(-1)
-        seccond_last = lines[-4]
+        seccond_last = lines[start -1]
         seccond_last=seccond_last.strip("FD\n")
         seccond_last=seccond_last.split(' ')
         seccond_last.pop(0)
         seccond_last.pop(-1)
-        third_last = lines[-5]
+        third_last = lines[start -2]
         third_last=third_last.strip("FD\n")
         third_last=third_last.split(' ')
         third_last.pop(0)
