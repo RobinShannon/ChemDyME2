@@ -7,7 +7,7 @@ import src.molecular_dynamics.md_Integrator as MD
 import src.bxd.bxd_constraint as BXD
 import src.molecular_dynamics.trajectory as Traj
 import src.molecular_dynamics.md_logger as lg
-import src.MechanismGeneration.reaction_crtieria as RC
+import src.mechanism_generation.reaction_crtieria as RC
 import src.utility.tools as Tl
 from copy import deepcopy
 import numpy as np
@@ -15,7 +15,7 @@ from ase.io import read
 from ase.optimize import BFGS as bfgs
 from ase.vibrations import Vibrations
 from ase.io import write
-from src.Calculators.NNCalculator import NNCalculator
+#from src.Calculators.NNCalculator import NNCalculator
 from ase.vibrations import Vibrations
 from ase.md.verlet import VelocityVerlet
 from ase import units
@@ -112,6 +112,11 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
+path = read('IRC1.log',index=':')
+write('FormHFpath.xyz', path)
+for i, mol in enumerate(path):
+    list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
+    write('FormHF/point' + str(i) + '.xyz', list)
 
 
 

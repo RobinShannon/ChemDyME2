@@ -188,7 +188,7 @@ class Gaussian(FileIOCalculator):
         os.chdir(path)
         print(str(dihedral))
         if dihedral != None:
-            mod = self.get_modred_lines(dihedral)
+            mod = self.get_modred_lines(dihedral,None)
             if rigid:
                 write(str(title) + '.com', atoms, format='gaussian-in', addsec=str(mod), **self.parameters)
             else:
