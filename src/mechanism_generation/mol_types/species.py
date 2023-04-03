@@ -392,7 +392,7 @@ class species:
         for bond in self.bonds_to_add:
             dist = mol.get_distance(bond[0],bond[1])
             distances.append(dist)
-
+            print(str(self.bonds_to_add))
         if rotors_to_exclude != None:
             del rotatable_bonds[rotors_to_exclude]
             del coId[rotors_to_exclude]
@@ -400,7 +400,7 @@ class species:
         for b in rotatable_bonds:
             dihed = mol.get_dihedral(*b)
             diheds.append(dihed)
-
+            print(str(rotatable_bonds))
         os.makedirs('MultiHind', exist_ok=True)
         hmol = mol.copy()
         self.calculator.set_calculator(hmol, 'high')

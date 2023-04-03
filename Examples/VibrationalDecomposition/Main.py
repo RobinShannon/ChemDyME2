@@ -15,7 +15,7 @@ from ase.io import read
 from ase.optimize import BFGS as bfgs
 from ase.vibrations import Vibrations
 from ase.io import write
-#from src.Calculators.NNCalculator import NNCalculator
+from src.Calculators.NNCalculator import NNCalculator
 from ase.vibrations import Vibrations
 from ase.md.verlet import VelocityVerlet
 from ase import units
@@ -56,7 +56,7 @@ def generate_displacements(mol, disp, rand_dis, seccond_order):
                 positions[i][j] += disp
                 copy.set_positions(positions)
                 traj.append(copy.copy())
-                positions[i][j] -=  disp
+                positions[i][j] -= disp
                 positions[i][j] -= disp
                 copy.set_positions(positions)
                 traj.append(copy.copy())
@@ -111,12 +111,18 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-
+path_s = read('Scan1.log',index=":")
+write('scan1traj.xyz', path_s)
+for p in path_s:
+    print(str(p.get_potential_energy()))
 path = read('IRC1.log',index=':')
-write('FormHFpath.xyz', path)
+
+for i, mol in enumerate(path):
+    print(str(mol.get_potential_energy()))
+
 for i, mol in enumerate(path):
     list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
-    write('FormHF/point' + str(i) + '.xyz', list)
+    write('NewGly/point' + str(i) + '.xyz', list)
 
 
 
@@ -151,7 +157,7 @@ for i, mol in enumerate(path):
 #write('MFComp2.xyz', ts)
 #narupa_mol = read('Start.xyz', index=0)
 narupa_mol = read('MFGeoms/Start.xyz')
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-570000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=narupa_mol))
 f =open("vibresults.txt", 'a')
 f2 =open("vibresults2.txt", 'a')
 f3 =open("vibresults3.txt", 'a')

@@ -17,7 +17,7 @@ from ase.io import read
 from ase.optimize import BFGS as bfgs
 from ase.vibrations import Vibrations
 from ase.io import write
-#from src.Calculators.NNCalculator import NNCalculator
+from src.Calculators.NNCalculator import NNCalculator
 from src.Calculators.ScineCalculator import  SparrowCalculator as SP
 from ase.vibrations import Vibrations
 from ase.md.verlet import VelocityVerlet
@@ -250,9 +250,9 @@ for i in range(0,len(s1)):
         print(s1[i].get_potential_energy())
         s1pruned.append(s1[i].copy())
 write('OH2.xyz', s1pruned)
-mol = read('H2O2/water.xyz')
+mol = read('NewGyl/water.xyz')
 
-mol.set_calculator(SP(method='AM1'))
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=mol))
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
 dyn = BFGS(mol)
 dyn.run(1e-7, 500)
@@ -289,6 +289,8 @@ R = Rs[ith]
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 new = L.T
+newGS = (gram_schmidt_columns(L.T))
+new[:,3:9] = copy.deepcopy(newGS[:,3:9])
 is_normal = np.dot(new[:,3],new[:,0])
 is_normal = np.dot(new[:,3],new[:,1])
 is_normal = np.dot(new[:,3],new[:,2])
@@ -297,13 +299,22 @@ is_normal = np.dot(new[:,3],new[:,5])
 is_normal = np.dot(new[:,3],new[:,6])
 is_normal = np.dot(new[:,3],new[:,7])
 is_normal = np.dot(new[:,3],new[:,8])
-newGS = (gram_schmidt_columns(L.T))
-new[:,6:9] = copy.deepcopy(newGS[:,6:9])
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
+is_normal = np.dot(new[:,4],new[:,0])
+is_normal = np.dot(new[:,4],new[:,1])
+is_normal = np.dot(new[:,4],new[:,2])
+is_normal = np.dot(new[:,4],new[:,4])
+is_normal = np.dot(new[:,4],new[:,5])
+is_normal = np.dot(new[:,4],new[:,6])
+is_normal = np.dot(new[:,4],new[:,7])
+is_normal = np.dot(new[:,4],new[:,8])
+is_normal = np.dot(new[:,5],new[:,0])
+is_normal = np.dot(new[:,5],new[:,1])
+is_normal = np.dot(new[:,5],new[:,2])
+is_normal = np.dot(new[:,5],new[:,4])
+is_normal = np.dot(new[:,5],new[:,5])
+is_normal = np.dot(new[:,5],new[:,6])
+is_normal = np.dot(new[:,5],new[:,7])
+is_normal = np.dot(new[:,5],new[:,8])
 new_converted = new
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
 new_converted = convert_hessian_to_cartesian(new,masses)
