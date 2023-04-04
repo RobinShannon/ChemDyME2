@@ -379,7 +379,7 @@ class species:
         os.chdir('../')
 
 
-    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid = False, ts =False):
+    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid = False, ts =False, all_bonds = False):
         current_dir = os.getcwd()
         print(str(rigid))
         os.makedirs(self.dir, exist_ok=True)
@@ -401,6 +401,10 @@ class species:
             dihed = mol.get_dihedral(*b)
             diheds.append(dihed)
             print(str(rotatable_bonds))
+        if all_bonds:
+            bonds_to_fix = ['All']
+        else:
+            bonds_to_fix = self.bonds_to_add
         os.makedirs('MultiHind', exist_ok=True)
         hmol = mol.copy()
         self.calculator.set_calculator(hmol, 'high')
@@ -416,7 +420,7 @@ class species:
                         hmol.set_dihedral(rotatable_bonds[2][0], rotatable_bonds[2][1], rotatable_bonds[2][2],
                                           rotatable_bonds[2][3], diheds[2], indices=coId[2])
                         if ts:
-                            hmol._calc.minimise_ts_write(dihedral=rotatable_bonds,fixed_bonds=self.bonds_to_add, path="MultiHind",
+                            hmol._calc.minimise_ts_write(dihedral=rotatable_bonds,fixed_bonds=bonds_to_fix, path="MultiHind",
                                                      title="H" + str(i) + '_' + str(j) + '_' + str(l), atoms=hmol,
                                                      rigid=rigid)
                         else:
