@@ -388,7 +388,7 @@ class Gaussian(FileIOCalculator):
             string += 'D ' + str(dihedral[0] + 1) + " " + str(dihedral[1] + 1) + " " + str(dihedral[2] + 1) + " " + str(
                 dihedral[3] + 1) + " F\n"
         if bonds != None and isinstance(bonds[0], str):
-            string += 'B * * F'
+            string += 'B * * F\n'
         elif bonds!= None and isinstance(bonds[0], tuple):
             for b in bonds:
                 string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
