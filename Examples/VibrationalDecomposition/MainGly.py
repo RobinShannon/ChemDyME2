@@ -61,20 +61,10 @@ def get_moments_of_inertia(mol):
     Itensor = np.array([[I11, I12, I13],
                         [I12, I22, I23],
                         [I13, I23, I33]])
-    Itensor2 =  np.array([[I12, I11, I13],
-                        [I22, I12, I23],
-                        [I23, I13, I33]])
 
-    evals, evecs = np.linalg.eig(Itensor)
 
-    absevec = abs(evecs)
-    sum_of_rows = absevec.sum(axis=1)
-    evecs = evecs / sum_of_rows[:, np.newaxis]
-    sum = 0
-    sum += np.dot(evecs[:,0],evecs[:,1])
-    sum += np.dot(evecs[:,0],evecs[:,2])
-    sum += np.dot(evecs[:,1],evecs[:,2])
-    return evecs, Itensor
+    evals, evecs = np.linalg.eigh(Itensor)
+    return evecs.transpose(), Itensor
 
 def get_translational_vectors(mol):
     T = np.zeros((3,len(mol)*3))
@@ -104,15 +94,7 @@ def get_rotational_vectors(mol, X):
             Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) * m
             Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) * m
             Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) * m
-
-    absR = abs(Rot)
-    row_sums = absR.sum(axis=1)
-    Rot_normalised = Rot / row_sums[:, np.newaxis]
-    sum = 0
-    sum += np.dot(Rot_normalised[0,:],Rot_normalised[1,:])
-    sum += np.dot(Rot_normalised[0, :], Rot_normalised[2, :])
-    sum += np.dot(Rot_normalised[1, :], Rot_normalised[2, :])
-    return Rot_normalised, sum
+    return Rot
 
 def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
@@ -251,11 +233,10 @@ for i in range(0,len(s1)):
         s1pruned.append(s1[i].copy())
 write('OH2.xyz', s1pruned)
 mol = read('NewGyl/water.xyz')
-
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=mol))
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
 dyn = BFGS(mol)
-dyn.run(1e-7, 500)
+dyn.run(1e-7, 50)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -275,141 +256,68 @@ Xs = [X, X1,X2,X3]
 Rs = []
 min_i = 10000.0
 ith = 0
-for i in range(0,4):
-    R,sum = get_rotational_vectors(mol, Xs[i])
-    Rs.append(R)
-    norms.append(sum)
-    if sum < min_i:
-        min_i = sum
-        ith = i
-
-
-R = Rs[ith]
+R = get_rotational_vectors(mol, X)
 
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 new = L.T
 newGS = (gram_schmidt_columns(L.T))
-new[:,3:9] = copy.deepcopy(newGS[:,3:9])
-is_normal = np.dot(new[:,3],new[:,0])
-is_normal = np.dot(new[:,3],new[:,1])
-is_normal = np.dot(new[:,3],new[:,2])
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
-is_normal = np.dot(new[:,4],new[:,0])
-is_normal = np.dot(new[:,4],new[:,1])
-is_normal = np.dot(new[:,4],new[:,2])
-is_normal = np.dot(new[:,4],new[:,4])
-is_normal = np.dot(new[:,4],new[:,5])
-is_normal = np.dot(new[:,4],new[:,6])
-is_normal = np.dot(new[:,4],new[:,7])
-is_normal = np.dot(new[:,4],new[:,8])
-is_normal = np.dot(new[:,5],new[:,0])
-is_normal = np.dot(new[:,5],new[:,1])
-is_normal = np.dot(new[:,5],new[:,2])
-is_normal = np.dot(new[:,5],new[:,4])
-is_normal = np.dot(new[:,5],new[:,5])
-is_normal = np.dot(new[:,5],new[:,6])
-is_normal = np.dot(new[:,5],new[:,7])
-is_normal = np.dot(new[:,5],new[:,8])
-new_converted = new
+min = 0
+for i in range(0,new.shape[0]):
+    for j in range(0, new.shape[0]):
+        if i != j:
+            is_norm = np.dot((new[i, :]), new[j, :])
+            if is_norm > min:
+                min = is_norm
+
+print(str(is_norm))
+
+
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_converted = convert_hessian_to_cartesian(new,masses)
-is_normal = np.dot(new[:,3],new[:,4])
-is_normal = np.dot(new[:,3],new[:,5])
-is_normal = np.dot(new[:,3],new[:,6])
-is_normal = np.dot(new[:,3],new[:,7])
-is_normal = np.dot(new[:,3],new[:,8])
+new_converted_nonGS = convert_hessian_to_cartesian(new,masses)
+new_converted = (gram_schmidt_columns(new_converted_nonGS))
 
-np.save('H2O2/wateram1.npy', new_converted)
 
-mode1 = new_converted[:,0].reshape(3,3)
-mode1_traj= []
-com = mol.get_center_of_mass()
-positions = mol.get_positions()
-positions -= com
-mol.set_positions(positions)
-for i in range(0,300):
-    mode1_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.01 * mode1)
-write('Modes/t1.xyz', mode1_traj)
+for i in range(0, new_converted.shape[0]):
+    for j in range(0, new_converted.shape[0]):
+        if i != j:
+            is_norm = np.dot((new_converted[i, :]), new_converted[j, :])
+            if is_norm > min:
+                min = is_norm
 
-mode1 = new_converted[:,1].reshape(3,3)
-mode1_traj= []
-com = mol.get_center_of_mass()
-positions = mol.get_positions()
-positions -= com
-mol.set_positions(positions)
-for i in range(0,30):
-    mode1_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode1)
-write('Modes/t2.xyz', mode1_traj)
+print(str(is_norm))
 
-mode1 = new_converted[:,2].reshape(3,3)
-mode1_traj= []
-com = mol.get_center_of_mass()
-positions = mol.get_positions()
-positions -= com
-mol.set_positions(positions)
-for i in range(0,30):
-    mode1_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode1)
-write('Modes/t3.xyz', mode1_traj)
+np.save('NewGyl/water.npy', new_converted)
 
-mode1 = new_converted[:,3].reshape(3,3)
-mode1_traj= []
-com = mol.get_center_of_mass()
-positions = mol.get_positions()
-positions -= com
-mol.set_positions(positions)
-for i in range(0,300):
-    mode1_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.01 * mode1)
-write('Modes/t4.xyz', mode1_traj)
+for i in range(0, new_converted.shape[0]):
+    mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
+    mode_traj= []
+    com = mol.get_center_of_mass()
+    positions = mol.get_positions()
+    positions -= com
+    mol.set_positions(positions)
+    for j in range(0,30):
+        mode_traj.append(mol.copy())
+        mol.set_positions(mol.get_positions() + 0.1 * mode)
+    for j in range(0, 30):
+        mode_traj.append(mol.copy())
+        mol.set_positions(mol.get_positions() - 0.1 * mode)
+    write('Modes/t' +str(i) +'.xyz', mode_traj)
 
-mode2 = new_converted[:,4].reshape(3,3)
-mode2_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode2_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode2)
-write('Modes/t5.xyz', mode2_traj)
-
-mode3 = new_converted[:,5].reshape(3,3)
-mode3_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode3_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode3)
-write('Modes/t6.xyz', mode3_traj)
-
-mode4 = new_converted[:,6].reshape(3,3)
-mode4_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode4_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode4)
-write('Modes/t7.xyz', mode4_traj)
-
-mode5 = new_converted[:,7].reshape(3,3)
-mode5_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode5_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode5)
-write('Modes/t8.xyz', mode5_traj)
-
-mode6 = new_converted[:,8].reshape(3,3)
-mode6_traj= []
-mol.set_positions(positions)
-for i in range(0,30):
-    mode6_traj.append(mol.copy())
-    mol.set_positions(mol.get_positions() + 0.1 * mode6)
-write('Modes/t9.xyz', mode6_traj)
-
+for i in range(0, new.shape[0]):
+    mode = new_converted[:,i].reshape(int(new.shape[0]/3),3)
+    mode_traj= []
+    com = mol.get_center_of_mass()
+    positions = mol.get_positions()
+    positions -= com
+    mol.set_positions(positions)
+    for j in range(0,30):
+        mode_traj.append(mol.copy())
+        mol.set_positions(mol.get_positions() + 0.1 * mode)
+    for j in range(0, 30):
+        mode_traj.append(mol.copy())
+        mol.set_positions(mol.get_positions() - 0.1 * mode)
+    write('Modes/non_t' +str(i) +'.xyz', mode_traj)
 
 
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
@@ -494,8 +402,10 @@ for run in range(0, 1000):
     tf3 = lambda var: var.mdsteps % 50 == 0
     log3 = lg.MDLogger( logging_function=lf3, triggering_function=tf3, outpath=gfile)
     loggers.append(log3)
-
-
+    lf2 = lambda var: var.md_integrator.current_velocities
+    tf2 = lambda var: var.mdsteps % 10 == 0
+    log2 = lg.MDLogger( logging_function=lf2, triggering_function=tf2, write_to_list = False)
+    loggers.append(log2)
     md = MD.Langevin(narupa_mol, temperature=300, timestep=0.5, friction=0.01)
     reaction_criteria = RC.NunezMartinez(narupa_mol, consistant_hit_steps = 1, relaxation_steps = 10)
     bxd_trajectory = Traj.Trajectory(narupa_mol, [bxd], md, loggers = loggers, criteria = reaction_criteria, reactive=True)
