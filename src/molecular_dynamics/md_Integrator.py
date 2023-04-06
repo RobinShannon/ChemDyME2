@@ -109,7 +109,7 @@ class VelocityVerlet(MDIntegrator):
 
         # Modify velocities
         self.current_velocities += (lagrangian * del_phi * (1/self.masses)[:, None])
-        #self.forces = del_phi * lagrangian
+        self.half_step_velocity = copy.deepcopy(self.current_velocities)
         self.constrained = True
 
     def constrain2(self, del_phi1, del_phi2):
