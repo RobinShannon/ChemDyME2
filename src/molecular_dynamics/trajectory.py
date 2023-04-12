@@ -23,13 +23,14 @@ class Trajectory:
     """
 
     def __init__(self, mol, bxd_list, md_integrator, loggers: Optional[Log.MDLogger] = [Log.MDLogger()],
-                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False):
+                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False, maxwell_boltzman = True):
         self.bxd_list = bxd_list
         self.md_integrator = md_integrator
         self.mol = mol.copy()
         self.mol._calc = mol.get_calculator()
         initial_temperature = md_integrator.temperature
-        vd.MaxwellBoltzmannDistribution(self.mol, temperature_K= initial_temperature, force_temp=True)
+        if maxwell_boltzman:
+            vd.MaxwellBoltzmannDistribution(self.mol, temperature_K= initial_temperature, force_temp=True)
         self.md_integrator.current_velocities = self.mol.get_velocities()
         self.md_integrator.half_step_velocity = self.mol.get_velocities()
         self.hit = False
