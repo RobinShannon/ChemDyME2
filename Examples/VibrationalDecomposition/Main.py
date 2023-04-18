@@ -110,19 +110,19 @@ def get_rot_tran(coord_true, coord_pred):
     model_coords_rotated = np.dot(coord_pred, rot)
 
     return rot, model_coords_rotated
+path_s = []
+path_s.append(read('FormHCN/A1.log',index="-1"))
+path_s.append(read('FormHCN/A5.log',index="-1"))
+path_s.append(read('FormHCN/A10.log',index="-1"))
+path_s.append(read('FormHCN/D1.log',index="-1"))
+path_s.append(read('FormHCN/D5.log',index="-1"))
 
-path_s = read('Scan1.log',index=":")
-write('scan1traj.xyz', path_s)
-for p in path_s:
-    print(str(p.get_potential_energy()))
-path = read('IRC1.log',index=':')
 
-for i, mol in enumerate(path):
-    print(str(mol.get_potential_energy()))
 
-for i, mol in enumerate(path):
+
+for i, mol in enumerate(path_s):
     list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
-    write('NewGly/point' + str(i) + '.xyz', list)
+    write('FormHCN/ADpoint' + str(i) + '.xyz', list)
 
 
 
