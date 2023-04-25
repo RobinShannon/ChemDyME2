@@ -659,7 +659,7 @@ class species:
                             print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             ene = ene_arr_1D_temp[-1]
                     try:
-                        if len(ene_arr_1D_temp) >0 and ene > (ene_arr_1D_temp[-1] *1.5):
+                        if len(ene_arr_1D_temp) >0 and ene > (ene_arr_1D_temp[-1] *3):
                             print("big jump in energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k) + ".log", index=0)
                             ene = ene_arr_1D_temp[-1]
