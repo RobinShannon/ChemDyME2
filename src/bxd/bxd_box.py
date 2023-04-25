@@ -1,6 +1,7 @@
 import numpy as np
 import src.bxd.bxd_bound as bound
 from copy import deepcopy
+import os
 
 class BXDBox:
 
@@ -32,7 +33,7 @@ class BXDBox:
         self.lower_milestoning_rates_file = None
         self.data_file = None
         self.hit_file = None
-        self.dir = None
+        self.dir = dir
 
     def reset(self, type, active):
         self.type = type
@@ -149,11 +150,12 @@ class BXDBox:
                 self.data.append(line)
 
     def open_box(self):
-        self.upper_rates_file = open(self.temp_dir + '/upper_rates.txt', 'a')
-        self.upper_milestoning_rates_file = open(self.temp_dir + '/upper_milestoning.txt', 'a')
-        self.lower_rates_file = open(self.temp_dir + '/lower_rates.txt', 'a')
-        self.lower_milestoning_rates_file = open(self.temp_dir + '/lower_milestoning.txt', 'a')
-        self.data_file = open(self.temp_dir + '/box_data.txt', 'a')
+        os.makedirs(self.dir, exist_ok=True)
+        self.upper_rates_file = open(self.dir + '/upper_rates.txt', 'a')
+        self.upper_milestoning_rates_file = open(self.dir + '/upper_milestoning.txt', 'a')
+        self.lower_rates_file = open(self.dir + '/lower_rates.txt', 'a')
+        self.lower_milestoning_rates_file = open(self.dir + '/lower_milestoning.txt', 'a')
+        self.data_file = open(self.dir + '/box_data.txt', 'a')
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0

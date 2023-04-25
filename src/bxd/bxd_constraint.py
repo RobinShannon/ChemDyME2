@@ -533,7 +533,7 @@ class Converging(BXD):
                           box will aim for "bound_hits" at the lower boundary and the top box will aim for
                           "bound_hits" at the top boundary
     """
-    def __init__(self, progress_metric, bound_file="bounds_out.txt", geom_file='box_geoms.xyz', bound_hits=100,
+    def __init__(self, progress_metric, bound_file="bounds_out.txt", geom_file='box_geoms.xyz', bound_hits=10,
                  read_from_file=True, convert_fixed_boxes=False, box_width=0, number_of_boxes=0,
                  boxes_to_converge=None, print_directory='Converging_Data', converge_ends=True, bxd_iterations = 1):
         super(Converging, self).__init__(progress_metric, bxd_iterations = bxd_iterations)
@@ -561,6 +561,7 @@ class Converging(BXD):
         else:
             self.start_box = 0
             self.end_box = len(self.box_list)-1
+        self.box_list[self.start_box].open_box()
 
     def reset(self, output_directory):
         """
@@ -582,20 +583,24 @@ class Converging(BXD):
 
         # update current and previous s(r) values
         self.s = self.progress_metric.collective_variable.get_s(mol)
-
+        self.progress_metric.project_point_on_path(self.s)
         # make sure to reset the inversion and bound_hit flags to False / none
         self.inversion = False
         self.bound_hit = "none"
 
         # Check whether bxd direction should be changed and update accordingly
         self.reached_end()
-
+        if self.progress_metric.reflect_back_to_path():
+            self.bound_hit = "path"
         # Check whether a boundary has been hit and if so update the hit boundary
-        self.inversion = self.boundary_check(decorrelated) or self.progress_metric.reflect_back_to_path()
+        self.inversion = self.boundary_check(decorrelated) or self.bound_hit is "path"
 
         # If there is a bxd inversion increment the stuck counter and set the steps_since_any_boundary_hit counter to 0
         if not self.inversion:
             self.box_list[self.box].points_in_box += 1
+            self.box_list[self.box].data.append(self.s)
+
+
 
     def create_fixed_boxes(self, width, number_of_boxes, start_s):
         box_list = []
@@ -633,8 +638,8 @@ class Converging(BXD):
             norm_upper = (n_u.split())
             for l2 in range(0,len(norm_upper)):
                 norm_upper[l2] = float(norm_upper[l2])
-            upper_bound = bound.BXDbound(norm_upper,d_upper)
-            box = box(lower_bound, upper_bound, "fixed", True, dir=temp_dir)
+            upper_bound = bound.BXDBound(norm_upper,d_upper)
+            box = b.BXDBox(lower_bound, upper_bound, "fixed", dir=temp_dir)
             box_list.append(box)
         return box_list
 
@@ -685,9 +690,9 @@ class Converging(BXD):
         # Check for hit against upper boundary
         if self.box_list[self.box].upper.hit(self.s, 'up'):
             self.bound_hit = 'upper'
-            if self.progress_metric.outside_path():
+            if self.progress_metric.reflect_back_to_path():
                 return True
-            elif self.box_list[self.box].upper.transparent and not self.progress_metric.outside_path():
+            elif self.box_list[self.box].upper.transparent and not self.progress_metric.reflect_back_to_path():
                 self.box_list[self.box].upper.transparent = False
                 self.box_list[self.box].close_box()
                 self.box += 1
@@ -709,10 +714,12 @@ class Converging(BXD):
                 self.box_list[self.box].upper_non_milestoning_count = 0
                 if self.box_list[self.box].last_hit == 'lower':
                     self.box_list[self.box].milestoning_count = 0
+                if not self.reverse:
+                    self.box_list[self.box].upper.transparent = self.criteria_met(self.box_list[self.box].upper)
                 return True
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             self.bound_hit = 'lower'
-            if self.progress_metric.outside_path():
+            if self.progress_metric.reflect_back_to_path():
                 return True
             if self.box_list[self.box].lower.transparent and not self.progress_metric.outside_path():
                 self.box_list[self.box].lower.transparent = False

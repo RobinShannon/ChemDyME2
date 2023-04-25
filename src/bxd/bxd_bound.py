@@ -44,9 +44,9 @@ class BXDBound:
         if self.invisible:
             return False
         coord = np.vdot(s, self.n) + self.d
-        if bound == "up" and coord > 0:
+        if bound == "up" and coord > 0.0001:
             return True
-        elif bound == "down" and coord < 0:
+        elif bound == "down" and coord < -0.0001:
             return True
         else:
             return False

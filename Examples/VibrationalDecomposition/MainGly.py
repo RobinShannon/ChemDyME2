@@ -232,11 +232,14 @@ for i in range(0,len(s1)):
         print(s1[i].get_potential_energy())
         s1pruned.append(s1[i].copy())
 write('OH2.xyz', s1pruned)
-mol = read('NewGyl/water.xyz')
+mol = read('GlyoxalGeoms/NN_TS.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
 #mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
-dyn = BFGS(mol)
-dyn.run(1e-7, 50)
+dyn = Sella(mol, internal = True)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -257,7 +260,7 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-
+L=np.roll(L, -1, axis=0)
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 new = L.T

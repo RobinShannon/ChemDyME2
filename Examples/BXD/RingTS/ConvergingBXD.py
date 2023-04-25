@@ -23,13 +23,17 @@ collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=7)
 path = Path.Path(narupa_path, collective_var,  stride=2, max_distance_from_path=1)
 progress = PM.Curve(collective_var, path,  max_nodes_skiped=3)
 #progress = PM.Line(narupa_mol, collective_var, narupa_end)
-md = MD.Langevin(narupa_mol, temperature=800, friction=0.01, timestep=0.25)
+md = MD.Langevin(narupa_mol, temperature=800, friction=10, timestep=0.25)
 logfile = open('log.txt', 'w')
 loggers = []
-lf1 = lambda var: 'box\t=\t' + str(var.bxd_list[0].box) + '\tprogress\t=\t'+str(var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].s) /var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].progress_metric.end)) +'\n'
-tf1 = lambda var: var.mdsteps % 100 == 0
+lf1 = lambda var: 'box\t=\t' + str(var.bxd_list[0].box) + '\tprogress\t=\t'+str(var.bxd_list[0].progress_metric.proj) + "\tdistance from path\t=\t" +str(var.bxd_list[0].progress_metric.distance_from_path)
+tf1 = lambda var: var.bxd_list[0].inversion  == True
 log1 = lg.MDLogger( logging_function=lf1, triggering_function=tf1)
 loggers.append(log1)
+lf2 = lambda var: 'steps\t=\t' + str(var.mdsteps) + '\tupper hits\t=\t'+str(var.bxd_list[0].box_list[var.bxd_list[0].box].upper.hits) + "\tlower hits\t=\t" +str(var.bxd_list[0].box_list[var.bxd_list[0].box].lower.hits)
+tf2 = lambda var: var.bxd_list[0].inversion == True
+log2 = lg.MDLogger( logging_function=lf2, triggering_function=tf2)
+loggers.append(log2)
 file = 'geom.xyz'
 lf3 = lambda var: str(write(file, var.mol, append=True))
 tf3 = lambda var: var.mdsteps % 100 == 0

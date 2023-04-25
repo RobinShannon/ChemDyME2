@@ -640,7 +640,7 @@ class species:
         angle_arr_1D = []
         ene_arr_2Ds = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
-        hmol = read("H0_0_0.log", index=index)
+        hmol = read("H0_0_0.log", index=-1)
         print(dihedrals)
         for i in range(0,int(steps)):
             ene_arr_2D = []
@@ -652,15 +652,15 @@ class species:
                         ene = (hmol.get_potential_energy()) / (invcm)
                     except:
                         try:
-                            hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=-2)
+                            hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=0)
                             ene = ene_arr_1D_temp[-1]
                         except:
                             print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             ene = ene_arr_1D_temp[-1]
                     try:
                         if ene > (ene_arr_1D_temp[-1] *1.5):
-                            hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k) + ".log", index=3)
-                            ene = (hmol.get_potential_energy()) / (invcm)
+                            hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k) + ".log", index=0)
+                            ene = ene_arr_1D_temp[-1]
                     except:
                         pass
                     ene_arr_1D_temp.append(ene)

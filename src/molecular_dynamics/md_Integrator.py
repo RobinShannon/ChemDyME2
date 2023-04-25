@@ -159,9 +159,7 @@ class VelocityVerlet(MDIntegrator):
 
         # If we have been constrained then forces have already been reset
         # Otherwise store forces provided to function
-        if self.constrained:
-            self.constrained = False
-        else:
+        if not self.constrained:
             self.forces = forces
 
         #  Get Acceleration from masses and forces
@@ -172,8 +170,13 @@ class VelocityVerlet(MDIntegrator):
 
         # Then get the next half step velocity and update the position.
         # NB currentVel is one full MD step behind currentPos
-        self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
-        self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep)
+        if self.constrained:
+            self.half_step_velocity = self.current_velocities + accel * self.timestep
+            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep * 2)
+            self.constrained = False
+        else:
+            self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
+            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep)
 
         # Return positions
         mol.set_positions(self.current_positions)
@@ -297,7 +300,7 @@ class Langevin(MDIntegrator):
         check = self.current_velocities * del_phi - self.old_velocities * del_phi
 
         # Update velocities
-        self.current_velocities = (self.current_velocities + (lagrangian * del_phi * (1/self.masses)[:, None]))
+        self.current_velocities = (self.current_velocities + (lagrangian * 1 * del_phi * (1/self.masses)[:, None]))
         self.half_step_velocity = copy.deepcopy(self.current_velocities)
         self.constrained = True
 
@@ -352,9 +355,7 @@ class Langevin(MDIntegrator):
 
         # If we have been constrained then forces have already been reset
         # Otherwise store forces provided to function
-        if self.constrained:
-            self.constrained = False
-        else:
+        if not self.constrained:
             self.forces = forces
 
         # keep track of position prior to update in case we need to revert
@@ -372,9 +373,13 @@ class Langevin(MDIntegrator):
 
         # Then get the next half step velocity and update the position.
         # NB currentVel is one full MD step behind currentPos
-
-        self.half_step_velocity = self.current_velocities + (self.c1 * accel - self.c2 * self.half_step_velocity + self.c3[:, None] * self.xi - self.c4[:, None] * self.eta)
-        self.current_positions = self.current_positions + self.timestep * self.half_step_velocity + self.c5[:, None] * self.eta
+        if self.constrained:
+            self.half_step_velocity = self.current_velocities + (self.c1 * accel - self.c2 * self.half_step_velocity + self.c3[:, None] * self.xi - self.c4[:, None] * self.eta)
+            self.current_positions = self.current_positions + self.timestep * self.half_step_velocity + self.c5[:, None] * self.eta
+            self.constrained=False
+        else:
+            self.half_step_velocity = self.current_velocities + (self.c1 * accel - self.c2 * self.half_step_velocity + self.c3[:, None] * self.xi - self.c4[:, None] * self.eta)
+            self.current_positions = self.current_positions + self.timestep  * self.half_step_velocity + self.c5[:, None] * self.eta
 
         self.verlet_velocity = self.current_velocities + accel * self.timestep * 0.5
         self.verlet_positions = self.current_positions + (self.verlet_velocity * self.timestep)
@@ -485,7 +490,6 @@ class Langevin(MDIntegrator):
             self.xi = standard_normal(size=(len(self.masses), 3))
             self.eta = standard_normal(size=(len(self.masses), 3))
 
-            changes = self.current_velocities - self.discarded_velocities
 
             # Then get the next half step velocity and update the position.
             # NB currentVel is one full MD step behind currentPos

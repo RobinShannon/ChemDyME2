@@ -89,6 +89,7 @@ class Trajectory:
             # Now we have gone through the first inversion section we can set first_run to false
             first_run = False
 
+
             # Now get the md object to propagate the dynamics according to the standard Velocity Verlet / Langevin
             # procedure:
             # 1. md_step_pos: Get the half step velocity v(t + 1/2 * delta_t) and then new positions x(t + delta_t)
@@ -96,12 +97,6 @@ class Trajectory:
             # 3. md_step_vel : Get the  new velocities v(t + delta_t)
             self.md_integrator.md_step_pos(forces, self.mol)
 
-            # Check whether we are stuck at a boundary and if so do a very small step to try and rectify the situation
-            for bxd in self.bxd_list:
-                if bxd.inversion and bxd.hit(self.mol):
-                    self.mol.set_positions(self.md_integrator.old_positions)
-                    self.md_integrator.retry_pos(self.mol)
-                    break
             try:
                 forces = self.mol.get_forces()
             except:
