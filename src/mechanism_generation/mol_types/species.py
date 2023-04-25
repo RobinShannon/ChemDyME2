@@ -652,13 +652,15 @@ class species:
                         ene = (hmol.get_potential_energy()) / (invcm)
                     except:
                         try:
+                            print("minor error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k) + ".log")
                             hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log", index=0)
                             ene = ene_arr_1D_temp[-1]
                         except:
                             print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             ene = ene_arr_1D_temp[-1]
                     try:
-                        if ene > (ene_arr_1D_temp[-1] *1.5):
+                        if len(ene_arr_1D_temp) >0 and ene > (ene_arr_1D_temp[-1] *1.5):
+                            print("big jump in energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             hmol = read("H" + str(i) + '_' + str(j) + '_' + str(k) + ".log", index=0)
                             ene = ene_arr_1D_temp[-1]
                     except:
