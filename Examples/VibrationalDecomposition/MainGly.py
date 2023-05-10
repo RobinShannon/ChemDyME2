@@ -64,7 +64,7 @@ def get_moments_of_inertia(mol):
 
 
     evals, evecs = np.linalg.eigh(Itensor)
-    return evecs.transpose(), Itensor
+    return evecs, Itensor
 
 def get_translational_vectors(mol):
     T = np.zeros((3,len(mol)*3))
@@ -94,7 +94,10 @@ def get_rotational_vectors(mol, X):
             Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) * m
             Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) * m
             Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) * m
-    return Rot
+    absR = abs(Rot)
+    row_sums = absR.sum(axis=1)
+    Rot_normalised = Rot / row_sums[:, np.newaxis]
+    return Rot_normalised
 
 def gram_schmidt_columns(X):
     Q, R = np.linalg.qr(X)
@@ -232,10 +235,29 @@ for i in range(0,len(s1)):
         print(s1[i].get_potential_energy())
         s1pruned.append(s1[i].copy())
 write('OH2.xyz', s1pruned)
-mol = read('GlyoxalGeoms/NN_TS.xyz')
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
-#mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-390000', atoms=mol))
+mol = read('MethylFormate/TS.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
+
+baseline = mol.get_potential_energy()
+
+# Set up a Sella Dynamics object
 dyn = Sella(mol, internal = True)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
+ts_ene = mol.get_potential_energy()*96.58
+write('MethylFormate/NN_TS.xyz', mol)
+reac = read('MethylFormate/Start.xyz')
+mol.set_positions(reac.get_positions())
+dyn = BFGS(mol)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
+comp_ene = mol.get_potential_energy()*96.58
+diff = ts_ene - comp_ene
+dyn = BFGS(mol,maxstep=100)
 try:
     dyn.run(1e-2, 1000)
 except:
@@ -260,11 +282,12 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-L=np.roll(L, -1, axis=0)
+#L=np.roll(L, -1, axis=0)
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 new = L.T
 newGS = (gram_schmidt_columns(L.T))
+new[:,3:] = copy.deepcopy(newGS[:,3:])
 min = 0
 for i in range(0,new.shape[0]):
     for j in range(0, new.shape[0]):
@@ -277,10 +300,10 @@ print(str(is_norm))
 
 
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_converted_nonGS = convert_hessian_to_cartesian(new,masses)
-new_converted = (gram_schmidt_columns(new_converted_nonGS))
+new_converted = convert_hessian_to_cartesian(new,masses)
 
 
+min=0
 for i in range(0, new_converted.shape[0]):
     for j in range(0, new_converted.shape[0]):
         if i != j:
@@ -290,7 +313,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 
-np.save('NewGyl/water.npy', new_converted)
+np.save('MethylFormate/co.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)

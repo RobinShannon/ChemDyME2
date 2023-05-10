@@ -111,25 +111,12 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-ircfull = read('Traj5.xyz', index='160:760:10')
 
-for i, mol in enumerate(ircfull):
-    list = generate_displacements(mol.copy(), 0.05, rand_dis=False, seccond_order=True)
-    write('water_region' + str(i) + '.xyz', list)
-
-
-FormIRC = read('FormGeoms/FullPath.xyz',':')
-
-narupa_mol = FormIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-9000', atoms=narupa_mol))
+FormIRC = read('FormAll/FormHFpath.xyz', index=":")
+narupa_mol = FormIRC[6].copy()
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-960000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
-for i in FormIRC:
-    narupa_mol.set_positions(i.get_positions())
-    ene = narupa_mol.get_potential_energy()
-    print(str((ene-baseline)*96.48))
 
-
-narupa_mol.set_positions(FormIRC[60].get_positions())
 # Set up a Sella Dynamics object
 dyn = Sella(narupa_mol, internal = True)
 try:
@@ -137,8 +124,8 @@ try:
 except:
     pass
 ts_ene = narupa_mol.get_potential_energy()*96.58
-write('FormGeoms/NN_TS.xyz', narupa_mol)
-narupa_mol.set_positions(FormIRC[15].get_positions())
+write('FormAll/NN_HFTS.xyz', narupa_mol)
+narupa_mol.set_positions(FormIRC[20].get_positions())
 dyn = BFGS(narupa_mol)
 try:
     dyn.run(1e-2, 1000)
@@ -146,9 +133,9 @@ except:
     pass
 comp_ene = narupa_mol.get_potential_energy()*96.58
 diff = ts_ene - comp_ene
-write('FormGeoms/NN_Comp.xyz', narupa_mol)
-
-narupa_mol.set_positions(FormIRC[60].get_positions())
+write('FormAll/NN_HFComp.xyz', narupa_mol)
+prod = read('FormAll/HCNprod.xyz')
+narupa_mol.set_positions(prod.get_positions())
 dyn = BFGS(narupa_mol)
 try:
     dyn.run(1e-2, 1000)
@@ -156,7 +143,7 @@ except:
     pass
 comp_ene = narupa_mol.get_potential_energy()*96.58
 diff = ts_ene - comp_ene
-write('FormGeoms/NNComp2.xyz', narupa_mol)
+write('FormAll/NN_HCNprod.xyz', narupa_mol)
 
 f =open("vibresults.txt", 'a')
 f2 =open("vibresults2.txt", 'a')

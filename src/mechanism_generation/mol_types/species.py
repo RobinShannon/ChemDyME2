@@ -641,6 +641,7 @@ class species:
         ene_arr_2Ds = []
         dihedrals = tl.read_mod_redundant3d('H0_0_0.com')
         hmol = read("H0_0_0.log", index=-1)
+        baseline = (hmol.get_potential_energy()) / (invcm)
         print(dihedrals)
         for i in range(0,int(steps)):
             ene_arr_2D = []
