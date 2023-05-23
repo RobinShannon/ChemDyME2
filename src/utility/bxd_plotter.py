@@ -156,7 +156,7 @@ class bxd_plotter_2d:
                 bl2 = self.ax.plot(line_start2, line_end2, color='grey')
                 self.bound_lines.append(bl2)
         if save:
-            self.fig.savefig(str(save_root)+'/fig.mp4')
+            self.fig.savefig(str(save_root)+'/fig.png')
         plt.pause(3)
 
     def ani_init(self):

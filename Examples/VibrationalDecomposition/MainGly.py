@@ -226,25 +226,26 @@ write('FormHCN.xyz', s1)
 mol = read('MethylFormate/TS.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 
-baseline = mol.get_potential_energy()
+#baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-dyn = Sella(mol, internal = True)
-try:
-    dyn.run(1e-2, 1000)
-except:
-    pass
-ts_ene = mol.get_potential_energy()*96.58
-write('MethylFormate/NN_TS.xyz', mol)
-reac = read('MethylFormate/Start.xyz')
-mol.set_positions(reac.get_positions())
-dyn = BFGS(mol)
-try:
-    dyn.run(1e-2, 1000)
-except:
-    pass
-comp_ene = mol.get_potential_energy()*96.58
-diff = ts_ene - comp_ene
+#dyn = Sella(mol, internal = True)
+#try:
+#    dyn.run(1e-2, 1000)
+#except:
+#    pass
+#ts_ene = mol.get_potential_energy()*96.58
+#write('MethylFormate/NN_TS.xyz', mol)
+#reac = read('MethylFormate/Start.xyz')
+#mol.set_positions(reac.get_positions())
+#dyn = BFGS(mol)
+#try:
+#    dyn.run(1e-2, 1000)
+#except:
+#    pass
+#comp_ene = mol.get_potential_energy()*96.58
+#diff = ts_ene - comp_ene
+#write('MethylFormate/NN_start.xyz', mol)
 dyn = BFGS(mol,maxstep=100)
 try:
     dyn.run(1e-2, 1000)
