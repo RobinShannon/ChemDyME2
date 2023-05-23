@@ -112,9 +112,8 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-FormIRC = read('FormAll/FormHFpath.xyz', index=":")
-narupa_mol = FormIRC[6].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-960000', atoms=narupa_mol))
+narupa_mol = read('GlyoxalGeoms/NN_TS.xyz')
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
@@ -124,8 +123,9 @@ try:
 except:
     pass
 ts_ene = narupa_mol.get_potential_energy()*96.58
-write('FormAll/NN_HFTS.xyz', narupa_mol)
-narupa_mol.set_positions(FormIRC[20].get_positions())
+#write('FormAll/NN_HFTS.xyz', narupa_mol)
+t=read('GlyoxalGeoms/Start.xyz', index='0')
+narupa_mol.set_positions(t.get_positions())
 dyn = BFGS(narupa_mol)
 try:
     dyn.run(1e-2, 1000)
@@ -133,7 +133,7 @@ except:
     pass
 comp_ene = narupa_mol.get_potential_energy()*96.58
 diff = ts_ene - comp_ene
-write('FormAll/NN_HFComp.xyz', narupa_mol)
+#write('FormAll/NN_HFComp.xyz', narupa_mol)
 prod = read('FormAll/HCNprod.xyz')
 narupa_mol.set_positions(prod.get_positions())
 dyn = BFGS(narupa_mol)

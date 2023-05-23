@@ -72,3 +72,6 @@ class BXDBound:
         self.rates = 1.0 / rates
         self.average_rate = np.mean(self.rates)
         self.rate_error = np.std(self.rates) / np.sqrt(len(self.rates))
+
+    def get_bound_array2D(self):
+        return [self.d, self.n[0], self.n[1], self.s_point[0],self.s_point[1]]

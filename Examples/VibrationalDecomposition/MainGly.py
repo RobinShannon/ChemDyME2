@@ -221,20 +221,8 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-s1 = read('scan_new.log', index=':')
-s1pruned = []
-
-
-for i in range(0,len(s1)):
-    bond1 = s1[i].get_distance(7,8)
-    try:
-        bond2 = s1[i+1].get_distance(7,8)
-    except:
-        bond2 = np.inf
-    if bond2 - bond1 > 0.0001:
-        print(s1[i].get_potential_energy())
-        s1pruned.append(s1[i].copy())
-write('OH2.xyz', s1pruned)
+s1 = read('IRC1.log', index=':')
+write('FormHCN.xyz', s1)
 mol = read('MethylFormate/TS.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 

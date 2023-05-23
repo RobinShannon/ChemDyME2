@@ -52,19 +52,6 @@ class BXD:
     def reached_end(self, projected):
         pass
 
-    @staticmethod
-    def get_starting_bounds(low_s, high_s):
-        n1 = (high_s - low_s) / np.linalg.norm(high_s - low_s)
-        n2 = n1
-        d1 = -1 * np.vdot(n2, low_s)
-        d2 = -1 * np.vdot(n2, high_s)
-        b1 = bound.BXDBound(n1, d1)
-        b2 = bound.BXDBound(n2, d2)
-        b2.invisible = True
-        b1.s_point = low_s
-        b2.s_point = high_s
-        return b1, b2
-
     def del_constraint(self, mol):
         """
         interfaces with the progress metric to return the delta_phi for the constraint at whichever boundary is hit
@@ -438,6 +425,21 @@ class Adaptive(BXD):
         write(furthest_geom, self.geometry_of_furthest_point, format='xyz')
         write(end_geom, mol, format='xyz')
 
+    def get_starting_bounds(self, low_s, high_s):
+        if self.fix_to_path:
+            b1 = self.convert_s_to_bound_on_path(low_s)
+            b2 = self.convert_s_to_bound_on_path(high_s)
+        else:
+            n1 = (high_s - low_s) / np.linalg.norm(high_s - low_s)
+            n2 = n1
+            d1 = -1 * np.vdot(n2, low_s)
+            d2 = -1 * np.vdot(n2, high_s)
+            b1 = bound.BXDBound(n1, d1)
+            b2 = bound.BXDBound(n2, d2)
+            b2.invisible = True
+            b1.s_point = low_s
+            b2.s_point = high_s
+        return b1, b2
 
 class Fixed(BXD):
 
@@ -624,7 +626,7 @@ class Converging(BXD):
         box_list = []
         lines = open(file,"r").readlines()
         for i in range(2, len(lines)-1):
-            temp_dir = self.dir + ("/box_" + str(i))
+            temp_dir = self.dir + ("/box_" + str(i-2))
             words = lines[i].split("\t")
             d_lower = (float(words[4]))
             n_l = (words[7]).strip("[]\n")
@@ -694,7 +696,7 @@ class Converging(BXD):
                 return True
             elif self.box_list[self.box].upper.transparent and not self.progress_metric.reflect_back_to_path():
                 self.box_list[self.box].upper.transparent = False
-                self.box_list[self.box].close_box()
+                self.box_list[self.box].close_box(path=self.progress_metric.path.s)
                 self.box += 1
                 self.box_list[self.box].open_box()
                 self.box_list[self.box].last_hit = 'lower'
@@ -723,7 +725,7 @@ class Converging(BXD):
                 return True
             if self.box_list[self.box].lower.transparent and not self.progress_metric.outside_path():
                 self.box_list[self.box].lower.transparent = False
-                self.box_list[self.box].close_box()
+                self.box_list[self.box].close_box(path=self.progress_metric.path.s)
                 self.box -= 1
                 self.box_list[self.box].open_box()
                 self.box_list[self.box].last_hit = 'upper'

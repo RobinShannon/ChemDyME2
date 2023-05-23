@@ -1,6 +1,7 @@
 import numpy as np
 import src.bxd.bxd_bound as bound
 from copy import deepcopy
+import src.utility.bxd_plotter as plt
 import os
 
 class BXDBox:
@@ -160,12 +161,24 @@ class BXDBox:
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
 
-    def close_box(self):
+    def close_box(self, path='None'):
         self.upper_rates_file.close()
         self.upper_milestoning_rates_file.close()
         self.lower_rates_file.close()
         self.lower_milestoning_rates_file.close()
+        for d in self.data:
+            for s in d:
+                self.data_file.write(str(s))
+                self.data_file.write('\t')
+            self.data_file.write('\n')
         self.data_file.close()
+        self.lower.s_point = self.data[0]
+        self.upper.s_point = self.data[-1]
+        if path is not None:
+            fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
+            ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
+            fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
+            fig.animate(save_file=True, save_root = self.dir, frames = 0.1 *len(self.data))
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
