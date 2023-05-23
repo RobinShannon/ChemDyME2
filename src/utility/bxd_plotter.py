@@ -86,7 +86,6 @@ class bxd_plotter_2d:
                 self.path_lines.append(path)
         except:
             print("couldnt print path ")
-        self.fig.show()
 
     def plot_bxd_from_file(self, point_file, bound_file, point = -1):
         self.points, self.bounds = self.read_file(point_file, bound_file)
@@ -94,9 +93,8 @@ class bxd_plotter_2d:
 
     def animate(self, save_file= False, save_root=os.getcwd(), frames = 500 ):
         self.ani = animation.FuncAnimation(self.fig, self.ani_update, interval=5, frames= int(frames) , init_func=self.ani_init, blit=True)
-        self.fig.show()
         if save_file:
-            self.ani.save(str(save_root)+'/bxd_animation.gif', fps=10)
+            self.ani.save(str(save_root)+'/bxd_animation.mp4', fps=10)
 
     def read_file(self, point, bound):
         point_file = open(point,'r')
@@ -159,7 +157,6 @@ class bxd_plotter_2d:
                 self.bound_lines.append(bl2)
         if save:
             self.fig.savefig(str(save_root)+'/fig.mp4')
-        self.fig.show()
         plt.pause(3)
 
     def ani_init(self):
@@ -213,8 +210,6 @@ class bxd_plotter_3d:
         for i in range(0, len(self.path_data)-1):
             path = self.ax.plot(np.array([self.path_data[i][0], self.path_data[i + 1][0]]), np.array([self.path_data[i][1],self.path_data[i + 1][1]]),zs=np.array([self.path_data[i][2], self.path_data[i + 1][2]]), color=self.path_colour, alpha=0.5)
             self.path_lines.append(path)
-        self.fig.show()
-        self.fig.canvas.draw()
 
     def plot_bxd_from_array(self, points, bounds):
         boundList = []

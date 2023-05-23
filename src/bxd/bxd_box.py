@@ -179,6 +179,8 @@ class BXDBox:
             ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
             fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
             fig.animate(save_file=True, save_root = self.dir, frames = 0.1 *len(self.data))
+
+        del fig
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
