@@ -223,7 +223,7 @@ def get_rot_tran(coord_true, coord_pred):
 
 s1 = read('IRC1.log', index=':')
 write('FormHCN.xyz', s1)
-mol = read('MethylFormate/TS.xyz')
+mol = read('MethylFormate/water.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
@@ -302,7 +302,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 
-np.save('MethylFormate/co.npy', new_converted)
+np.save('MethylFormate/water.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
