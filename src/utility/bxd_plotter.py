@@ -142,7 +142,7 @@ class bxd_plotter_2d:
             x_dist = 0.2*(max(self.points[:,0])-min(self.points[:,0]))
             y_dist = 0.2*(max(self.points[:,1])-min(self.points[:,1]))
             self.ax.set_xlim([min(self.points[:,0])-x_dist, max(self.points[:,0])+x_dist])
-            self.ax.set_xlim([(self.points[:,1])-y_dist, max(self.points[:,1])+y_dist])
+            self.ax.set_xlim([min(self.points[:,1])-y_dist, max(self.points[:,1])+y_dist])
         else:
             self.ax.set_xlim([min(self.points[:,0])-2, max(self.points[:,0])+1])
             self.ax.set_ylim([min(self.points[:,1])-2, max(self.points[:,1])+1])
@@ -165,7 +165,7 @@ class bxd_plotter_2d:
             x_dist = 0.2*(max(self.points[:,0])-min(self.points[:,0]))
             y_dist = 0.2*(max(self.points[:,1])-min(self.points[:,1]))
             self.ax.set_xlim([min(self.points[:,0])-x_dist, max(self.points[:,0])+x_dist])
-            self.ax.set_xlim([(self.points[:,1])-y_dist, max(self.points[:,1])+y_dist])
+            self.ax.set_xlim([min(self.points[:,1])-y_dist, max(self.points[:,1])+y_dist])
         else:
             self.ax.set_xlim([min(self.points[:,0])-2, max(self.points[:,0])+1])
             self.ax.set_ylim([min(self.points[:,1])-2, max(self.points[:,1])+1])
