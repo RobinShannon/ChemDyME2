@@ -6,10 +6,11 @@ import os
 
 class BXDBox:
 
-    def __init__(self, lower, upper, type, dir = None):
+    def __init__(self, lower, upper, type, dir = None, plot=False):
         self.upper = upper
         self.lower = lower
         self.type = type
+        self.plot = plot
         # store all s values
         self.data = []
         self.top_data = []
@@ -172,15 +173,12 @@ class BXDBox:
                 self.data_file.write('\t')
             self.data_file.write('\n')
         self.data_file.close()
-        self.lower.s_point = self.data[0]
-        self.upper.s_point = self.data[-1]
-        if path is not None:
+        if path is not None and self.plot:
             fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
             ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
             fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
-            fig.animate(save_file=True, save_root = self.dir, frames = 0.1 *len(self.data))
-
-        del fig
+            fig.animate(save_file=True, save_root = self.dir, frames = min(500,len(self.data)))
+            del fig
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0

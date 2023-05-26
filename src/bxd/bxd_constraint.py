@@ -537,7 +537,7 @@ class Converging(BXD):
     """
     def __init__(self, progress_metric, bound_file="bounds_out.txt", geom_file='box_geoms.xyz', bound_hits=10,
                  read_from_file=True, convert_fixed_boxes=False, box_width=0, number_of_boxes=0,
-                 boxes_to_converge=None, print_directory='Converging_Data', converge_ends=True, bxd_iterations = 1):
+                 boxes_to_converge=None, print_directory='Converging_Data', converge_ends=True, bxd_iterations = 1, plot_box_data = False):
         super(Converging, self).__init__(progress_metric, bxd_iterations = bxd_iterations)
         self.bound_file = bound_file
         self.geom_file = geom_file
@@ -548,6 +548,7 @@ class Converging(BXD):
         self.box_width = box_width
         self.number_of_boxes = number_of_boxes
         self.boxes_to_converge = boxes_to_converge
+        self.plot = plot_box_data
         if self.read_from_file:
             self.box_list = self.read_exsisting_boundaries(self.bound_file)
 
@@ -612,7 +613,7 @@ class Converging(BXD):
             temp_dir = self.dir + ("/box_" + str(i))
             s += width
             upper_bound = bound.BXDBound(1.0,-1.0*deepcopy(s))
-            box = box(lower_bound, upper_bound, "fixed", True, dir = temp_dir)
+            box = box(lower_bound, upper_bound, "fixed", True, dir = temp_dir, plot = self.plot)
             box_list.append(box)
             lower_bound = deepcopy(upper_bound)
         return box_list
@@ -641,7 +642,7 @@ class Converging(BXD):
             for l2 in range(0,len(norm_upper)):
                 norm_upper[l2] = float(norm_upper[l2])
             upper_bound = bound.BXDBound(norm_upper,d_upper)
-            box = b.BXDBox(lower_bound, upper_bound, "fixed", dir=temp_dir)
+            box = b.BXDBox(lower_bound, upper_bound, "fixed", dir=temp_dir, plot = self.plot)
             box_list.append(box)
         return box_list
 
