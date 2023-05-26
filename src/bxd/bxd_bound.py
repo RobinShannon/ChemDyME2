@@ -14,7 +14,7 @@ class BXDBound:
         self.average_rate = 0
         self.rate_error = 0
         self.invisible = False
-        self.s_point = 0
+        self.s_point = None
 
     def reset(self):
         self.hits = 0
@@ -45,11 +45,11 @@ class BXDBound:
             return False
         coord = np.vdot(s, self.n) + self.d
         if bound == "up" and coord > 0.0001:
-            if self.s_point == 0:
+            if self.s_point is None:
                 self.s_point = s
             return True
         elif bound == "down" and coord < -0.0001:
-            if self.s_point == 0:
+            if self.s_point is None:
                 self.s_point = s
             return True
         else:
