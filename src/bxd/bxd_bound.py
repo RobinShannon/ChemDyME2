@@ -34,12 +34,8 @@ class BXDBound:
         coord1 = np.vdot(s, self.n) + self.d
         coord2 = np.vdot(old_s, self.n) + self.d
         if direction == 'up' and coord1 < coord2:
-            if self.s_point == 0:
-                self.s_point = s
             return True
         elif direction == 'down' and coord1 > coord2:
-            if self.s_point == 0:
-                self.s_point = s
             return True
         else:
             return False
@@ -49,8 +45,12 @@ class BXDBound:
             return False
         coord = np.vdot(s, self.n) + self.d
         if bound == "up" and coord > 0.0001:
+            if self.s_point == 0:
+                self.s_point = s
             return True
         elif bound == "down" and coord < -0.0001:
+            if self.s_point == 0:
+                self.s_point = s
             return True
         else:
             return False
