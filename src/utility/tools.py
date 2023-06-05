@@ -325,9 +325,9 @@ def read_mod_redundant3d(file):
         print(lines[-3])
         if "B" in lines[-3]:
             print("True")
-            start = -4
+            start = -5
         else:
-            start = -3
+            start = -4
         last_line = lines[int(start)]
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')

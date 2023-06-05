@@ -28,7 +28,7 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
         except:
             box.lower.average_rate = 0
         try:
-            box.read_box_data(temp_dir)
+            box.read_box_data(temp_dir,BXD.progress_metric)
         except:
             pass
 

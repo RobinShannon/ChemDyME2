@@ -36,6 +36,7 @@ class BXDBox:
         self.data_file = None
         self.hit_file = None
         self.dir = dir
+        self.projected_data = []
 
     def reset(self, type, active):
         self.type = type
@@ -55,7 +56,8 @@ class BXDBox:
         self.milestoning_count = 0
         self.decorrelation_count = 0
         self.decorrelation_time = 0
-
+        self.projected_data = []
+        self.data = []
 
     def get_s_extremes(self, b, eps):
         self.top_data = []
@@ -95,31 +97,22 @@ class BXDBox:
             modified_data.append(ar)
         return modified_data
 
-    def get_full_histogram(self, boxes=10, data_frequency=1):
-        data1 = self.data[0::data_frequency]
-        d = np.asarray([np.fromstring(d[0].replace('[', '').replace(']', ''), dtype=float, sep=' ') for d in data1])
-        proj = np.asarray([float(d[2]) for d in data1])
-        edge = (max(proj) - min(proj)) / boxes
-        edges = np.arange(min(proj), max(proj),edge).tolist()
-        energy = np.asarray([float(d[3]) for d in data1])
+    def get_full_histogram(self, boxes=10):
+        d = np.asarray(self.data, dtype =float)
         sub_bound_list = self.get_sub_bounds(boxes)
         hist = [0] * boxes
-        energies = []
+        edges = []
+        for i in range(1, boxes + 1):
+            edges.append(i)
         for j in range(0, boxes):
-            temp_ene = []
-            for ene,da in zip(energy,d):
+            for da in d:
                 try:
                     if not (sub_bound_list[j+1].hit(da,"up")) and not (sub_bound_list[j].hit(da,"down")):
                         hist[j] += 1
-                        temp_ene.append(float(ene))
                 except:
                     pass
-            try:
-                temp_ene = np.asarray(temp_ene)
-                energies.append(np.mean(temp_ene))
-            except:
-                energies.append(0)
-        return edges, hist, energies
+
+        return edges, hist
 
     def get_sub_bounds(self, boxes):
         # Get difference between upper and lower boundaries
@@ -142,14 +135,16 @@ class BXDBox:
         bounds.append(deepcopy(self.upper))
         return bounds
 
-    def read_box_data(self, path):
+    def read_box_data(self, path,progress_metric):
         path += '/box_data.txt'
         file = open(path, 'r')
-        for line in file.readlines():
+        for i,line in enumerate(file.readlines()):
             line = line.rstrip('\n')
             line = line.split('\t')
-            if float(line[2]) >= 0:
-                self.data.append(line)
+            del line[-1]
+            self.data.append(line)
+            ar = np.asarray(line,dtype=float)
+            self.projected_data.append(progress_metric.project_point_on_path(np.asarray(line,dtype=float)))
 
     def open_box(self):
         os.makedirs(self.dir, exist_ok=True)
