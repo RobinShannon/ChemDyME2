@@ -469,6 +469,18 @@ class Fixed(BXD):
         self.inversion = self.boundary_check() or self.progress_metric.reflect_back_to_path()
         self.old_s = self.s
 
+    def get_starting_bounds(self, low_s, high_s):
+        n1 = (high_s - low_s) / np.linalg.norm(high_s - low_s)
+        n2 = n1
+        d1 = -1 * np.vdot(n2, low_s)
+        d2 = -1 * np.vdot(n2, high_s)
+        b1 = bound.BXDBound(n1, d1)
+        b2 = bound.BXDBound(n2, d2)
+        b2.invisible = True
+        b1.s_point = low_s
+        b2.s_point = high_s
+        return b1, b2
+
     def boundary_check(self):
         self.bound_hit = 'none'
         # Check for hit against upper boundary

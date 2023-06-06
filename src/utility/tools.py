@@ -217,7 +217,7 @@ def fitFourier3D(energies,angles,coeffs):
 # Function takes a molecule in ASE format, converts it into an OBmol and then returns a SMILES string as a name
 def getSMILES(mol, opt, partialOpt = False):
     if opt:
-        min = BFGS(mol)
+        min = BFGS(mol, logfile=None)
         if partialOpt:
             try:
                 min.run(fmax=0.25, steps=5)
