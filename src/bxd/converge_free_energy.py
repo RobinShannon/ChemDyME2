@@ -1,4 +1,5 @@
 import numpy as np
+import os
 def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Data', decorrelation_limit=1,
                     data_frequency=1):
     """
