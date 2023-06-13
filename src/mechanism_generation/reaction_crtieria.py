@@ -8,7 +8,7 @@ import src.utility.tools as TL
 # Class to control connectivity maps / to determine  whether transitions have occured
 class ReactionCriteria:
 
-    def __init__(self, consistant_hit_steps = 5, relaxation_steps = 10):
+    def __init__(self, consistant_hit_steps = 50, relaxation_steps = 10):
         self.criteria_met = False
         self.transition_mol = []
         self.consistant_hit_steps = consistant_hit_steps
@@ -49,7 +49,7 @@ class ReactionCriteria:
 
 class NunezMartinez(ReactionCriteria):
 
-    def __init__(self,mol, consistant_hit_steps = 25, relaxation_steps = 125):
+    def __init__(self,mol, consistant_hit_steps = 50, relaxation_steps = 125):
         super(NunezMartinez, self).__init__(consistant_hit_steps, relaxation_steps)
         self.dRef = CT.refBonds(mol)
         self.C = CT.bondMatrix(self.dRef, mol)

@@ -166,7 +166,7 @@ def collate_free_energy_data(BXD, prefix='Converging_Data', outfile='Combined_co
                 except:
                     pass
 
-def get_overall_rates(BXD, directory, milestoning, decorrelation_limit):
+def get_overall_rates(BXD, directory, milestoning=True, decorrelation_limit=1):
     bxs = len(BXD.box_list)
     transition_array = np.zeros((bxs,bxs))
     for i, box in enumerate(BXD.box_list):
