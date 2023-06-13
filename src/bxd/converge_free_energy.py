@@ -3,7 +3,7 @@ import os
 import scipy.linalg as linalg
 
 def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Data', decorrelation_limit=1,
-                    data_frequency=1):
+                    data_limit=10000):
     """
     Reads the data in the output directory to calculate the free_energy profile
     :param T: Temperature MD was run at in K
@@ -170,34 +170,6 @@ def collate_free_energy_data(BXD, prefix='Converging_Data', outfile='Combined_co
                 except:
                     pass
 
-def get_overall_rates(BXD, directory, milestoning=True, decorrelation_limit=1):
-    bxs = len(BXD.box_list)
-    transition_array = np.zeros((bxs,bxs))
-    for i, box in enumerate(BXD.box_list):
-        temp_dir = directory + ("/box_" + str(i) + '/')
-        try:
-            box.upper.average_rates(milestoning, 'upper', temp_dir, decorrelation_limit)
-        except:
-            box.lower.average_rate = 0
-        try:
-            box.lower.average_rates(milestoning, 'lower', temp_dir, decorrelation_limit)
-        except:
-            box.lower.average_rate = 0
-
-    for i in range(0, bxs - 1):
-        lowerloss = BXD.box_list[i].lower.average_rate
-        lowergain = BXD.box_list[i - 1].upper.average_rate if i > 0 else 0
-        upperloss = BXD.box_list[i].upper.average_rate
-        uppergain = BXD.box_list[i + 1].lower.average_rate if i < bxs - 1 else 0
-        transition_array[i][i] =uppergain + lowergain - upperloss - lowerloss
-        if i > 0:
-            transition_array[i][i - 1] = lowerloss
-            transition_array[i - 1][i] = lowergain
-        if i < bxs - 1:
-            transition_array[i][i+1] = upperloss
-            transition_array[i + 1][i] = uppergain
-    eigval, eigvec = np.linalg.eig(transition_array)
-    return(eigval)
 
 def get_rates(self, milestoning = False, directory = 'Converging_Data', decorrelation_limit = 1, errors = False, n_samp = 10000):
 
@@ -242,8 +214,6 @@ def get_rates(self, milestoning = False, directory = 'Converging_Data', decorrel
             rate2= (eig[-1])
             rates.append(rate)
             rates2.append(rate2)
-            matrix = np.zeros((boxes, boxes))
-
         return [np.mean(rates),np.std(rates)]
     else:
         matrix = np.zeros((boxes, boxes))

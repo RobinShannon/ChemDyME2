@@ -135,7 +135,7 @@ class BXDBox:
         bounds.append(deepcopy(self.upper))
         return bounds
 
-    def read_box_data(self, path,progress_metric):
+    def read_box_data(self, path,progress_metric, data_limit):
         path += '/box_data.txt'
         file = open(path, 'r')
         for i,line in enumerate(file.readlines()):
@@ -145,7 +145,8 @@ class BXDBox:
             self.data.append(line)
             ar = np.asarray(line,dtype=float)
             self.projected_data.append(progress_metric.project_point_on_path(np.asarray(line,dtype=float)))
-
+            if i > data_limit:
+                break
 
     def open_box(self):
         os.makedirs(self.dir, exist_ok=True)
