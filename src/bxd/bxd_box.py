@@ -145,8 +145,7 @@ class BXDBox:
             self.data.append(line)
             ar = np.asarray(line,dtype=float)
             self.projected_data.append(progress_metric.project_point_on_path(np.asarray(line,dtype=float)))
-            if i > 10000:
-                break
+
 
     def open_box(self):
         os.makedirs(self.dir, exist_ok=True)
