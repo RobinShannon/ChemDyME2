@@ -97,7 +97,7 @@ class BXDBox:
             modified_data.append(ar)
         return modified_data
 
-    def get_full_histogram(self, boxes=10):
+    def get_full_histogram(self, boxes=10,):
         d = np.asarray(self.data, dtype =float)
         sub_bound_list = self.get_sub_bounds(boxes)
         hist = [0] * boxes
@@ -145,7 +145,7 @@ class BXDBox:
             self.data.append(line)
             ar = np.asarray(line,dtype=float)
             self.projected_data.append(progress_metric.project_point_on_path(np.asarray(line,dtype=float)))
-            if i < 10000:
+            if i > 10000:
                 break
 
     def open_box(self):

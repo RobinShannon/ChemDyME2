@@ -15,6 +15,7 @@ class BXDBound:
         self.rate_error = 0
         self.invisible = False
         self.s_point = None
+        self.random_rate=0
 
     def reset(self):
         self.hits = 0
@@ -79,3 +80,6 @@ class BXDBound:
 
     def get_bound_array2D(self):
         return [self.d, self.n[0], self.n[1], self.s_point[0],self.s_point[1]]
+
+    def sample_from_dist(self):
+        self.random_rate = float(np.random.normal(self.average_rate,self.rate_error,1))

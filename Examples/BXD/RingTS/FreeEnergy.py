@@ -9,6 +9,9 @@ import src.molecular_dynamics.trajectory as Traj
 import src.molecular_dynamics.md_logger as lg
 from ase.io import read, write
 import src.Calculators.ScineCalculator as SP
+from datetime import date
+
+f = open("free_energy_summary.txt", "a")
 
 narupa_mol = read('NEB.xyz', index='0')
 narupa_mol.set_calculator(SP.SparrowCalculator(method='AM1'))
@@ -26,6 +29,9 @@ progress = PM.Curve(collective_var, path,  max_nodes_skiped=3)
 #bxd_manager = bxd.Converging(progress, bound_hits=50,read_from_file=True, bound_file="bounds_out.txt", decorrelation_limit = 100, box_data_print_freqency=100)
 bxd_manager = BXD.Converging(progress_metric=progress, bound_hits=1)
 free_energy = FE.get_free_energy(bxd_manager,800,milestoning=True, boxes=10)
-print(str(free_energy))
-rate = FE.get_overall_rates(bxd_manager,milestoning=True)
-print(str(rate))
+f.write('Free Energy profile: Resolution = ' + (str(10)) + ' Date ' + str(date.today())+'\n\n')
+for fe in free_energy:
+    f.write(str(fe[0])+'\t'+str(fe[1])+'\n')
+rate = FE.get_rates(bxd_manager,milestoning=True,directory='Converging_Data',errors = True)
+f.write('Rate coefficient' + '\n\n')
+f.write(str(rate))

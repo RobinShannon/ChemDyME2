@@ -1,5 +1,7 @@
 import numpy as np
 import os
+import scipy.linalg as linalg
+
 def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Data', decorrelation_limit=1,
                     data_frequency=1):
     """
@@ -75,7 +77,7 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
                 BXD.box_list[i].eq_population_err /= total_probability
             last_s = 0
             for i in range(0, len(BXD.box_list)):
-                s, dens, ene = BXD.box_list[i].get_full_histogram(boxes, data_frequency)
+                s, dens = BXD.box_list[i].get_full_histogram(boxes)
                 for sj in s:
                     sj -= s[0]
                 for j in range(0, len(dens)):
@@ -87,10 +89,11 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
                     p_log = -1.0 * np.log(p)
                     p_log_err = (p_err) / p
                     s_path = s[j] + last_s
-                    profile.append((s_path, p_log, p_log_err, ene[j]))
+                    profile.append((s_path, p_log, p_log_err))
                 last_s += s[-1]
             return profile
         except:
+            return profile
             print('couldnt find histogram data for high resolution profile')
 
 
@@ -180,11 +183,8 @@ def get_overall_rates(BXD, directory, milestoning=True, decorrelation_limit=1):
             box.lower.average_rates(milestoning, 'lower', temp_dir, decorrelation_limit)
         except:
             box.lower.average_rate = 0
-        try:
-            box.read_box_data(temp_dir)
-        except:
-            pass
-    for i in range(0, i < bxs - 1):
+
+    for i in range(0, bxs - 1):
         lowerloss = BXD.box_list[i].lower.average_rate
         lowergain = BXD.box_list[i - 1].upper.average_rate if i > 0 else 0
         upperloss = BXD.box_list[i].upper.average_rate
@@ -196,6 +196,71 @@ def get_overall_rates(BXD, directory, milestoning=True, decorrelation_limit=1):
         if i < bxs - 1:
             transition_array[i][i+1] = upperloss
             transition_array[i + 1][i] = uppergain
-        eigval, eigvec = np.linalg.eig(transition_array)
-        f = open('output.txt', 'w')
-        f.write(eigval)
+    eigval, eigvec = np.linalg.eig(transition_array)
+    return(eigval)
+
+def get_rates(self, milestoning = False, directory = 'Converging_Data', decorrelation_limit = 1, errors = False, n_samp = 10000):
+
+    # Get number of boxes
+    boxes = len(self.box_list)
+    for i,box in enumerate(self.box_list):
+        temp_dir = directory + ("/box_" + str(i) + '/')
+        try:
+            box.upper.average_rates(milestoning, 'upper', temp_dir, decorrelation_limit)
+        except:
+            box.lower.average_rate = 0
+        try:
+            box.lower.average_rates(milestoning, 'lower', temp_dir, decorrelation_limit)
+        except:
+            box.lower.average_rate = 0
+        try:
+            box.read_box_data(temp_dir)
+        except:
+            pass
+    if errors:
+        rates = []
+        rates2= []
+        for b in range(0,n_samp):
+            matrix = np.zeros((boxes,boxes))
+            for i in range(0, boxes):
+                self.box_list[i].upper.sample_from_dist()
+                self.box_list[i].lower.sample_from_dist()
+            for i in range(0, boxes):
+                if i == 0:
+                    matrix[i][i] = - self.box_list[i].upper.random_rate
+                elif i < boxes - 1:
+                    matrix[i][i] = - self.box_list[i].upper.random_rate - self.box_list[i].lower.random_rate
+                if i > 0:
+                    matrix[i][i - 1] = self.box_list[i].lower.random_rate
+                    matrix[i - 1][i] = self.box_list[i - 1].upper.random_rate
+                if i < boxes - 2:
+                    matrix[i + 1][i] = self.box_list[i + 1].lower.random_rate
+                if i < boxes - 1:
+                    matrix[i][i + 1] = self.box_list[i].upper.random_rate
+            eig= linalg.eigvals(matrix)
+            rate = (eig[-2])
+            rate2= (eig[-1])
+            rates.append(rate)
+            rates2.append(rate2)
+            matrix = np.zeros((boxes, boxes))
+
+        return [np.mean(rates),np.std(rates)]
+    else:
+        matrix = np.zeros((boxes, boxes))
+        for i in range(0, boxes):
+            self.box_list[i].upper.sample_from_dist()
+            self.box_list[i].lower.sample_from_dist()
+        for i in range(0, boxes):
+            if i == 0:
+                matrix[i][i] = - self.box_list[i].upper.random_rate
+            elif i < boxes-1:
+                matrix[i][i] = - self.box_list[i].upper.random_rate - self.box_list[i].lower.random_rate
+            if i > 0:
+                matrix[i][i-1] = self.box_list[i].lower.random_rate
+                matrix[i-1][i] = self.box_list[i - 1].upper.random_rate
+            if i < boxes - 2:
+                matrix[i+1][i] = self.box_list[i + 1].lower.random_rate
+            if i < boxes - 1:
+                matrix[i][i+1] = self.box_list[i].upper.random_rate
+        eig = linalg.eigvals(matrix)
+        return [eig[-2],0]
