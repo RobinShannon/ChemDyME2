@@ -143,8 +143,6 @@ class BXDBox:
             line = line.split('\t')
             del line[-1]
             self.data.append(line)
-            ar = np.asarray(line,dtype=float)
-            self.projected_data.append(progress_metric.project_point_on_path(np.asarray(line,dtype=float)))
             if i > data_limit:
                 break
 
