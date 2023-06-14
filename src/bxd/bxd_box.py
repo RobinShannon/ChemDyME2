@@ -99,11 +99,13 @@ class BXDBox:
 
     def get_full_histogram(self, boxes=10,):
         d = np.asarray(self.data, dtype =float)
+        dist = np.dot(d[0],np.asarray(self.upper.n)) + self.upper.d
+        inc = np.abs(dist)/boxes
         sub_bound_list = self.get_sub_bounds(boxes)
         hist = [0] * boxes
         edges = []
         for i in range(1, boxes + 1):
-            edges.append(i)
+            edges.append(inc*i)
         for j in range(0, boxes):
             for da in d:
                 try:

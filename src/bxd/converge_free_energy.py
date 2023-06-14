@@ -76,20 +76,29 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
                 BXD.box_list[i].eq_population /= total_probability
                 BXD.box_list[i].eq_population_err /= total_probability
             last_s = 0
-            for i in range(0, len(BXD.box_list)):
+            for i in range(0, len(BXD.box_list)-1):
                 s, dens = BXD.box_list[i].get_full_histogram(boxes)
                 for sj in s:
                     sj -= s[0]
-                for j in range(0, len(dens)):
+                box_gibbs_diff = (BXD.box_list[i+1].gibbs - BXD.box_list[i].gibbs)
+                gibbs_err = (BXD.box_list[i+1].gibbs_err - BXD.box_list[i].gibbs_err)
+                max_d = -1.0 * np.log(float(dens[-1]) / (float(len(BXD.box_list[i].data))))
+                min_d = -1.0 * np.log(float(dens[0]) / (float(len(BXD.box_list[i].data))))
+                max_d_err = np.sqrt(float(dens[-1])) / (float(len(BXD.box_list[i].data))) / -1*np.log(float(dens[-1]) / (float(len(BXD.box_list[i].data))))
+                correction =  box_gibbs_diff/(max_d-min_d)
+                correction_err =correction * np.sqrt((gibbs_err/box_gibbs_diff)**2 + (max_d_err/max_d)**2)
+                offset = -1.0 * np.log(float(dens[0]) / (float(len(BXD.box_list[i].data))))
+                for j in range(1, len(dens)):
                     d_err = np.sqrt(float(dens[j])) / (float(len(BXD.box_list[i].data)))
                     d = float(dens[j]) / (float(len(BXD.box_list[i].data)))
-                    p = d * BXD.box_list[i].eq_population
-                    p_err = p * np.sqrt(
-                        (d_err / d) ** 2 + (BXD.box_list[i].eq_population_err / BXD.box_list[i].eq_population) ** 2)
+                    p = d
+                    p_err = p * np.sqrt((d_err / d) ** 2 )
                     p_log = -1.0 * np.log(p)
                     p_log_err = (p_err) / p
+                    p_corr = ((p_log-offset) * correction) + BXD.box_list[i].gibbs
+                    p_corr_err = p_corr * np.sqrt((p_log_err / p_log)**2 + (correction_err/correction)**2)
                     s_path = s[j] + last_s
-                    profile.append((s_path, p_log, p_log_err))
+                    profile.append((s_path, p_corr, p_corr_err))
                 last_s += s[-1]
             return profile
         except:
