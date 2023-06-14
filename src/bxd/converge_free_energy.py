@@ -31,7 +31,7 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
         except:
             box.lower.average_rate = 0
         try:
-            box.read_box_data(temp_dir,BXD.progress_metric,data_limit=data_limit)
+            box.read_box_data(temp_dir, data_limit=data_limit)
         except:
             pass
 
@@ -81,8 +81,8 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
                 for sj in s:
                     sj -= s[0]
                 for j in range(0, len(dens)):
-                    d_err = np.sqrt(float(dens[j])) / (float(len(BXD.box_list[i].data)) / data_frequency)
-                    d = float(dens[j]) / (float(len(BXD.box_list[i].data)) / data_frequency)
+                    d_err = np.sqrt(float(dens[j])) / (float(len(BXD.box_list[i].data)))
+                    d = float(dens[j]) / (float(len(BXD.box_list[i].data)))
                     p = d * BXD.box_list[i].eq_population
                     p_err = p * np.sqrt(
                         (d_err / d) ** 2 + (BXD.box_list[i].eq_population_err / BXD.box_list[i].eq_population) ** 2)
@@ -185,10 +185,7 @@ def get_rates(self, milestoning = False, directory = 'Converging_Data', decorrel
             box.lower.average_rates(milestoning, 'lower', temp_dir, decorrelation_limit)
         except:
             box.lower.average_rate = 0
-        try:
-            box.read_box_data(temp_dir)
-        except:
-            pass
+
     if errors:
         rates = []
         rates2= []

@@ -135,7 +135,7 @@ class BXDBox:
         bounds.append(deepcopy(self.upper))
         return bounds
 
-    def read_box_data(self, path,progress_metric, data_limit):
+    def read_box_data(self, path, data_limit):
         path += '/box_data.txt'
         file = open(path, 'r')
         for i,line in enumerate(file.readlines()):
