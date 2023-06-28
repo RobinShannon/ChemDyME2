@@ -9,6 +9,7 @@ from ase.io import write
 
 
 
+
 class Trajectory:
     """
     Controls the running of a bxd trajectory. This class interfaces with a a list of one or more bxd object to track
@@ -31,6 +32,7 @@ class Trajectory:
         initial_temperature = md_integrator.temperature
         if maxwell_boltzman:
             vd.MaxwellBoltzmannDistribution(self.mol, temperature_K= initial_temperature, force_temp=True)
+            vd.Stationary(self.mol,True)
         self.md_integrator.current_velocities = self.mol.get_velocities()
         self.md_integrator.half_step_velocity = self.mol.get_velocities()
         self.hit = False

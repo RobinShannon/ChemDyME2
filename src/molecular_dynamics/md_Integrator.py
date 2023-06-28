@@ -4,6 +4,7 @@ from numpy.random import standard_normal
 from ase import units
 import warnings
 import copy
+from ase.md import velocitydistribution as vd
 
 class MDIntegrator:
     """
@@ -207,6 +208,7 @@ class VelocityVerlet(MDIntegrator):
 
         # Return positions
         mol.set_velocities(self.current_velocities)
+        vd.Stationary(mol, True)
 
     def output(self, mol):
         """
