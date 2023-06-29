@@ -122,7 +122,6 @@ class Trajectory:
                         bxd.close('temp',self.mol)
             if bxd_complete or self.mdsteps > max_steps or self.criteria is not None and self.criteria.complete:
                 keep_going = False
-                write('temp.xyz', traj)
                 if self.criteria is not None:
                     return self.criteria.product_geom
                 else:
