@@ -172,8 +172,8 @@ class VelocityVerlet(MDIntegrator):
         # Then get the next half step velocity and update the position.
         # NB currentVel is one full MD step behind currentPos
         if self.constrained:
-            self.half_step_velocity = self.current_velocities + accel * self.timestep
-            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep * 2)
+            self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
+            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep * 0.5)
             self.constrained = False
         else:
             self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
