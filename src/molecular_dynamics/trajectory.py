@@ -79,6 +79,7 @@ class Trajectory:
                 if bxd.connected_BXD is None or bxd.connected_BXD.active is True:
                     bxd.update(self.mol)
                     if bxd.inversion and not first_run:
+                        self.mol.set_positions(self.md_integrator.old_positions)
                         if bxd.bound_hit != 'path':
                             del_phi.append(bxd.del_constraint(self.mol))
                         if bxd.progress_metric.reflect_back_to_path():

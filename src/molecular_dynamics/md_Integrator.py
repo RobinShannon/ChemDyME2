@@ -109,7 +109,7 @@ class VelocityVerlet(MDIntegrator):
         lagrangian = (-2.0 * np.vdot(b, c)) / np.vdot(b, (b * (1 / a)))
 
         # Modify velocities
-        self.current_velocities += (lagrangian * del_phi * (1/self.masses)[:, None])
+        self.current_velocities = (self.current_velocities + (lagrangian * 1 * del_phi * (1/self.masses)[:, None]))
         self.half_step_velocity = copy.deepcopy(self.current_velocities)
         self.constrained = True
 
