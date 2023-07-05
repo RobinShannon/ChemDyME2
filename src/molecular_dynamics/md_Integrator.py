@@ -173,7 +173,7 @@ class VelocityVerlet(MDIntegrator):
         # NB currentVel is one full MD step behind currentPos
         if self.constrained:
             self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
-            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep * 0.5)
+            self.current_positions = self.current_positions + (self.half_step_velocity * self.timestep)
             self.constrained = False
         else:
             self.half_step_velocity = self.current_velocities + accel * self.timestep * 0.5
@@ -208,7 +208,8 @@ class VelocityVerlet(MDIntegrator):
 
         # Return positions
         mol.set_velocities(self.current_velocities)
-
+        vd.Stationary(self.mol, True)
+        self.current_velocities(mol.get_velocities())
     def output(self, mol):
         """
         Generates string of output text appropriate to the velocity verlet case
