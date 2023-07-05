@@ -208,7 +208,7 @@ class VelocityVerlet(MDIntegrator):
 
         # Return positions
         mol.set_velocities(self.current_velocities)
-        vd.Stationary(self.mol, True)
+        vd.Stationary(mol, True)
         self.current_velocities(mol.get_velocities())
     def output(self, mol):
         """
