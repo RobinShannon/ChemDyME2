@@ -195,7 +195,7 @@ class Gaussian(FileIOCalculator):
                 write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant, loose)',addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
-            pop_point = -2 - len(dihedral)
+            pop_point = -5 - len(dihedral)
             lines.pop(pop_point)
             f.close()
             f=open(str(title) + '.com','w')
