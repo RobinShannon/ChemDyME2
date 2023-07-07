@@ -223,7 +223,7 @@ def get_rot_tran(coord_true, coord_pred):
 
 s1 = read('IRC1.log', index=':')
 write('FormHCN.xyz', s1)
-mol = read('NewGyl/hydroxyl.xyz')
+mol = read('NewGyl/HCOCO_3removed.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
@@ -248,7 +248,7 @@ mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
 #write('MethylFormate/NN_start.xyz', mol)
 dyn = BFGS(mol,maxstep=100)
 try:
-    dyn.run(1e-2, 1000)
+    dyn.run(1e-8, 1000)
 except:
     pass
 vib = Vibrations(mol)
@@ -302,7 +302,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 
-np.save('NewGyl/hydroxyl.npy', new_converted)
+np.save('NewGyl/HCOCO.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
