@@ -81,8 +81,8 @@ class Trajectory:
             if self.mdsteps % 100 == 0 and self.check_molecular_species:
                 temp_mol = self.mol.copy()
                 temp_mol._calc = self.mol.get_calculator()
-                name = Tl.getSMILES(temp_mol)
-                if str(name) not in self.check_molecular_species:
+                name = Tl.getSMILES(temp_mol, opt=True)
+                if str(name) not in self.check_allowed_species:
                     return None
 
 
