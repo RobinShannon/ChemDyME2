@@ -170,12 +170,15 @@ class BXDBox:
                 self.data_file.write('\t')
             self.data_file.write('\n')
         self.data_file.close()
-        if path is not None and self.plot:
-            fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
-            ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
-            fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
-            fig.animate(save_file=True, save_root = self.dir, frames = min(500,len(self.data)))
-            del fig
+        try:
+            if path is not None and self.plot:
+                fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
+                ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
+                fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
+                fig.animate(save_file=True, save_root = self.dir, frames = min(500,len(self.data)))
+                del fig
+        except:
+            pass
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0

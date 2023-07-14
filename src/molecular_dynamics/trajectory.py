@@ -2,7 +2,7 @@ import numpy as np
 import sys
 from ase.md import velocitydistribution as vd
 import src.mechanism_generation.reaction_crtieria as RC
-import src.utility.connectivity_tools as CT
+import src.utility.tools as Tl
 import src.molecular_dynamics.md_logger as Log
 from typing import Optional
 from ase.io import write
@@ -24,7 +24,7 @@ class Trajectory:
     """
 
     def __init__(self, mol, bxd_list, md_integrator, loggers: Optional[Log.MDLogger] = [Log.MDLogger()],
-                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False, maxwell_boltzman = True):
+                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False, maxwell_boltzman = True, allowed_species = None):
         self.bxd_list = bxd_list
         self.md_integrator = md_integrator
         self.mol = mol.copy()
@@ -40,6 +40,11 @@ class Trajectory:
         self.loggers = loggers
         self.criteria = criteria
         self.mdsteps = 1
+        if allowed_species != None:
+            self.allowed_species = allowed_species
+            self.check_molecular_species = True
+        else:
+            self.check_molecular_species = False
 
 
 
@@ -72,6 +77,14 @@ class Trajectory:
 
         # Run MD trajectory for specified number of steps or until bxd reaches its end point
         while keep_going:
+
+            if self.mdsteps % 100 == 0 and self.check_molecular_species:
+                temp_mol = self.mol.copy()
+                temp_mol._calc = self.mol.get_calculator()
+                name = Tl.getSMILES(temp_mol)
+                if str(name) not in self.check_molecular_species:
+                    return None
+
 
             del_phi = []
             # update each bxd constraint with the current geometry and determine whether a bxd inversion is neccessary

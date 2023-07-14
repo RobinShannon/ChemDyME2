@@ -225,7 +225,7 @@ def getSMILES(mol, opt, partialOpt = False):
                 min.run(fmax=0.25, steps=1)
         else:
             try:
-                min.run(fmax=0.1, steps=100)
+                min.run(fmax=0.1, steps=10)
             except:
                 min.run(fmax=0.1, steps=1)
 
