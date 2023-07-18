@@ -82,8 +82,8 @@ class Trajectory:
                 temp_mol = self.mol.copy()
                 temp_mol._calc = self.mol.get_calculator()
                 name = Tl.getSMILES(temp_mol, opt=True)
-                if str(name) not in self.allowed_species:
-                    print(str(name[0]) + 'in not in allowed species')
+                if str(name[0]) not in self.allowed_species:
+                    print(str(name[0]) + ' in not in allowed species')
                     return None
 
 
