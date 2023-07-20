@@ -13,7 +13,6 @@ class BXDBound:
         self.rates = []
         self.average_rate = 0
         self.rate_error = 0
-        self.invisible = False
         self.s_point = None
         self.random_rate=0
 

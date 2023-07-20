@@ -430,6 +430,7 @@ class Adaptive(BXD):
         if self.fix_to_path:
             b1 = self.convert_s_to_bound_on_path(low_s)
             b2 = self.convert_s_to_bound_on_path(high_s)
+
         else:
             n1 = (high_s - low_s) / np.linalg.norm(high_s - low_s)
             n2 = n1
@@ -437,9 +438,9 @@ class Adaptive(BXD):
             d2 = -1 * np.vdot(n2, high_s)
             b1 = bound.BXDBound(n1, d1)
             b2 = bound.BXDBound(n2, d2)
-            b2.invisible = True
-            b1.s_point = low_s
-            b2.s_point = high_s
+        b2.invisible = True
+        b1.s_point = low_s
+        b2.s_point = high_s
         return b1, b2
 
 class Fixed(BXD):
@@ -670,14 +671,12 @@ class Converging(BXD):
             # If converge_ends then make sure the final bound meets the bound_hits criteria before reversing
             if not self.converge_ends or self.criteria_met(self.box_list[self.box].upper):
                 self.reverse = True
-                self.progress_metric.set_bxd_reverse(self.reverse)
                 print('reversing')
         # If we are reversing then check whether we are back in box 0 and the run is complete
         elif self.box == self.start_box and self.reverse is True:
             # If converge_ends then make sure the first bound meets the bound_hits criteria
             if not self.converge_ends or self.criteria_met(self.box_list[self.box].lower):
                 self.reverse = False
-                self.progress_metric.set_bxd_reverse(self.reverse)
                 self.completed_runs += 1
                 for bx in self.box_list:
                     bx.upper.hits = 0
