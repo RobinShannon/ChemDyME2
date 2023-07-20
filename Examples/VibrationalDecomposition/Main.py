@@ -111,9 +111,9 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-path_s1 = (read('FormF/Scan3.log',index=":"))
-path_s2 =(read('FormF/Scan3_2.log',index=":"))
-path_s3 = (read('FormF/Scan_3_3.log',index=":"))
+path_s1 = (read('FormCN/Scan3.log',index=":"))
+path_s2 =(read('FormCN/Scan3_2.log',index=":"))
+path_s3 = (read('FormCN/Scan3_3.log',index=":"))
 path_s = path_s1 +path_s2+path_s3
 
 
@@ -121,7 +121,7 @@ path_s = path_s1 +path_s2+path_s3
 
 for i, mol in enumerate(path_s):
     list = generate_displacements(mol.copy(), 0.05, rand_dis=True, seccond_order=False)
-    write('FormF/Traj' + str(i) + '.xyz', list)
+    write('FormCN/Traj' + str(i) + '.xyz', list)
 
 
 

@@ -120,8 +120,6 @@ class Trajectory:
                 pass
             self.md_integrator.md_step_vel(forces, self.mol)
 
-            traj.append(self.mol.copy())
-
             if self.loggers != None:
                 for log in self.loggers:
                     log.write_log(self)
