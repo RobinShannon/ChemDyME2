@@ -152,7 +152,6 @@ class Adaptive(BXD):
         # progresses
         s1, s2 = self.progress_metric.start, self.progress_metric.end
         b1, b2 = self.get_starting_bounds(s1, s2)
-        b2.transparent=True
         box = b.BXDBox(b1, b2, 'adap')
         # Add starting box to box list
         self.box_list.append(box)
@@ -672,6 +671,7 @@ class Converging(BXD):
             if not self.converge_ends or self.criteria_met(self.box_list[self.box].upper):
                 self.reverse = True
                 print('reversing')
+                self.box_list[self.box].upper.transparent = False
         # If we are reversing then check whether we are back in box 0 and the run is complete
         elif self.box == self.start_box and self.reverse is True:
             # If converge_ends then make sure the first bound meets the bound_hits criteria
