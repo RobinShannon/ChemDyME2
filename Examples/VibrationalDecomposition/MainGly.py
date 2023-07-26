@@ -223,17 +223,17 @@ def get_rot_tran(coord_true, coord_pred):
 
 s1 = read('IRC1.log', index=':')
 write('FormHCN.xyz', s1)
-mol = read('NewGyl/HCOCO_3removed.xyz')
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
+mol = read('GlyoxalGeoms/NN_TS.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-#dyn = Sella(mol, internal = True)
-#try:
-#    dyn.run(1e-2, 1000)
-#except:
-#    pass
+dyn = Sella(mol, internal = True)
+try:
+    dyn.run(1e-2, 1000)
+except:
+    pass
 #ts_ene = mol.get_potential_energy()*96.58
 #write('MethylFormate/NN_TS.xyz', mol)
 #reac = read('MethylFormate/Start.xyz')
@@ -246,11 +246,11 @@ mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=mol))
 #comp_ene = mol.get_potential_energy()*96.58
 #diff = ts_ene - comp_ene
 #write('MethylFormate/NN_start.xyz', mol)
-dyn = BFGS(mol,maxstep=100)
-try:
-    dyn.run(1e-8, 1000)
-except:
-    pass
+#dyn = BFGS(mol,maxstep=100)
+#try:
+#    dyn.run(1e-8, 1000)
+#except:
+#    pass
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -302,7 +302,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 
-np.save('NewGyl/HCOCO.npy', new_converted)
+np.save('NewGyl/gly.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)

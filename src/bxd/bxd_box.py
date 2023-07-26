@@ -35,6 +35,7 @@ class BXDBox:
         self.lower_milestoning_rates_file = None
         self.data_file = None
         self.hit_file = None
+        self.histogram_file = None
         self.dir = dir
         self.projected_data = []
 
@@ -101,20 +102,21 @@ class BXDBox:
         d = np.asarray(self.data, dtype =float)
         dist = np.dot(d[0],np.asarray(self.upper.n)) + self.upper.d
         inc = np.abs(dist)/boxes
-        sub_bound_list = self.get_sub_bounds(boxes)
-        hist = [0] * boxes
-        edges = []
+
+        self.sub_bound_list = self.get_sub_bounds(boxes)
+        self.hist = [0] * boxes
+        self.edges = []
         for i in range(1, boxes + 1):
-            edges.append(inc*i)
+            self.edges.append(inc*i)
         for j in range(0, boxes):
             for da in d:
                 try:
-                    if not (sub_bound_list[j+1].hit(da,"up")) and not (sub_bound_list[j].hit(da,"down")):
-                        hist[j] += 1
+                    if not (self.sub_bound_list[j+1].hit(da,"up")) and not (self.sub_bound_list[j].hit(da,"down")):
+                        self.hist[j] += 1
                 except:
                     pass
 
-        return edges, hist
+        return self.edges, self.hist
 
     def get_sub_bounds(self, boxes):
         # Get difference between upper and lower boundaries
@@ -155,6 +157,7 @@ class BXDBox:
         self.lower_rates_file = open(self.dir + '/lower_rates.txt', 'a')
         self.lower_milestoning_rates_file = open(self.dir + '/lower_milestoning.txt', 'a')
         self.data_file = open(self.dir + '/box_data.txt', 'a')
+        self.histogram_file = open(self.dir + '/histogram.txt', 'w')
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
@@ -170,10 +173,13 @@ class BXDBox:
                 self.data_file.write('\t')
             self.data_file.write('\n')
         self.data_file.close()
+        self.histogram_file.write(self.hist)
         try:
             if path is not None and self.plot:
                 fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
-                ar = [self.lower.get_bound_array2D(),self.upper.get_bound_array2D()]
+                ar = []
+                for i in self.sub_bound_list:
+                    ar.append(i.get_bound_array2D())
                 fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
                 fig.animate(save_file=True, save_root = self.dir, frames = min(500,len(self.data)))
                 del fig
