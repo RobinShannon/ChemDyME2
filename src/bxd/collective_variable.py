@@ -137,13 +137,16 @@ class CartesianPrincipalCoordinates(CollectiveVariable):
     :param input_prefix:  Gives the common prefix of all files defining the desired PC's at present these must be
                           generated from pathReducer separately.
     """
-    def __init__(self, number_of_pcs, input_prefix):
+    def __init__(self, number_of_pcs, input_prefix, file=True, numpy_array=None):
         super().__init__()
         self.number_of_pcs = number_of_pcs
         self.pc_array = []
         for i in range(0, number_of_pcs):
-            inp = input_prefix + str(i) + '.txt'
-            array = np.loadtxt(inp)
+            if file:
+                inp = input_prefix + str(i) + '.txt'
+                array = np.loadtxt(inp)
+            else:
+                array=numpy_array
             self.pc_array.append(array)
 
     def get_s(self, mol):
