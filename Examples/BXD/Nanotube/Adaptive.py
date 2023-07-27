@@ -26,7 +26,7 @@ md = MD.Langevin(narupa_mol, temperature=300, friction=10, timestep=0.5)
 
 logfile = open('log.txt', 'w')
 loggers = []
-lf1 = lambda var: 'box\t=\t' + str(var.bxd_list[0].box) + '\tprogress\t=\t'+str(var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].s) /var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].progress_metric.end)) +'\n'
+lf1 = lambda var: 'box\t=\t' + str(var.bxd_list[0].box) + '\tprogress\t=\t'+str(var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].s) /var.bxd_list[0].progress_metric.project_point_on_path(var.bxd_list[0].progress_metric.full_distance)) +'\n'
 tf1 = lambda var: var.mdsteps % 1000 == 0
 log1 = lg.MDLogger( logging_function=lf1, triggering_function=tf1)
 loggers.append(log1)
