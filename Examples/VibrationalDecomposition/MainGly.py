@@ -223,7 +223,7 @@ def get_rot_tran(coord_true, coord_pred):
 
 s1 = read('IRC1.log', index=':')
 write('FormHCN.xyz', s1)
-mol = read('GlyoxalGeoms/NN_TS.xyz')
+mol = read('GlyoxalGeoms/Start.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
 
 #baseline = mol.get_potential_energy()

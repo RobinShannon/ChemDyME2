@@ -22,7 +22,7 @@ progress = PM.Curve(collective_var, path, max_nodes_skiped=1)
 
 narupa_mol.set_calculator(OpenMMCalculator('Nano.xml', narupa_mol))
 narupa_mol.set_positions(narupa_path[0].get_positions())
-md = MD.Langevin(narupa_mol, temperature=300, friction=10, timestep=0.5)
+md = MD.Langevin(narupa_mol, temperature=800, friction=10, timestep=1)
 
 logfile = open('log.txt', 'w')
 loggers = []

@@ -174,7 +174,7 @@ class BXDBox:
                 self.data_file.write('\t')
             self.data_file.write('\n')
         self.data_file.close()
-        self.histogram_file.write(self.hist)
+        self.histogram_file.write(str(self.hist))
         try:
             if path is not None and self.plot:
                 fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
