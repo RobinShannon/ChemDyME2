@@ -3,7 +3,7 @@ import os
 import scipy.linalg as linalg
 
 def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Data', decorrelation_limit=5,
-                    data_limit=10000):
+                    data_limit=100000000):
     """
     Reads the data in the output directory to calculate the free_energy profile
     :param T: Temperature MD was run at in K
