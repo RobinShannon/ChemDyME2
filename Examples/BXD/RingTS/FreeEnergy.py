@@ -28,7 +28,8 @@ path = Path.Path(narupa_path, collective_var,  stride=2, max_distance_from_path=
 progress = PM.Curve(collective_var, path,  max_nodes_skiped=3)
 #bxd_manager = bxd.Converging(progress, bound_hits=50,read_from_file=True, bound_file="bounds_out.txt", decorrelation_limit = 100, box_data_print_freqency=100)
 bxd_manager = BXD.Converging(progress_metric=progress, bound_hits=1)
-free_energy = FE.get_free_energy(bxd_manager,800,milestoning=True, boxes=10)
+print(len(bxd_manager.box_list))
+free_energy = FE.get_free_energy(bxd_manager,600,milestoning=True, boxes=10, decorrelation_limit=5)
 f.write('Free Energy profile: Resolution = ' + (str(5)) + ' Date ' + str(date.today())+'\n\n')
 for fe in free_energy:
     f.write(str(fe[0])+'\t'+str(fe[1])+'\n')

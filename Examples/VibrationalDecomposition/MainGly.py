@@ -223,26 +223,24 @@ def get_rot_tran(coord_true, coord_pred):
 
 s1 = read('IRC1.log', index=':')
 write('FormHCN.xyz', s1)
-mol = read('GlyoxalGeoms/Start.xyz')
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
+mol = read('NewGyl/water.xyz')
+mol.set_calculator(SP())
 
 #baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-dyn = Sella(mol, internal = True)
-try:
-    dyn.run(1e-2, 1000)
-except:
-    pass
-#ts_ene = mol.get_potential_energy()*96.58
-#write('MethylFormate/NN_TS.xyz', mol)
-#reac = read('MethylFormate/Start.xyz')
-#mol.set_positions(reac.get_positions())
-#dyn = BFGS(mol)
+#dyn = Sella(mol, internal = True)
 #try:
 #    dyn.run(1e-2, 1000)
 #except:
 #    pass
+#ts_ene = mol.get_potential_energy()*96.58
+#write('MethylFormate/NN_TS.xyz', mol)
+#reac = read('MethylFormate/Start.xyz')
+#mol.set_positions(reac.get_positions())
+dyn = BFGS(mol, logfile=None)
+dyn.run(1e-2, 1000)
+
 #comp_ene = mol.get_potential_energy()*96.58
 #diff = ts_ene - comp_ene
 #write('MethylFormate/NN_start.xyz', mol)
@@ -254,7 +252,7 @@ except:
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
-vib.summary()
+vib.summary(log='vibout.txt')
 vib.clean()
 L = vib.modes
 T = get_translational_vectors(mol)
@@ -302,7 +300,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 
-np.save('NewGyl/gly.npy', new_converted)
+np.save('NewGyl/water.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)

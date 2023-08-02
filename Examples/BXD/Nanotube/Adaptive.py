@@ -9,7 +9,7 @@ import src.molecular_dynamics.trajectory as Traj
 from ase.io import read,write
 import src.molecular_dynamics.md_logger as lg
 
-narupa_path = read('NanoTraj4.xyz', index ='1:')
+narupa_path = read('NanoTraj4.xyz', index =':')
 narupa_mol =  read('NanoTraj4.xyz', index ='1')
 
 pcs = 2
@@ -21,7 +21,7 @@ path = Path.Path(narupa_path, collective_var, stride=1, max_distance_from_path=3
 progress = PM.Curve(collective_var, path, max_nodes_skiped=1)
 
 narupa_mol.set_calculator(OpenMMCalculator('Nano.xml', narupa_mol))
-narupa_mol.set_positions(narupa_path[0].get_positions())
+narupa_mol.set_positions(narupa_path[1].get_positions())
 md = MD.Langevin(narupa_mol, temperature=800, friction=10, timestep=1)
 
 logfile = open('log.txt', 'w')
@@ -37,7 +37,7 @@ log3 = lg.MDLogger(logging_function=lf3, triggering_function=tf3)
 loggers.append(log3)
 
 
-bxd_manager = BXD.Adaptive(progress, epsilon=0.999, adaptive_steps=100000, fix_to_path=True)
+bxd_manager = BXD.Adaptive(progress, epsilon=0.999, adaptive_steps=10000, fix_to_path=True)
 bxd_trajectory = Traj.Trajectory(narupa_mol, [bxd_manager], md, loggers = loggers)
 bxd_trajectory.run_trajectory()
 bxd_manager.print_bounds('bounds_out.txt')
