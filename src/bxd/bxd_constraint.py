@@ -160,6 +160,7 @@ class Adaptive(BXD):
         self.new_box = False
 
 
+
     def update(self, mol, decorrelated=True ):
         """
         General book-keeping method. Takes an ASE atoms object, stores data from progress_metric at the current
