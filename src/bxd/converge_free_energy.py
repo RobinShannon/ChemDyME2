@@ -206,15 +206,18 @@ def get_rates(self, milestoning = False, directory = 'Converging_Data', decorrel
             for i in range(0, boxes):
                 if i == 0:
                     matrix[i][i] = - self.box_list[i].upper.random_rate
-                elif i < boxes - 1:
+                elif i < boxes-1:
                     matrix[i][i] = - self.box_list[i].upper.random_rate - self.box_list[i].lower.random_rate
-                if i > 0:
-                    matrix[i][i - 1] = self.box_list[i].lower.random_rate
-                    matrix[i - 1][i] = self.box_list[i - 1].upper.random_rate
-                if i < boxes - 2:
-                    matrix[i + 1][i] = self.box_list[i + 1].lower.random_rate
+                elif i == boxes-1:
+                    matrix[i][i] = self.box_list[i].lower.random_rate
+                if i > 0 and i < boxes:
+                    matrix[i][i-1] = self.box_list[i].lower.random_rate
+                if i > 0 and i < boxes:
+                    matrix[i-1][i] = self.box_list[i - 1].upper.random_rate
                 if i < boxes - 1:
-                    matrix[i][i + 1] = self.box_list[i].upper.random_rate
+                    matrix[i+1][i] = self.box_list[i + 1].lower.random_rate
+                if i < boxes - 1:
+                    matrix[i][i+1] = self.box_list[i].upper.random_rate
             eig= linalg.eigvals(matrix)
             rate = (eig[-2])
             rate2= (eig[-1])

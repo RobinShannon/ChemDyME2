@@ -72,7 +72,7 @@ class BXDBound:
         if maxi > 2.0 * decorrelation_limit:
             rates = rates[rates > decorrelation_limit]
         else:
-            rates = rates[rates > 2]
+            rates = rates[rates > 3]
         self.rates = 1.0 / rates
         self.average_rate = np.mean(self.rates)
         self.rate_error = np.std(self.rates) / np.sqrt(len(self.rates))

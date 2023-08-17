@@ -182,7 +182,7 @@ class BXDBox:
                 for i in self.sub_bound_list:
                     ar.append(i.get_bound_array2D())
                 fig.plot_bxd_from_array(self.data, ar, save_file=True, save_root = self.dir)
-                fig.animate(save_file=True, save_root = self.dir, frames = min(500,len(self.data)))
+                fig.animate(save_file=True, save_root = self.dir, frames = min(50000,len(self.data)))
                 del fig
         except:
             pass
