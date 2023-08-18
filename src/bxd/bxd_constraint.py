@@ -5,6 +5,7 @@ import os
 from copy import deepcopy
 import src.bxd.bxd_bound as bound
 import src.bxd.bxd_box as b
+import src.utility.bxd_plotter as plt
 
 class BXD:
     """
@@ -34,6 +35,8 @@ class BXD:
         self.bxd_iterations = bxd_iterations
         self.inversion = False
         self.connected_BXD = connected_BXD
+        self.all_data = []
+        self.all_bounds = []
 
     def __len__(self):
         return len(self.box_list)
@@ -385,6 +388,7 @@ class Adaptive(BXD):
             if not self.reverse:
                 self.box_list[self.box].upper.transparent = False
                 self.box_list[self.box].lower.transparent = True
+                self.print_snapshot()
                 self.box_list[self.box].data = []
                 self.box += 1
                 self.box_list[self.box].data = []
@@ -395,6 +399,7 @@ class Adaptive(BXD):
                 return True
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             if self.reverse and not self.box_list[self.box].type == 'adap':
+                self.print_snapshot()
                 self.box_list[self.box].data = []
                 self.box -= 1
                 self.box_list[self.box].data = []
@@ -409,6 +414,22 @@ class Adaptive(BXD):
             return True
         else:
             return False
+
+    def print_snapshot(self):
+
+        os.makedirs("snapshots", exist_ok=True)
+        os.makedirs( "snapshots/snapshot"+str(self.box), exist_ok=True)
+        direct = "snapshots/snapshot"+str(self.box)
+        fig = plt.bxd_plotter_2d(self.progress_metric.path.s, zoom = False, all_bounds = True)
+        ar = []
+        data = [d[0] for d in self.box_list[self.box].data]
+        self.all_data += data
+        for i in self.box_list:
+            ar.append(i.upper.get_bound_array2D())
+            self.all_bounds.append(i.upper.get_bound_array2D())
+        fig.plot_bxd_from_array(self.all_data, self.all_bounds, save_file=True, save_root = direct)
+        del fig
+
 
     def close(self, temp_dir, mol):
         """
@@ -609,6 +630,7 @@ class Converging(BXD):
         self.reached_end()
         if self.progress_metric.reflect_back_to_path():
             self.bound_hit = "path"
+            self.box_list[self.box].last_hit = 'path'
         # Check whether a boundary has been hit and if so update the hit boundary
         self.inversion = self.boundary_check(decorrelated) or self.bound_hit is "path"
 

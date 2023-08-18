@@ -189,3 +189,5 @@ class BXDBox:
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
+
+
