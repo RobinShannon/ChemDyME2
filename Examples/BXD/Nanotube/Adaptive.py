@@ -13,15 +13,15 @@ narupa_path = read('NanoTraj4.xyz', index =':')
 narupa_mol =  read('NanoTraj4.xyz', index ='0')
 
 pcs = 2
-dim_red = DR.DimensionalityReduction(narupa_path, number=pcs, c_only=False)
+dim_red = DR.DimensionalityReduction(narupa_path, number=pcs, c_only=True)
 dim_red.print_pcs('PCpruned')
-collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=50)
+collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=250)
 
-path = Path.Path(narupa_path, collective_var, stride=1, max_distance_from_path=8)
-progress = PM.Curve(collective_var, path, max_nodes_skiped=1)
+path = Path.Path(narupa_path, collective_var, stride=1, max_distance_from_path=5)
+progress = PM.Curve(collective_var, path, max_nodes_skiped=3)
 
 narupa_mol.set_calculator(OpenMMCalculator('Nano.xml', narupa_mol))
-md = MD.Langevin(narupa_mol, temperature=800, friction=0.1, timestep=1)
+md = MD.Langevin(narupa_mol, temperature=800, friction=50, timestep=0.25)
 
 logfile = open('log.txt', 'w')
 loggers = []

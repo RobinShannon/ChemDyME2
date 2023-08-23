@@ -37,6 +37,6 @@ loggers.append(log2)
 names = ['COCO[O]','[CH2]OCOO']
 
 #bxd_manager = bxd.Converging(progress, bound_hits=50,read_from_file=True, bound_file="bounds_out.txt", decorrelation_limit = 100, box_data_print_freqency=100)
-bxd_manager = BXD.Converging(progress_metric=progress, bound_hits=15, plot_box_data=True)
+bxd_manager = BXD.Converging(progress_metric=progress, bound_hits=1, plot_box_data=True)
 bxd_trajectory = Traj.Trajectory(narupa_mol, [bxd_manager], md, loggers = loggers,  allowed_species=names)
 bxd_trajectory.run_trajectory()
