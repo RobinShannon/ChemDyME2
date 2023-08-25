@@ -630,7 +630,7 @@ class Converging(BXD):
         self.reached_end()
         if self.progress_metric.reflect_back_to_path():
             self.bound_hit = "path"
-            self.box_list[self.box].last_hit = 'path'
+           # self.box_list[self.box].last_hit = 'path'
         # Check whether a boundary has been hit and if so update the hit boundary
         self.inversion = self.boundary_check(decorrelated) or self.bound_hit is "path"
 

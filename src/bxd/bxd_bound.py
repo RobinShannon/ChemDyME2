@@ -13,7 +13,7 @@ class BXDBound:
         self.rates = []
         self.average_rate = 0
         self.rate_error = 0
-        self.s_point = None
+        self.s_point = n
         self.random_rate=0
 
     def reset(self):
