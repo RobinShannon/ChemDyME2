@@ -99,6 +99,10 @@ class SparrowCalculator(Calculator):
                     ele = su.ElementType.O
                 elif s == 'C':
                     ele = su.ElementType.C
+                elif s == 'F':
+                    ele = su.ElementType.F
+                elif s == 'N':
+                    ele = su.ElementType.N
                 elements.append(ele)
             self.structure.elements = elements
             self.calc.settings['spin_multiplicity'] = self.spin_mult

@@ -16,14 +16,14 @@ narupa_path = read('NEB.xyz', index=':')
 
 pcs = 2
 #dim_red = DR.DimensionalityReduction(narupa_path, subset=True,start_ind=[-1,6],end_ind=[0,9], number=pcs)
-dim_red = DR.DimensionalityReduction(narupa_path, subset=True,start_ind=[-1,1,3,6],end_ind=[0,2,4,9], number=pcs)
+dim_red = DR.DimensionalityReduction(narupa_path,  number=pcs)
 dim_red.print_pcs('PC')
-collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=8)
+collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=20)
 
-path = Path.Path(narupa_path, collective_var,  stride=2, max_distance_from_path=1)
+path = Path.Path(narupa_path, collective_var,  stride=1, max_distance_from_path=0.1)
 progress = PM.Curve(collective_var, path,  max_nodes_skiped=3)
 #progress = PM.Line(narupa_mol, collective_var, narupa_end)
-md = MD.Langevin(narupa_mol, temperature=600, friction=10, timestep=0.1)
+md = MD.Langevin(narupa_mol, temperature=800, friction=0.1, timestep=0.1)
 logfile = open('log.txt', 'w')
 loggers = []
 lf1 = lambda var: 'box\t=\t' + str(var.bxd_list[0].box) + '\tprogress\t=\t'+str(var.bxd_list[0].progress_metric.proj) + "\tdistance from path\t=\t" +str(var.bxd_list[0].progress_metric.distance_from_path)
