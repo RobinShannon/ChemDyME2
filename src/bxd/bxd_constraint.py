@@ -392,7 +392,6 @@ class Adaptive(BXD):
                 self.box_list[self.box].data = []
                 self.box += 1
                 self.box_list[self.box].data = []
-                self.new_box = True
                 return False
             else:
                 self.bound_hit = 'upper'
@@ -400,6 +399,7 @@ class Adaptive(BXD):
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             if self.reverse and not self.box_list[self.box].type == 'adap':
                 self.print_snapshot()
+                self.box_list[self.box].data = []
                 self.box_list[self.box].data = []
                 self.box -= 1
                 self.box_list[self.box].data = []
