@@ -391,6 +391,7 @@ class Adaptive(BXD):
                 self.print_snapshot()
                 self.box_list[self.box].data = []
                 self.box += 1
+                self.new_box = True
                 self.box_list[self.box].data = []
                 return False
             else:
