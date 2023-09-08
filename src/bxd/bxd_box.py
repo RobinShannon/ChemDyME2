@@ -177,7 +177,7 @@ class BXDBox:
         self.histogram_file.write(str(self.hist))
         try:
             if path is not None and self.plot:
-                fig = plt.bxd_plotter_2d(path, zoom = True, all_bounds = False)
+                fig = plt.bxd_plotter_2d(path, zoom = False, all_bounds = False)
                 ar = []
                 for i in self.sub_bound_list:
                     ar.append(i.get_bound_array2D())

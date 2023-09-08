@@ -422,11 +422,10 @@ class Adaptive(BXD):
         os.makedirs( "snapshots/snapshot"+str(self.box), exist_ok=True)
         direct = "snapshots/snapshot"+str(self.box)
         fig = plt.bxd_plotter_2d(self.progress_metric.path.s, zoom = False, all_bounds = True)
-        ar = []
+        self.all_bounds = []
         data = [d[0] for d in self.box_list[self.box].data]
         self.all_data += data
         for i in self.box_list:
-            ar.append(i.upper.get_bound_array2D())
             self.all_bounds.append(i.upper.get_bound_array2D())
         fig.plot_bxd_from_array(self.all_data, self.all_bounds, save_file=True, save_root = direct)
         del fig
