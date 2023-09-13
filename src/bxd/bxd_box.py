@@ -21,7 +21,7 @@ class BXDBox:
         self.eq_population_err = 0
         self.gibbs = 0
         self.gibbs_err = 0
-        self.last_hit = 'lower'
+        self.last_hit = 'none'
         self.milestoning_count = 0
         self.upper_non_milestoning_count = 0
         self.lower_non_milestoning_count = 0
