@@ -24,7 +24,7 @@ class Trajectory:
     """
 
     def __init__(self, mol, bxd_list, md_integrator, loggers: Optional[Log.MDLogger] = [Log.MDLogger()],
-                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False, maxwell_boltzman = True, allowed_species = None):
+                 criteria: Optional[RC.ReactionCriteria] = None, reactive=False, maxwell_boltzman = True, allowed_species = None, thermalise = False):
         self.bxd_list = bxd_list
         self.md_integrator = md_integrator
         self.mol = mol.copy()
@@ -40,6 +40,7 @@ class Trajectory:
         self.loggers = loggers
         self.criteria = criteria
         self.mdsteps = 1
+        self.thermalise = thermalise
         if allowed_species != None:
             self.allowed_species = allowed_species
             self.check_molecular_species = True
@@ -91,7 +92,10 @@ class Trajectory:
             # update each bxd constraint with the current geometry and determine whether a bxd inversion is neccessary
             for bxd in self.bxd_list:
                 if bxd.connected_BXD is None or bxd.connected_BXD.active is True:
-                    bxd.update(self.mol)
+                    if self.thermalise and self.mdsteps < 10000:
+                        bxd.update(self.mol, True)
+                    else:
+                        bxd.update(self.mol)
                     if bxd.inversion and not first_run:
                         self.mol.set_positions(self.md_integrator.old_positions)
                         if bxd.bound_hit != 'path':

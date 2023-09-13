@@ -212,6 +212,7 @@ class bxd_plotter_3d:
 
     def plot_bxd_from_array(self, points, bounds):
         boundList = []
+        bounds = []
         for b in bounds:
             bo = boundary3D(b[0],b[1][0],b[1][1],b[1][2],b[2][0],b[2][1],b[2][2])
             boundList.append(bo)

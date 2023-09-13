@@ -421,13 +421,22 @@ class Adaptive(BXD):
         os.makedirs("snapshots", exist_ok=True)
         os.makedirs( "snapshots/snapshot"+str(self.box), exist_ok=True)
         direct = "snapshots/snapshot"+str(self.box)
-        fig = plt.bxd_plotter_2d(self.progress_metric.path.s, zoom = False, all_bounds = True)
-        self.all_bounds = []
-        data = [d[0] for d in self.box_list[self.box].data]
-        self.all_data += data
-        for i in self.box_list:
-            self.all_bounds.append(i.upper.get_bound_array2D())
-        fig.plot_bxd_from_array(self.all_data, self.all_bounds, save_file=True, save_root = direct)
+        if len(self.box_list[self.box].data[0]) >2:
+            fig = plt.bxd_plotter_3d(self.progress_metric.path.s)
+            self.all_bounds = []
+            data = [d[0][0:3] for d in self.box_list[self.box].data]
+            self.all_data += data
+            for i in self.box_list:
+                self.all_bounds.append(i.upper.get_bound_array3D())
+            fig.plot_bxd_from_array(self.all_data, self.all_bounds)
+        else:
+            fig = plt.bxd_plotter_2d(self.progress_metric.path.s)
+            self.all_bounds = []
+            data = [d[0][0:2] for d in self.box_list[self.box].data]
+            self.all_data += data
+            for i in self.box_list:
+                self.all_bounds.append(i.upper.get_bound_array2D())
+            fig.plot_bxd_from_array(self.all_data, self.all_bounds, save_file=True, save_root = direct)
         del fig
 
 
