@@ -18,12 +18,12 @@ dim_red = DR.DimensionalityReduction(narupa_path, number=pcs, c_only=True)
 dim_red.print_pcs('PCpruned')
 collective_var = CV.PrincipalCoordinates(dim_red.pc_list, number_of_elements=250)
 
-path = Path.Path(narupa_path, collective_var, stride=1, max_distance_from_path=2)
+path = Path.Path(narupa_path, collective_var, stride=1, max_distance_from_path=4)
 progress = PM.Curve(collective_var, path, max_nodes_skiped=2)
 
 narupa_mol.set_calculator(OpenMMCalculator('Nano.xml', narupa_mol))
 narupa_mol.set_positions(narupa_path[0].get_positions())
-md = MD.Langevin(narupa_mol, temperature=1000, friction=50, timestep=0.5)
+md = MD.Langevin(narupa_mol, temperature=1000, friction=1, timestep=0.5)
 
 logfile = open('log.txt', 'w')
 loggers = []
@@ -38,7 +38,7 @@ log3 = lg.MDLogger(logging_function=lf3, triggering_function=tf3)
 loggers.append(log3)
 
 
-bxd_manager = BXD.Adaptive(progress, epsilon=0.999, adaptive_steps=50000, fix_to_path=True)
+bxd_manager = BXD.Adaptive(progress, epsilon=0.995, adaptive_steps=150000, fix_to_path=True)
 bxd_trajectory = Traj.Trajectory(narupa_mol, [bxd_manager], md, loggers = loggers)
 bxd_trajectory.run_trajectory()
 bxd_manager.print_bounds('bounds_out.txt')

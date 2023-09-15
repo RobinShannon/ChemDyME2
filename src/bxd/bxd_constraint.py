@@ -421,7 +421,7 @@ class Adaptive(BXD):
         os.makedirs("snapshots", exist_ok=True)
         os.makedirs( "snapshots/snapshot"+str(self.box), exist_ok=True)
         direct = "snapshots/snapshot"+str(self.box)
-        if len(self.box_list[self.box].data[0]) >2:
+        if len(self.progress_metric.path.s[0]) >2:
             fig = plt.bxd_plotter_3d(self.progress_metric.path.s)
             self.all_bounds = []
             data = [d[0][0:3] for d in self.box_list[self.box].data]
