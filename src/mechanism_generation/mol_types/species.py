@@ -527,7 +527,7 @@ class species:
         np.savetxt('coeffs4.txt', min_coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
 
-    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True]):
+    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True], limit=np.inf):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -563,6 +563,8 @@ class species:
                         except:
                             print("error getting energy for file H" + str(i) + '_' + str(j) + '_' + str(k)+ ".log")
                             ene = ene_arr_1D_temp[-1]
+                    if ene- min_ene > limit:
+                        ene = ene_arr_1D_temp[-1]
                     ene_arr_1D_temp.append(ene)
                     if ene < min_ene:
                         min_ene = ene
