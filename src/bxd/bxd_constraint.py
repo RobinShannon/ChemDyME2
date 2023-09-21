@@ -713,6 +713,7 @@ class Converging(BXD):
                 for bx in self.box_list:
                     bx.upper.hits = 0
                     bx.lower.hits = 0
+                self.box_list[self.box].close_box(path=self.progress_metric.path.s)
 
     def criteria_met(self, boundary):
         """
