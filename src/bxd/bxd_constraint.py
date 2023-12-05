@@ -748,7 +748,6 @@ class Converging(BXD):
                 self.box_list[self.box].last_hit = 'lower'
                 return False
             else:
-                self.bound_hit = 'upper'
                 if decorrelated:
                     self.box_list[self.box].upper.hits += 1
                     self.box_list[self.box].upper_rates_file.write\
@@ -764,7 +763,7 @@ class Converging(BXD):
                         self.box_list[self.box].milestoning_count = 0
                     if not self.reverse:
                         self.box_list[self.box].upper.transparent = self.criteria_met(self.box_list[self.box].upper)
-                    return True
+                return True
 
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             self.bound_hit = 'lower'

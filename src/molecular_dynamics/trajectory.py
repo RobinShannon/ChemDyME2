@@ -92,7 +92,7 @@ class Trajectory:
             # update each bxd constraint with the current geometry and determine whether a bxd inversion is neccessary
             for bxd in self.bxd_list:
                 if bxd.connected_BXD is None or bxd.connected_BXD.active is True:
-                    if self.thermalise and self.mdsteps < 10000:
+                    if self.thermalise and self.mdsteps < 5000:
                         bxd.update(self.mol, False)
                     else:
                         bxd.update(self.mol)
@@ -100,7 +100,7 @@ class Trajectory:
                         self.mol.set_positions(self.md_integrator.old_positions)
                         if bxd.bound_hit != 'path':
                             del_phi.append(bxd.del_constraint(self.mol))
-                        if bxd.progress_metric.reflect_back_to_path() and len(del_phi) == 0:
+                        if bxd.progress_metric.reflect_back_to_path():
                             del_phi.append(bxd.path_del_constraint(self.mol))
                         self.md_integrator.constrain(del_phi)
                     if bxd.inversion and first_run:
