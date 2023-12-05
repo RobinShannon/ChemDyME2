@@ -112,8 +112,8 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-narupa_mol = read('GlyoxalGeoms/NN_TS.xyz')
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-580000', atoms=narupa_mol))
+narupa_mol = read('FormAll/HCO_1removed.xyz')
+narupa_mol.set_calculator(NNCalculator(checkpoint='gen8_27', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 
 # Set up a Sella Dynamics object

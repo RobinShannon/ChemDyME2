@@ -93,14 +93,14 @@ class Trajectory:
             for bxd in self.bxd_list:
                 if bxd.connected_BXD is None or bxd.connected_BXD.active is True:
                     if self.thermalise and self.mdsteps < 10000:
-                        bxd.update(self.mol, True)
+                        bxd.update(self.mol, False)
                     else:
                         bxd.update(self.mol)
                     if bxd.inversion and not first_run:
                         self.mol.set_positions(self.md_integrator.old_positions)
                         if bxd.bound_hit != 'path':
                             del_phi.append(bxd.del_constraint(self.mol))
-                        if bxd.progress_metric.reflect_back_to_path():
+                        if bxd.progress_metric.reflect_back_to_path() and len(del_phi) == 0:
                             del_phi.append(bxd.path_del_constraint(self.mol))
                         self.md_integrator.constrain(del_phi)
                     if bxd.inversion and first_run:

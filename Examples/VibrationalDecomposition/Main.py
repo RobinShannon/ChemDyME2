@@ -125,7 +125,7 @@ for i, mol in enumerate(path_s):
 
 
 
-#ts.set_calculator(NNCalculator(checkpoint='best_model.ckpt-880000', atoms=ts))
+ts.set_calculator(NNCalculator(checkpoint='best_model.ckpt-880000', atoms=ts))
 #f = ts.get_forces()
 # Set up a Sella Dynamics object
 #dyn = Sella(ts, internal = True)

@@ -644,7 +644,7 @@ class Converging(BXD):
         self.inversion = self.boundary_check(decorrelated) or self.bound_hit is "path"
 
         # If there is a bxd inversion increment the stuck counter and set the steps_since_any_boundary_hit counter to 0
-        if not self.inversion:
+        if not self.inversion and decorrelated:
             self.box_list[self.box].points_in_box += 1
             self.box_list[self.box].data.append(self.s)
 
@@ -757,14 +757,15 @@ class Converging(BXD):
                         self.box_list[self.box].upper_milestoning_rates_file.write\
                             (str(self.box_list[self.box].milestoning_count) + '\n')
                         self.box_list[self.box].milestoning_count = 0
-                self.box_list[self.box].decorrelation_count = 0
-                self.box_list[self.box].last_hit = 'upper'
-                self.box_list[self.box].upper_non_milestoning_count = 0
-                if self.box_list[self.box].last_hit == 'lower':
-                    self.box_list[self.box].milestoning_count = 0
-                if not self.reverse:
-                    self.box_list[self.box].upper.transparent = self.criteria_met(self.box_list[self.box].upper)
-                return True
+                    self.box_list[self.box].decorrelation_count = 0
+                    self.box_list[self.box].last_hit = 'upper'
+                    self.box_list[self.box].upper_non_milestoning_count = 0
+                    if self.box_list[self.box].last_hit == 'lower':
+                        self.box_list[self.box].milestoning_count = 0
+                    if not self.reverse:
+                        self.box_list[self.box].upper.transparent = self.criteria_met(self.box_list[self.box].upper)
+                    return True
+
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             self.bound_hit = 'lower'
             if self.progress_metric.reflect_back_to_path():
@@ -787,10 +788,10 @@ class Converging(BXD):
                     if self.box_list[self.box].last_hit == 'upper':
                         self.box_list[self.box].lower_milestoning_rates_file.write(str(self.box_list[self.box].milestoning_count) + '\n')
                         self.box_list[self.box].milestoning_count = 0
-                self.box_list[self.box].last_hit = 'lower'
-                self.box_list[self.box].lower_non_milestoning_count = 0
-                if self.box_list[self.box].last_hit == 'upper':
-                    self.box_list[self.box].milestoning_count = 0
+                    self.box_list[self.box].last_hit = 'lower'
+                    self.box_list[self.box].lower_non_milestoning_count = 0
+                    if self.box_list[self.box].last_hit == 'upper':
+                        self.box_list[self.box].milestoning_count = 0
                 return True
         else:
             return False

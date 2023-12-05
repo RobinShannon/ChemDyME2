@@ -22,7 +22,7 @@ from src.Calculators.ScineCalculator import  SparrowCalculator as SP
 from ase.vibrations import Vibrations
 from ase.md.verlet import VelocityVerlet
 from ase import units
-import random
+#import random
 from sella import Sella
 from ase.optimize import BFGS
 import math
@@ -221,15 +221,14 @@ def get_rot_tran(coord_true, coord_pred):
 
     return rot, model_coords_rotated
 
-s1 = read('IRC1.log', index=':')
-write('FormHCN.xyz', s1)
-mol = read('NewGyl/water.xyz')
-mol.set_calculator(SP())
+
+mol = read('FormAll/OH_TS.xyz')
+mol.set_calculator(NNCalculator(checkpoint='Gen8_27', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-#dyn = Sella(mol, internal = True)
+#dyn = Sella(mol, internal=True)
 #try:
 #    dyn.run(1e-2, 1000)
 #except:
@@ -238,21 +237,21 @@ mol.set_calculator(SP())
 #write('MethylFormate/NN_TS.xyz', mol)
 #reac = read('MethylFormate/Start.xyz')
 #mol.set_positions(reac.get_positions())
-dyn = BFGS(mol, logfile=None)
-dyn.run(1e-2, 1000)
 
 #comp_ene = mol.get_potential_energy()*96.58
 #diff = ts_ene - comp_ene
-#write('MethylFormate/NN_start.xyz', mol)
-#dyn = BFGS(mol,maxstep=100)
-#try:
-#    dyn.run(1e-8, 1000)
-#except:
-#    pass
+
+dyn = BFGS(mol,maxstep=100)
+try:
+   dyn.run(1e-8, 100)
+except:
+    pass
+
+write('FormAll/TS.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
-vib.summary(log='vibout.txt')
+vib.summary()
 vib.clean()
 L = vib.modes
 T = get_translational_vectors(mol)
@@ -269,12 +268,13 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-#L=np.roll(L, -1, axis=0)
+L=np.roll(L, -1, axis=0)
+
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 new = L.T
 newGS = (gram_schmidt_columns(L.T))
-new[:,3:] = copy.deepcopy(newGS[:,3:])
+#new[:,3:] = copy.deepcopy(newGS[:,3:])
 min = 0
 for i in range(0,new.shape[0]):
     for j in range(0, new.shape[0]):
@@ -287,8 +287,8 @@ print(str(is_norm))
 
 
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_converted = convert_hessian_to_cartesian(new,masses)
-
+new_conv = convert_hessian_to_cartesian(new,masses)
+new_converted = (gram_schmidt_columns(new_conv))
 
 min=0
 for i in range(0, new_converted.shape[0]):
@@ -299,8 +299,8 @@ for i in range(0, new_converted.shape[0]):
                 min = is_norm
 
 print(str(is_norm))
-
-np.save('NewGyl/water.npy', new_converted)
+#new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
+np.save('FormAll/TS.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
