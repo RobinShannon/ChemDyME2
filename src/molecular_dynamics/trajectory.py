@@ -72,6 +72,7 @@ class Trajectory:
 
         # Set up boolean for while loop to determine whether the trajectory loop should keep going and then track number
         # of md steps
+        inverted_previously = False
         keep_going = True
         self.mdsteps = 0
         bxd_complete = False
@@ -96,14 +97,17 @@ class Trajectory:
                         bxd.update(self.mol, False)
                     else:
                         bxd.update(self.mol)
-                    if bxd.inversion and not first_run:
+                    if bxd.inversion and not first_run and not inverted_previously:
                         self.mol.set_positions(self.md_integrator.old_positions)
                         if bxd.bound_hit != 'path':
                             del_phi.append(bxd.del_constraint(self.mol))
                         if bxd.progress_metric.reflect_back_to_path():
                             del_phi.append(bxd.path_del_constraint(self.mol))
                         self.md_integrator.constrain(del_phi)
-                    if bxd.inversion and first_run:
+                        inverted_previously = True
+                    else:
+                        inverted_previously = False
+                    if bxd.inversion and first_run and not inverted_previously:
                         sys.stderr.write(" bxd bound hit on first MD step, possibly due a small rounding error but check "
                                         "input")
 

@@ -222,7 +222,7 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('FormAll/OH_TS.xyz')
+mol = read('FormAll/formaldehyde.xyz')
 mol.set_calculator(NNCalculator(checkpoint='Gen8_27', atoms=mol))
 
 #baseline = mol.get_potential_energy()
@@ -247,7 +247,7 @@ try:
 except:
     pass
 
-write('FormAll/TS.xyz', mol)
+write('FormAll/form.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -268,12 +268,12 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-L=np.roll(L, -1, axis=0)
+#L=np.roll(L, -1, axis=0)
 
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
-new = L.T
-newGS = (gram_schmidt_columns(L.T))
+newinit = L.T
+new = (gram_schmidt_columns(L.T))
 #new[:,3:] = copy.deepcopy(newGS[:,3:])
 min = 0
 for i in range(0,new.shape[0]):
@@ -287,8 +287,8 @@ print(str(is_norm))
 
 
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_conv = convert_hessian_to_cartesian(new,masses)
-new_converted = (gram_schmidt_columns(new_conv))
+new_converted = convert_hessian_to_cartesian(new,masses)
+
 
 min=0
 for i in range(0, new_converted.shape[0]):
@@ -300,7 +300,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('FormAll/TS.npy', new_converted)
+np.save('FormAll/form.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
