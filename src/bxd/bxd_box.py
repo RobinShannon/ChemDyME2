@@ -167,7 +167,10 @@ class BXDBox:
         self.upper_milestoning_rates_file.close()
         self.lower_rates_file.close()
         self.lower_milestoning_rates_file.close()
-        a,b = self.get_full_histogram()
+        try:
+            a,b = self.get_full_histogram()
+        except:
+            pass
         for d in self.data:
             for s in d:
                 self.data_file.write(str(s))

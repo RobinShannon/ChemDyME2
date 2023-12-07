@@ -150,7 +150,7 @@ class Curve(ProgressMetric):
         # Vector projection of S onto segment
         vector_projection = segment_start + (scalar_projection * (segment / path_segment_length))
         norm = (s - vector_projection)/np.linalg.norm(s - vector_projection)
-        return norm
+        return -norm
 
     def project_point_on_path(self, s):
         """
@@ -226,6 +226,20 @@ class Curve(ProgressMetric):
                 return False
         else:
             return False
+
+
+    def outside_path(self):
+        """
+        Determine whether the current point is outside the defined max_distance_from_path.
+        If we are outside the path, but moving closer to the path then return False instead of True
+        :return: Boolean
+        """
+        # Check whether the current distance to the path is outside of the maximum allowable
+        if self.distance_from_path > self.path_bound_distance_at_point():
+            return True
+        else:
+            return False
+
 
     def path_bound_distance_at_point(self):
         """
