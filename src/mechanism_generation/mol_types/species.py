@@ -471,12 +471,8 @@ class species:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=index)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
                 except:
-                    try:
-                        hmol = read("H" + str(i) + '_' + str(j) + ".log", index=-2)
-                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
-                    except:
-                        print("error getting energy for file H" + str(i) + '_' + str(j) + ".log")
-                        ene = ene_arr_1D[-1]
+                    print("error getting energy for file H" + str(i) + '_' + str(j) + ".log")
+                    ene = ene_arr_1D[-1]
 
                 arr.append(ene)
                 ene_arr_1D.append(ene)
