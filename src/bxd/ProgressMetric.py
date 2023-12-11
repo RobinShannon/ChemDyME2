@@ -150,7 +150,7 @@ class Curve(ProgressMetric):
         # Vector projection of S onto segment
         vector_projection = segment_start + (scalar_projection * (segment / path_segment_length))
         norm = (s - vector_projection)/np.linalg.norm(s - vector_projection)
-        return -norm
+        return norm
 
     def project_point_on_path(self, s):
         """
