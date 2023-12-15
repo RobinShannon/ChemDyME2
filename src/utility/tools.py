@@ -308,7 +308,7 @@ def read_mod_redundant2d(file):
         last_line=last_line.split(' ')
         last_line.pop(0)
         last_line.pop(-1)
-        seccond_last = lines[-6]
+        seccond_last = lines[-4]
         seccond_last=seccond_last.strip("FD\n")
         seccond_last=seccond_last.split(' ')
         seccond_last.pop(0)

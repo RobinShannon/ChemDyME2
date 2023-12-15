@@ -222,17 +222,17 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('FormAll/ts.xyz')
-mol.set_calculator(NNCalculator(checkpoint='Gen8_27', atoms=mol))
+mol = read('GlyoxalGeoms/NN_Comp.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-dyn = Sella(mol, internal=True)
-try:
-    dyn.run(1e-2, 1000)
-except:
-    pass
+#dyn = Sella(mol, internal=True)
+#try:
+#    dyn.run(1e-2, 1000)
+#except:
+#    pass
 #ts_ene = mol.get_potential_energy()*96.58
 #write('MethylFormate/NN_TS.xyz', mol)
 #reac = read('MethylFormate/Start.xyz')
@@ -241,13 +241,13 @@ except:
 #comp_ene = mol.get_potential_energy()*96.58
 #diff = ts_ene - comp_ene
 
-#dyn = BFGS(mol,maxstep=100)
-#try:
-#   dyn.run(1e-8, 100)
-#except:
-#    pass
+dyn = BFGS(mol,maxstep=100)
+try:
+   dyn.run(1e-2, 100)
+except:
+    pass
 
-write('FormAll/ts.xyz', mol)
+write('GlyoxalGeoms/NN_Comp.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -268,12 +268,14 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-L=np.roll(L, -1, axis=0)
+#L=np.roll(L, -1, axis=0)
 
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
+norm = np.dot((L[0, :]), L[0, :])
 newinit = L.T
 new = (gram_schmidt_columns(L.T))
+norm = np.dot((new[0, :]), new[0, :])
 #new[:,3:] = copy.deepcopy(newGS[:,3:])
 min = 0
 for i in range(0,new.shape[0]):
@@ -300,7 +302,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('FormAll/ts.npy', new_converted)
+np.save('GlyoxalGeoms/NN_Comp.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
