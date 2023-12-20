@@ -6,6 +6,7 @@ class BXDBound:
         self.n = n
         self.d = d
         self.hits = 0
+        self.milestoning_hits=0
         self.stuck_count = 0
         self.transparent = False
         self.invisible = False
@@ -18,6 +19,7 @@ class BXDBound:
 
     def reset(self):
         self.hits = 0
+        self.milestoning_hits=0
         self.stuck_count = 0
         self.transparent = False
         self.step_since_hit = 0

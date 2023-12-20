@@ -1,9 +1,9 @@
 import numpy as np
 
 TS_hess = np.load('TS.npy')
-post_comp = np.load('GlyoxalGeoms/NN_Comp.npy')
-HCOCO_hess = np.load('HCOCO.npy')
-water_hess = np.load('water.npy')
+post_comp = np.load('GlyoxalGeoms/ProductProjection.npy')
+HCOCO_hess = np.load('GlyoxalGeoms/HCOCO_linear.npy')
+water_hess = np.load('GlyoxalGeoms/water.npy')
 
 imag = TS_hess[:,23]
 comp_arr = []
@@ -21,8 +21,8 @@ w_sum = 0
 h_arr = []
 w_arr = []
 
-for i in range(0,24):
-    imag = TS_hess[:,i]
+for i in range(6,24):
+    imag = post_comp[:,i]
     imag_h = imag[[0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17]]
     imag_w = imag[[9, 10, 11, 18, 19, 20, 21, 22, 23]]
 
@@ -51,7 +51,7 @@ print("trans proportion = " + str(trans_sum / total ))
 print("done")
 
 
-
+imag = TS_hess[:,23]
 imag_h = imag[[0,1,2,3,4,5,6,7,8,12,13,14,15,16,17]]
 imag_w = imag[[9,10,11,18,19,20,21,22,23]]
 

@@ -64,7 +64,10 @@ def get_moments_of_inertia(mol):
 
 
     evals, evecs = np.linalg.eigh(Itensor)
-    return evecs, Itensor
+    absE = (evecs*evecs)
+    row_sums = np.sqrt(absE.sum(axis=1))
+    evec_normalised = evecs / row_sums[:, np.newaxis]
+    return evec_normalised, Itensor
 
 def get_translational_vectors(mol):
     T = np.zeros((3,len(mol)*3))
@@ -91,11 +94,11 @@ def get_rotational_vectors(mol, X):
     for i in range(len(mol)):
         m = math.sqrt(masses[i])
         for j in range(0,3):
-            Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) * m
-            Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) * m
-            Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) * m
-    absR = abs(Rot)
-    row_sums = absR.sum(axis=1)
+            Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) / m
+            Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) / m
+            Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) / m
+    absR = (Rot*Rot)
+    row_sums = np.sqrt(absR.sum(axis=1))
     Rot_normalised = Rot / row_sums[:, np.newaxis]
     return Rot_normalised
 
@@ -222,7 +225,7 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('GlyoxalGeoms/NN_Comp.xyz')
+mol = read('GlyoxalGeoms/water.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
@@ -247,7 +250,7 @@ try:
 except:
     pass
 
-write('GlyoxalGeoms/NN_Comp.xyz', mol)
+write('GlyoxalGeoms/water.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -269,7 +272,7 @@ min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
 #L=np.roll(L, -1, axis=0)
-
+#L=np.roll(L, -1, axis=0)
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
 norm = np.dot((L[0, :]), L[0, :])
@@ -302,7 +305,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('GlyoxalGeoms/NN_Comp.npy', new_converted)
+np.save('GlyoxalGeoms/HCOCO_linear.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
