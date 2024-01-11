@@ -474,7 +474,7 @@ class species:
                     print("error getting energy for file H" + str(i) + '_' + str(j) + ".log")
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
-                if i > 1 and (ene - ene_arr_1D[-1])  > (smooth*(ene_arr_1D[-1]-ene_arr_1D[-2])):
+                if j > 1 and (ene - ene_arr_1D[-1])  > (smooth*(ene_arr_1D[-1]-ene_arr_1D[-2])):
                     if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0 and (ene - ene_arr_1D[-1]) > 0.2 :
                         pass
                     else:
