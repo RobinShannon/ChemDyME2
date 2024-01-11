@@ -474,7 +474,7 @@ class species:
                     print("error getting energy for file H" + str(i) + '_' + str(j) + ".log")
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
-                if len(arr) !=0 and ene > (2*arr.append[-1]) and j !=(steps-1):
+                if len(arr) !=0 and ene > (2*arr[-1]) and j !=(steps-1):
                     ene = arr[-1]
                 arr.append(ene)
                 ene_arr_1D.append(ene)
