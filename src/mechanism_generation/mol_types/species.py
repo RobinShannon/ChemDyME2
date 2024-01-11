@@ -479,8 +479,8 @@ class species:
                         pass
                     else:
                         ene = ene_arr_1D[-1]
-                if j == 0 and i > 1 and (ene - ene_arr_1D[-steps])  > (smooth*(ene_arr_1D[-steps]-ene_arr_1D[-steps-1])):
-                    if (ene_arr_1D[-steps]-ene_arr_1D[-steps-1]) == 0 and (ene - ene_arr_1D[-steps]) < 0.3 :
+                if j == 0 and i > 1 and (ene - ene_arr_1D[-int(steps)])  > (smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1])):
+                    if (ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1]) == 0 and (ene - ene_arr_1D[-int(steps)]) < 0.3 :
                         pass
                     else:
                         ene = ene_arr_1D[-steps]
