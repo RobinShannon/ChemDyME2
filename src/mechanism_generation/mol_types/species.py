@@ -450,7 +450,7 @@ class species:
 
         os.chdir(current_dir)
 
-    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=50):
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=5000000):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -480,7 +480,7 @@ class species:
                     else:
                         ene = ene_arr_1D[-1]
                 if j == 0 and i > 1 and (ene - ene_arr_1D[-int(steps)])  > (smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1])):
-                    if (ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1]) == 0 and (ene - ene_arr_1D[-int(steps)]) < 0.3 :
+                    if (ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1]) == 0 and (ene - ene_arr_1D[-int(steps)]) < 1000 :
                         pass
                     else:
                         ene = ene_arr_1D[-int(steps)]
