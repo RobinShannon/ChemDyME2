@@ -475,12 +475,12 @@ class species:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
                 if j > 1 and (ene - ene_arr_1D[-1])  > (smooth*(ene_arr_1D[-1]-ene_arr_1D[-2])):
-                    if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0 and (ene - ene_arr_1D[-1]) < 0.2 :
+                    if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0 and (ene - ene_arr_1D[-1]) < 0.3 :
                         pass
                     else:
                         ene = ene_arr_1D[-1]
                 if j == 0 and i > 1 and (ene - ene_arr_1D[-steps])  > (smooth*(ene_arr_1D[-steps]-ene_arr_1D[-steps-1])):
-                    if (ene_arr_1D[-steps]-ene_arr_1D[-steps-1]) == 0 and (ene - ene_arr_1D[-steps]) < 0.2 :
+                    if (ene_arr_1D[-steps]-ene_arr_1D[-steps-1]) == 0 and (ene - ene_arr_1D[-steps]) < 0.3 :
                         pass
                     else:
                         ene = ene_arr_1D[-steps]
