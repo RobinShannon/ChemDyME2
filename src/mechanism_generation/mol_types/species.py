@@ -483,7 +483,7 @@ class species:
                     if (ene_arr_1D[-int(steps)]-ene_arr_1D[-int(steps)-1]) == 0 and (ene - ene_arr_1D[-int(steps)]) < 0.3 :
                         pass
                     else:
-                        ene = ene_arr_1D[-steps]
+                        ene = ene_arr_1D[-int(steps)]
                 arr.append(ene)
                 ene_arr_1D.append(ene)
                 a =[]
