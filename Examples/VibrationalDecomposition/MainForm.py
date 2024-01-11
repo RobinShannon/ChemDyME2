@@ -112,7 +112,7 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-narupa_mol = read('FormAll/HCO_1removed.xyz')
+narupa_mol = read('GlyoxalGeoms/ProductProjection.xyz')
 narupa_mol.set_calculator(NNCalculator(checkpoint='gen8_27', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 

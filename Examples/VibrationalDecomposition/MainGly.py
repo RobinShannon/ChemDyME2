@@ -2,7 +2,7 @@ import numpy
 
 
 import src.bxd.collective_variable as CV
-from ase.constraints import Hookean
+from ase.constraints import FixAtoms
 import scipy
 import src.bxd.ProgressMetric as PM
 import src.molecular_dynamics.md_Integrator as MD
@@ -64,6 +64,7 @@ def get_moments_of_inertia(mol):
 
 
     evals, evecs = np.linalg.eigh(Itensor)
+    evecs = evecs.T
     absE = (evecs*evecs)
     row_sums = np.sqrt(absE.sum(axis=1))
     evec_normalised = evecs / row_sums[:, np.newaxis]
@@ -77,7 +78,8 @@ def get_translational_vectors(mol):
         T[0][(i*3)] = math.sqrt(m)
         T[1][(i*3)+1] = math.sqrt(m)
         T[2][(i * 3) + 2] = math.sqrt(m)
-    row_sums = T.sum(axis=1)
+    absT = (T * T)
+    row_sums = np.sqrt(absT.sum(axis=1))
     T_normalised = T / row_sums[:, np.newaxis]
     return T_normalised
 
@@ -94,12 +96,15 @@ def get_rotational_vectors(mol, X):
     for i in range(len(mol)):
         m = math.sqrt(masses[i])
         for j in range(0,3):
-            Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) / m
-            Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) / m
-            Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) / m
+            Rot[0][i * 3 + j] = ((Py[i] * X[j][2]) - (Pz[i] * X[j][1])) * m
+            Rot[1][i * 3 + j] = ((Pz[i] * X[j][0]) - (Px[i] * X[j][2])) * m
+            Rot[2][i * 3 + j] = ((Px[i] * X[j][1]) - (Py[i] * X[j][0])) * m
     absR = (Rot*Rot)
     row_sums = np.sqrt(absR.sum(axis=1))
     Rot_normalised = Rot / row_sums[:, np.newaxis]
+    is_norm = np.dot((Rot_normalised[0, :]), Rot_normalised[1, :])
+    is_norm = np.dot((Rot_normalised[0, :]), Rot_normalised[2, :])
+    is_norm = np.dot((Rot_normalised[1, :]), Rot_normalised[2, :])
     return Rot_normalised
 
 def gram_schmidt_columns(X):
@@ -120,12 +125,14 @@ def gs(X):
     for i in range(len(X)):
         temp_vec = X[i]
         for inY in Y :
-            proj_vec = proj(inY, X[i])
+            proj_vec = (np.dot(X[i], inY) / np.dot(inY, inY))*inY
             #print "i =", i, ", projection vector =", proj_vec
-            temp_vec = map(lambda x, y : x - y, temp_vec, proj_vec)
+            temp_vec -= proj_vec
+
             #print "i =", i, ", temporary vector =", temp_vec
+        temp_vec = np.divide(temp_vec, np.sqrt(np.dot(temp_vec, temp_vec)))
         Y.append(temp_vec)
-    return Y
+    return np.asarray(Y)
 
 def convert_hessian_to_cartesian(Hess, m):
     masses = np.tile(m,(len(m),1))
@@ -225,8 +232,8 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('GlyoxalGeoms/water.xyz')
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
+mol = read('H2O2/ho2.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
@@ -243,14 +250,16 @@ mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-740000', atoms=mol))
 
 #comp_ene = mol.get_potential_energy()*96.58
 #diff = ts_ene - comp_ene
-
+constraints = []
+#constraints.append(FixAtoms(indices=[0, 3]))
+#mol.set_constraint(constraints)
 dyn = BFGS(mol,maxstep=100)
 try:
    dyn.run(1e-2, 100)
 except:
-    pass
-
-write('GlyoxalGeoms/water.xyz', mol)
+   pass
+#del mol.constraints
+write('H2O2/ho2.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -273,11 +282,24 @@ ith = 0
 R = get_rotational_vectors(mol, X)
 #L=np.roll(L, -1, axis=0)
 #L=np.roll(L, -1, axis=0)
+#L=np.roll(L, -1, axis=0)
 L[0:3,:] = copy.deepcopy(T)
 L[3:6,:] = copy.deepcopy(R)
+#hcoco = np.load('GlyoxalGeoms/hcoco_uncorrected.npy')
+#water = np.load('GlyoxalGeoms/water_uncorrected.npy')
+#hcoco = hcoco.transpose()
+#water = water.transpose()
+#hcoco_out = np.zeros((15,24))
+#water_out = np.zeros((9,24))
+#hcoco_out[:,0:6] = hcoco[:,0:6]
+#hcoco_out[:,9:18] = hcoco[:,6:15]
+#water_out[:,6:9] =water[:,0:3]
+#water_out[:,18:24] =water[:,3:9]
+#L[12:21,:] = copy.deepcopy(hcoco_out[6:15,:])
+#L[21:24,:] = copy.deepcopy(water_out[6:9,:])
 norm = np.dot((L[0, :]), L[0, :])
 newinit = L.T
-new = (gram_schmidt_columns(L.T))
+new = (gs(L))
 norm = np.dot((new[0, :]), new[0, :])
 #new[:,3:] = copy.deepcopy(newGS[:,3:])
 min = 0
@@ -290,9 +312,9 @@ for i in range(0,new.shape[0]):
 
 print(str(is_norm))
 
-
+np.save('H2O2/ho2_uncorrected.npy', new)
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
-new_converted = convert_hessian_to_cartesian(new,masses)
+new_converted = convert_hessian_to_cartesian(new.T,masses)
 
 
 min=0
@@ -305,7 +327,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('GlyoxalGeoms/HCOCO_linear.npy', new_converted)
+np.save('H2O2/ho2.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
@@ -341,7 +363,7 @@ for i in range(0, new.shape[0]):
 GlyIRC = read('GlyoxalGeoms/GlyoxalIRC.log',':')
 write('GlyoxalGeoms/GlyoxalPaths.xyz',GlyIRC)
 narupa_mol = GlyIRC[0].copy()
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-90000', atoms=narupa_mol))
+narupa_mol.set_calculator(NNCalculator(checkpoint='Gen8_27', atoms=narupa_mol))
 baseline = narupa_mol.get_potential_energy()
 for i in GlyIRC:
     narupa_mol.set_positions(i.get_positions())
