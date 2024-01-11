@@ -475,7 +475,10 @@ class species:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     ene = (hmol.get_potential_energy() - baseline) / (invcm)
                 if i > 1 and (ene - arr[-1])  > (smooth*(arr[-1]-arr[-2])):
-                    ene = arr[-1]
+                    if (arr[-1]-arr[-2]) == 0 and (ene - arr[-1]) < 0.2 :
+                        pass
+                    else:
+                        ene = arr[-1]
                 arr.append(ene)
                 ene_arr_1D.append(ene)
                 a =[]
