@@ -65,7 +65,7 @@ for i in range(0,15):
     proj = abs(np.dot(imag_h,vec) / np.sqrt(np.dot(vec,vec)))
     h_arr.append(proj)
     if i >2:
-        h_sum += proj
+        h_sum += proj *2
     else:
         trans_sum += proj
 
@@ -74,7 +74,7 @@ for i in range(0,9):
     proj = abs(np.dot(imag_w,vec) / np.sqrt(np.dot(vec,vec)))
     w_arr.append(proj)
     if i >2:
-        w_sum += proj
+        w_sum += proj *2
     else:
         trans_sum += proj
 
@@ -105,7 +105,7 @@ for i in range(0,15):
     proj = abs(np.dot(imag_h,vec) / np.dot(vec,vec))
     h_arr.append(proj)
     if i >2:
-        h_sum += proj
+        h_sum += proj *2
     else:
         trans_sum += proj
 
@@ -114,7 +114,7 @@ for i in range(0,9):
     proj = abs(np.dot(imag_w,vec) / np.dot(vec,vec))
     w_arr.append(proj)
     if i > 2:
-        w_sum += proj
+        w_sum += proj *2
     else:
         trans_sum += proj
 
