@@ -301,8 +301,8 @@ def read_mod_redundant(file):
 
 def check_gaussian(gauss_out):
     Sucess = False
-    with open('example.txt') as f:
-        if 'blabla' in f.read():
+    with open(gauss_out) as f:
+        if 'Normal termination of Gaussian' in f.read():
             Sucess = True
     return Sucess
 
