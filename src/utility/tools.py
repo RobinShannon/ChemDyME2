@@ -299,6 +299,13 @@ def read_mod_redundant(file):
         last_line.pop(-1)
         return last_line
 
+def check_gaussian(gauss_out):
+    Sucess = False
+    with open('example.txt') as f:
+        if 'blabla' in f.read():
+            Sucess = True
+    return Sucess
+
 def read_mod_redundant2d(file):
     diheds = []
     with open(file,'r') as f:

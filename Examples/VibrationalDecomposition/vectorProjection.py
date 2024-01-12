@@ -65,7 +65,7 @@ for i in range(0,15):
     proj = abs(np.dot(imag_h,vec) / np.sqrt(np.dot(vec,vec)))
     h_arr.append(proj)
     if i >2:
-        h_sum += proj *2
+        h_sum += proj
     else:
         trans_sum += proj
 
@@ -74,9 +74,16 @@ for i in range(0,9):
     proj = abs(np.dot(imag_w,vec) / np.sqrt(np.dot(vec,vec)))
     w_arr.append(proj)
     if i >2:
-        w_sum += proj *2
+        w_sum += proj
     else:
-        trans_sum += proj
+        proj_h = abs(np.dot(imag_w[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
+        proj_oh = abs(np.dot(imag_w[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
+        sum = proj_h + proj_oh
+        proj_h *= proj / sum
+        proj_oh *= proj / sum
+        trans_sum += proj_oh
+        h_sum += 0.75 * proj_h
+        w_sum += 0.25 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
@@ -105,7 +112,7 @@ for i in range(0,15):
     proj = abs(np.dot(imag_h,vec) / np.dot(vec,vec))
     h_arr.append(proj)
     if i >2:
-        h_sum += proj *2
+        h_sum += proj
     else:
         trans_sum += proj
 
@@ -114,9 +121,16 @@ for i in range(0,9):
     proj = abs(np.dot(imag_w,vec) / np.dot(vec,vec))
     w_arr.append(proj)
     if i > 2:
-        w_sum += proj *2
+        w_sum += proj
     else:
-        trans_sum += proj
+        proj_h = abs(np.dot(imag_w[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
+        proj_oh = abs(np.dot(imag_w[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
+        sum = proj_h + proj_oh
+        proj_h *= proj / sum
+        proj_oh *= proj / sum
+        trans_sum += proj_oh
+        w_sum += 0.75 * proj_h
+        h_sum += 0.25 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
@@ -155,7 +169,14 @@ for i in range(0,9):
     if i > 2:
         w_sum += proj
     else:
-        trans_sum += proj
+        proj_h = abs(np.dot(imag_w[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
+        proj_oh = abs(np.dot(imag_w[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
+        sum = proj_h + proj_oh
+        proj_h *= proj / sum
+        proj_oh *= proj / sum
+        trans_sum += proj_oh
+        h_sum += 0.75 * proj_h
+        w_sum += 0.25 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
