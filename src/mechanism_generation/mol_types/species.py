@@ -379,7 +379,7 @@ class species:
         os.chdir('../')
 
 
-    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid = False, ts =False, all_bonds = False):
+    def write_multi_dimensional_torsion(self,mol, increment = 18, directory="hindered_rotor", rotors_to_exclude = None, rigid = False, ts =False, all_bonds = False, explicit_dihedral=None):
         current_dir = os.getcwd()
         print(str(rigid))
         os.makedirs(self.dir, exist_ok=True)
@@ -387,6 +387,8 @@ class species:
         os.makedirs(directory, exist_ok=True)
         os.chdir(directory)
         rotatable_bonds, coId = CT.get_rotatable_bonds(mol,self.bonds_to_add)
+        if explicit_dihedral != None:
+            rotatable_bonds.append(explicit_dihedral)
         self.rotor_indexes = rotatable_bonds
         distances = []
         for bond in self.bonds_to_add:
