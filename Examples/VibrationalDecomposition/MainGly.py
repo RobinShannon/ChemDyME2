@@ -232,8 +232,8 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('H2O2/ts.xyz')
-mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=mol))
+mol = read('MethylFormate/NN_TS.xyz')
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
@@ -259,7 +259,7 @@ constraints = []
 #except:
 #   pass
 #del mol.constraints
-write('H2O2/ts.xyz', mol)
+write('MethylFormate/NN_TS.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -312,7 +312,7 @@ for i in range(0,new.shape[0]):
 
 print(str(is_norm))
 
-np.save('H2O2/ts_uncorrected.npy', new)
+np.save('MethylFormate/ts_uncorrected.npy', new)
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
 new_converted = convert_hessian_to_cartesian(new.T,masses)
 
@@ -327,7 +327,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('H2O2/ts.npy', new_converted)
+np.save('MethylFormate/NN_TS.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)

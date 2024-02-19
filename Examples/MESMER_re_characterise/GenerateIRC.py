@@ -50,7 +50,7 @@ write('irc1.xyz', irc1)
 write('irc2.xyz', irc2)
 
 os.chdir('IRC2')
-for i in range(0,142):
+for i in range(0,56):
     target = open("point"+str(i)+".log", "r")
     for line in target:
         if "Sum of electronic and zero-point Energies=" in line:

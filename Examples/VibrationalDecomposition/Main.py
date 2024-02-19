@@ -10,7 +10,7 @@ import src.mechanism_generation.reaction_crtieria as RC
 import src.utility.tools as Tl
 from copy import deepcopy
 import numpy as np
-from ase.io import read
+from ase.io import read, write
 from ase.optimize import BFGS as bfgs
 from ase.vibrations import Vibrations
 from ase.io import write
@@ -119,10 +119,25 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-narupa_mol = read('MethylFormate/NN_TS.xyz', index=0)
-narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=narupa_mol))
-
-
+narupa_mol = read('H2O2/ho2.xyz', format='xyz')
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=narupa_mol))
+dyn = BFGS(narupa_mol,maxstep=100)
+try:
+   dyn.run(1e-2, 100)
+except:
+   pass
+print(str(narupa_mol.get_potential_energy()))
+del narupa_mol
+import importlib
+importlib.reload(src.Calculators.NNCalculator)
+narupa_mol = read('H2O2/ho2.xyz')
+narupa_mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-410000', atoms=narupa_mol))
+dyn = BFGS(narupa_mol,maxstep=100)
+try:
+   dyn.run(1e-2, 100)
+except:
+   pass
+print(str(narupa_mol.get_potential_energy()))
 f4 = open("vibresults4.txt", 'a')
 
 

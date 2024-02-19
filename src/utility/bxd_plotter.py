@@ -144,8 +144,8 @@ class bxd_plotter_2d:
             self.ax.set_xlim([min(self.points[:,0])-x_dist, max(self.points[:,0])+x_dist])
             self.ax.set_ylim([min(self.points[:,1])-y_dist, max(self.points[:,1])+y_dist])
         else:
-            self.ax.set_xlim([min(self.points[:,0])-2, max(self.points[:,0])+1])
-            self.ax.set_ylim([min(self.points[:,1])-2, max(self.points[:,1])+1])
+            self.ax.set_xlim([min(self.points[:,0])-4, max(self.points[:,0])+4])
+            self.ax.set_ylim([min(self.points[:,1])-4, max(self.points[:,1])+4])
         self.bound_lines = []
         for b in self.bounds:
             line_start, line_end = b.getLine(self.bound_size)

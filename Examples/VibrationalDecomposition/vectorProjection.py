@@ -20,7 +20,7 @@ w_sum = 0
 h_arr = []
 w_arr = []
 
-for j in range(6,24):
+for j in range(0,24):
     imag = post_comp[:,j]
     imag_h = imag[[0, 1, 2, 3, 4, 5, 6, 7, 8, 12, 13, 14, 15, 16, 17]]
     imag_w = imag[[9, 10, 11, 18, 19, 20, 21, 22, 23]]
@@ -107,7 +107,7 @@ w_sum = 0
 h_arr = []
 w_arr = []
 
-for i in range(0,15):
+for i in range(0,21):
     vec = HCOCO_hess[:,i]
     proj = abs(np.dot(imag_h,vec) / np.dot(vec,vec))
     h_arr.append(proj)
@@ -129,8 +129,8 @@ for i in range(0,9):
         proj_h *= proj / sum
         proj_oh *= proj / sum
         trans_sum += proj_oh
-        w_sum += 0.75 * proj_h
-        h_sum += 0.25 * proj_h
+        w_sum += 0.95 * proj_h
+        h_sum += 0.05 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
@@ -175,8 +175,8 @@ for i in range(0,9):
         proj_h *= proj / sum
         proj_oh *= proj / sum
         trans_sum += proj_oh
-        h_sum += 0.75 * proj_h
-        w_sum += 0.25 * proj_h
+        h_sum += 0.25 * proj_h
+        trans_sum += 0.75 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))

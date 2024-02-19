@@ -99,6 +99,7 @@ class Curve(ProgressMetric):
         self.distance_from_path = 0
         self.old_distance_from_path = 0
         self.percentage_along_segment = 0
+        self.countdown = 0
         if end_type =='distance':
             self.full_distance = self.path.total_distance[-1]
 
@@ -215,9 +216,12 @@ class Curve(ProgressMetric):
         :return: Boolean
         """
         # Check whether the current distance to the path is outside of the maximum allowable
+        if self.countdown != 0:
+            self.countdown -= 1
         if self.distance_from_path > self.path_bound_distance_at_point():
             # If so compare to the previous MD frame to see whether we are moving closer or further away from path
-            if self.distance_from_path > self.old_distance_from_path:
+            if self.distance_from_path > self.old_distance_from_path and self.countdown==0:
+                self.countdown=10
                 # If moving further awy then return signal the need for reflection
                 return True
             else:

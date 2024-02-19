@@ -85,10 +85,13 @@ def get_free_energy(BXD, T, boxes=1, milestoning=False, directory='Converging_Da
                 max_d = -1.0 * np.log(float(dens[-1]) / (float(len(BXD.box_list[i].data))))
                 min_d = -1.0 * np.log(float(dens[0]) / (float(len(BXD.box_list[i].data))))
                 max_d_err = np.sqrt(float(dens[-1])) / (float(len(BXD.box_list[i].data))) / -1*np.log(float(dens[-1]) / (float(len(BXD.box_list[i].data))))
-                correction =  box_gibbs_diff/(max_d-min_d)
-                correction_err =correction * np.sqrt((gibbs_err/box_gibbs_diff)**2 + (max_d_err/max_d)**2)
-                offset = -1.0 * np.log(float(dens[0]) / (float(len(BXD.box_list[i].data))))
-                for j in range(1, len(dens)):
+                #correction =  box_gibbs_diff/(max_d-min_d)
+                #correction_err =correction * np.sqrt((gibbs_err/box_gibbs_diff)**2 + (max_d_err/max_d)**2)
+                #offset = -1.0 * np.log(float(dens[0]) / (float(len(BXD.box_list[i].data))))
+                correction  = 1
+                offset = 0
+                correction_err = 0
+                for j in range(0, len(dens)):
                     d_err = np.sqrt(float(dens[j])) / (float(len(BXD.box_list[i].data)))
                     d = float(dens[j]) / (float(len(BXD.box_list[i].data)))
                     p = d
