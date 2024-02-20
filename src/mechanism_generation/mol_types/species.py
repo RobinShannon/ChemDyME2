@@ -477,6 +477,8 @@ class species:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     if not (i==0 or j==0):
                         ene = ene_arr_1D[-1]
+                    else:
+                        ene = (hmol.get_potential_energy() - baseline) / (invcm)
 
                 #if not tl.check_gaussian("H" + str(i) + '_' + str(j) + ".log") or ene < 0:
                     #ene = ene_arr_1D[-1]
