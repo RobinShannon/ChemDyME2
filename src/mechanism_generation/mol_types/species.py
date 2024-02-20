@@ -477,8 +477,8 @@ class species:
                     hmol = read("H" + str(i) + '_' + str(j) + ".log", index=0)
                     ene = ene_arr_1D[-1]
 
-                if not tl.check_gaussian("H" + str(i) + '_' + str(j) + ".log") or ene < 0:
-                    ene = ene_arr_1D[-1]
+                #if not tl.check_gaussian("H" + str(i) + '_' + str(j) + ".log") or ene < 0:
+                    #ene = ene_arr_1D[-1]
                 '''
                 if j > 1 and np.abs((ene - ene_arr_1D[-1]))  > np.abs((smooth*(ene_arr_1D[-1]-ene_arr_1D[-2]))):
                     if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0 and (ene - ene_arr_1D[-1]) < 1000 :
