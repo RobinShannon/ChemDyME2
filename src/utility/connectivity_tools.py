@@ -280,7 +280,7 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
 
     for bond in add_bonds:
         torsion = [0,0,0,0]
-        atom = BABmol.GetAtom(int(bond[0]+1))
+        atom = BABmol.GetAtom(int(bond[1]+1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom):
             bnd = atom.GetBond(neighbour_atom)
             if bnd.GetBeginAtom().GetIdx()-1 != bond[0]:
@@ -291,7 +291,7 @@ def get_rotatable_bonds(mol, add_bonds, combine = True):
                 torsion[0] = bnd.GetEndAtom().GetIdx()-1
             if torsion[0] != bond[1]:
                 break
-        atom2 = BABmol.GetAtom(int(bond[1]+1))
+        atom2 = BABmol.GetAtom(int(bond[0]+1))
         for neighbour_atom in openbabel.OBAtomAtomIter(atom2):
             bnd = atom2.GetBond(neighbour_atom)
             if bnd.GetBeginAtom().GetIdx()-1 != bond[1]:
