@@ -452,7 +452,7 @@ class species:
 
         os.chdir(current_dir)
 
-    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=5000000):
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=5000000, combine=True, explicit_bond=None):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
