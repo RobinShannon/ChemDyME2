@@ -485,9 +485,13 @@ class species:
 
                 if j > 1 and np.abs((ene - ene_arr_1D[-1]))  > np.abs((smooth*(ene_arr_1D[-1]-ene_arr_1D[-2]))):
                     if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0:
+                        print('passing')
                         pass
                     else:
+
                         ene = ene_arr_1D[-1]+0.5*(ene_arr_1D[-1] - ene_arr_1D[-2])
+                        print('new E = ' + str(ene))
+                        print('old E = ' + str(ene_arr_1D[-1]))
                 #if j == 0 and i > 1 and np.abs((ene - ene_arr_1D[-int(steps)]))  > np.abs((smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]))):
                     #if (ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]) == 0:
                         #pass
