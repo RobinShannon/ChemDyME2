@@ -452,7 +452,7 @@ class species:
 
         os.chdir(current_dir)
 
-    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=5000000, combine=True, explicit_bond=None):
+    def read_multi_dimensional_torsion2D(self,path, f_coeffs = 5, index=-1,smooth=5000000, combine=True, explicit_bond=None, cutoff=np.inf):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -492,6 +492,10 @@ class species:
                         ene = ene_arr_1D[-1]+2*(ene_arr_1D[-1] - ene_arr_1D[-2])
                         print('new E = ' + str(ene))
                         print('old E = ' + str(ene_arr_1D[-1]))
+
+                if ene > cutoff:
+                    ene = ene_arr_1D[-1]+0.5*(ene_arr_1D[-1] - ene_arr_1D[-2])
+
                 #if j == 0 and i > 1 and np.abs((ene - ene_arr_1D[-int(steps)]))  > np.abs((smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]))):
                     #if (ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]) == 0:
                         #pass
