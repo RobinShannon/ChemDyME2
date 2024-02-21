@@ -488,11 +488,11 @@ class species:
                         pass
                     else:
                         ene = ene_arr_1D[-1]+0.5*(ene_arr_1D[-1] - ene_arr_1D[-2])
-                if j == 0 and i > 1 and np.abs((ene - ene_arr_1D[-int(steps)]))  > np.abs((smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]))):
-                    if (ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]) == 0:
-                        pass
-                    else:
-                        ene = ene_arr_1D[-int(steps)] + 0.5 * (ene_arr_1D[-int(steps)] - ene_arr_1D[-int(steps)+1])
+                #if j == 0 and i > 1 and np.abs((ene - ene_arr_1D[-int(steps)]))  > np.abs((smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]))):
+                    #if (ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]) == 0:
+                        #pass
+                    #else:
+                        #ene = ene_arr_1D[-int(steps)] + 0.5 * (ene_arr_1D[-int(steps)] - ene_arr_1D[-int(steps)+1])
 
                 arr.append(ene)
                 ene_arr_1D.append(ene)
