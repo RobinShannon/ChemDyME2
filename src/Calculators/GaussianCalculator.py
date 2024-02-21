@@ -212,7 +212,7 @@ class Gaussian(FileIOCalculator):
         current_dir = os.getcwd()
         os.makedirs(path, exist_ok=True)
         os.chdir(path)
-        write(str(title) + '.com', atoms, format='gaussian-in', extra='frequency=(projected)', **self.parameters)
+        write(str(title) + '.com', atoms, format='gaussian-in', extra='frequency=(projected,anharmonic)', **self.parameters)
         os.chdir(current_dir)
 
     def minimise_ts_write(self, dihedral=None, fixed_bonds = None, path=os.getcwd(), title="gauss", atoms: Optional[Atoms] = None, rigid=False):
