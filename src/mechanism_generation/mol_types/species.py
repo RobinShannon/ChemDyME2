@@ -483,18 +483,18 @@ class species:
                 #if not tl.check_gaussian("H" + str(i) + '_' + str(j) + ".log") or ene < 0:
                     #ene = ene_arr_1D[-1]
 
+                if ene > cutoff:
+                    ene = ene_arr_1D[-1]+3*(ene_arr_1D[-1] - ene_arr_1D[-2])
+
                 if j > 1 and np.abs((ene - ene_arr_1D[-1]))  > np.abs((smooth*(ene_arr_1D[-1]-ene_arr_1D[-2]))):
                     if (ene_arr_1D[-1]-ene_arr_1D[-2]) == 0:
                         print('passing')
                         pass
                     else:
 
-                        ene = ene_arr_1D[-1]+2*(ene_arr_1D[-1] - ene_arr_1D[-2])
+                        ene = ene_arr_1D[-1]+3*(ene_arr_1D[-1] - ene_arr_1D[-2])
                         print('new E = ' + str(ene))
                         print('old E = ' + str(ene_arr_1D[-1]))
-
-                if ene > cutoff:
-                    ene = ene_arr_1D[-1]+0.5*(ene_arr_1D[-1] - ene_arr_1D[-2])
 
                 #if j == 0 and i > 1 and np.abs((ene - ene_arr_1D[-int(steps)]))  > np.abs((smooth*(ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]))):
                     #if (ene_arr_1D[-int(steps)]-ene_arr_1D[-2*int(steps)]) == 0:
@@ -555,7 +555,7 @@ class species:
         np.savetxt('coeffs4.txt', min_coeffs[3][:], delimiter=' ', fmt='%4.4f')
         os.chdir('../')
 
-    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True], limit=np.inf):
+    def read_multi_dimensional_torsion3D(self,path, f_coeffs = 6, index=-1, sin=[True,True,True], cos=[True,True,True], limit=np.inf, smooth =100000000):
         os.chdir(path)
         os.chdir('hindered_rotor')
         os.chdir('MultiHind')
@@ -593,6 +593,16 @@ class species:
                             ene = ene_arr_1D_temp[-1]
                     if ene- min_ene > limit:
                         ene = ene_arr_1D_temp[-1]
+
+                    if k > 1 and np.abs((ene - ene_arr_1D_temp[-1])) > np.abs((smooth * (ene_arr_1D_temp[-1] - ene_arr_1D_temp[-2]))):
+                        if (ene_arr_1D_temp[-1] - ene_arr_1D_temp[-2]) == 0:
+                            print('passing')
+                            pass
+                        else:
+
+                            ene = ene_arr_1D_temp[-1] + 3 * (ene_arr_1D_temp[-1] - ene_arr_1D_temp[-2])
+                            print('new E = ' + str(ene))
+                            print('old E = ' + str(ene_arr_1D_temp[-1]))
                     ene_arr_1D_temp.append(ene)
                     if ene < min_ene:
                         min_ene = ene
