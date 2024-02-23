@@ -215,21 +215,12 @@ class Curve(ProgressMetric):
         If we are outside the path, but moving closer to the path then return False instead of True
         :return: Boolean
         """
-        # Check whether the current distance to the path is outside of the maximum allowable
-        if self.countdown != 0:
-            self.countdown -= 1
+
         if self.distance_from_path > self.path_bound_distance_at_point():
-            # If so compare to the previous MD frame to see whether we are moving closer or further away from path
-            if self.distance_from_path > self.old_distance_from_path and self.countdown==0:
-                self.countdown=10
-                # If moving further awy then return signal the need for reflection
-                return True
-            else:
-                # Otherwise leave reflection for this frame to see the trajectory moves back inside the bound of its own
-                # accord
-                return False
+            return True
         else:
             return False
+
 
 
     def outside_path(self):
