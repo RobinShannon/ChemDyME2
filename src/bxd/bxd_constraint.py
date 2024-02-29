@@ -738,9 +738,7 @@ class Converging(BXD):
         # Check for hit against upper boundary
         if self.box_list[self.box].upper.hit(self.s, 'up'):
             self.bound_hit = 'upper'
-            if self.progress_metric.outside_path():
-                return True
-            elif self.box_list[self.box].upper.transparent and not self.progress_metric.reflect_back_to_path():
+            if self.box_list[self.box].upper.transparent and not self.progress_metric.reflect_back_to_path():
                 self.box_list[self.box].upper.transparent = False
                 self.box_list[self.box].close_box(path=self.progress_metric.path.s)
                 self.box += 1
@@ -767,8 +765,6 @@ class Converging(BXD):
 
         elif self.box_list[self.box].lower.hit(self.s, 'down'):
             self.bound_hit = 'lower'
-            if self.progress_metric.outside_path():
-                return True
             if self.box_list[self.box].lower.transparent and not self.progress_metric.outside_path():
                 self.box_list[self.box].lower.transparent = False
                 self.box_list[self.box].close_box(path=self.progress_metric.path.s)

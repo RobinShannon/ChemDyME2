@@ -82,8 +82,8 @@ for i in range(0,9):
         proj_h *= proj / sum
         proj_oh *= proj / sum
         trans_sum += proj_oh
-        h_sum += 0.75 * proj_h
-        w_sum += 0.25 * proj_h
+        h_sum += 0.5 * proj_h
+        w_sum += 0.5 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
@@ -129,8 +129,8 @@ for i in range(0,9):
         proj_h *= proj / sum
         proj_oh *= proj / sum
         trans_sum += proj_oh
-        w_sum += 0.95 * proj_h
-        h_sum += 0.05 * proj_h
+        w_sum += 0.5 * proj_h
+        h_sum += 0.5 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
@@ -175,8 +175,8 @@ for i in range(0,9):
         proj_h *= proj / sum
         proj_oh *= proj / sum
         trans_sum += proj_oh
-        h_sum += 0.25 * proj_h
-        trans_sum += 0.75 * proj_h
+        h_sum += 0.5 * proj_h
+        trans_sum += 0.5 * proj_h
 
 total = w_sum+h_sum+trans_sum
 print("water proportion = " + str(w_sum/total))
