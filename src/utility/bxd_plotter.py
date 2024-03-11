@@ -189,7 +189,7 @@ class bxd_plotter_2d:
 class bxd_plotter_3d:
 
     def __init__(self, path_data, path_colour="tomato", point_colour="teal", bound_colour="orange",
-                 bound_size = 5, double_bounds = False):
+                 bound_size = 1, double_bounds = False):
         plt.ion()
         self.path_colour = path_colour
         self.point_colour = point_colour
@@ -210,11 +210,10 @@ class bxd_plotter_3d:
             path = self.ax.plot(np.array([self.path_data[i][0], self.path_data[i + 1][0]]), np.array([self.path_data[i][1],self.path_data[i + 1][1]]),zs=np.array([self.path_data[i][2], self.path_data[i + 1][2]]), color=self.path_colour, alpha=0.5)
             self.path_lines.append(path)
 
-    def plot_bxd_from_array(self, points, bounds):
+    def plot_bxd_from_array(self, points,bounds):
         boundList = []
-        bounds = []
         for b in bounds:
-            bo = boundary3D(b[0],b[1][0],b[1][1],b[1][2],b[2][0],b[2][1],b[2][2])
+            bo = boundary3D(b[0],b[1],b[2],b[3],b[4],b[5],b[6])
             boundList.append(bo)
         self.plot_update(np.array(points), boundList)
 

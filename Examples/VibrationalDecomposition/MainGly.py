@@ -232,17 +232,17 @@ def get_rot_tran(coord_true, coord_pred):
     return rot, model_coords_rotated
 
 
-mol = read('MethylFormate/NN_TS.xyz')
+mol = read('MethylFormate/co.xyz')
 mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 
 #baseline = mol.get_potential_energy()
 
 # Set up a Sella Dynamics object
-dyn = Sella(mol, internal=True)
-try:
-    dyn.run(1e-2, 1000)
-except:
-    pass
+#dyn = Sella(mol, internal=True)
+#try:
+#    dyn.run(1e-2, 1000)
+#except:
+#    pass
 #ts_ene = mol.get_potential_energy()*96.58
 #write('MethylFormate/NN_TS.xyz', mol)
 #reac = read('MethylFormate/Start.xyz')
@@ -253,13 +253,13 @@ except:
 constraints = []
 #constraints.append(FixAtoms(indices=[0, 3]))
 #mol.set_constraint(constraints)
-#dyn = BFGS(mol,maxstep=100)
-#try:
-#   dyn.run(1e-2, 100)
-#except:
-#   pass
+dyn = BFGS(mol,maxstep=100)
+try:
+   dyn.run(1e-2, 100)
+except:
+   pass
 #del mol.constraints
-write('MethylFormate/NN_TS.xyz', mol)
+write('MethylFormate/co.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()
 vib.run()
@@ -280,7 +280,7 @@ Rs = []
 min_i = 10000.0
 ith = 0
 R = get_rotational_vectors(mol, X)
-L=np.roll(L, -1, axis=0)
+#L=np.roll(L, -1, axis=0)
 #L=np.roll(L, -1, axis=0)
 #L=np.roll(L, -1, axis=0)
 L[0:3,:] = copy.deepcopy(T)
@@ -312,7 +312,7 @@ for i in range(0,new.shape[0]):
 
 print(str(is_norm))
 
-np.save('MethylFormate/ts_uncorrected.npy', new)
+np.save('MethylFormate/co.npy', new)
 masses = ((np.tile(mol.get_masses(), (3, 1))).transpose()).flatten()
 new_converted = convert_hessian_to_cartesian(new.T,masses)
 
@@ -327,7 +327,7 @@ for i in range(0, new_converted.shape[0]):
 
 print(str(is_norm))
 #new_converted[:, (-1,-3)] = new_converted[:, (-3,-1)]
-np.save('MethylFormate/NN_TS.npy', new_converted)
+np.save('MethylFormate/co.npy', new_converted)
 
 for i in range(0, new_converted.shape[0]):
     mode = new_converted[:,i].reshape(int(new_converted.shape[0]/3),3)
