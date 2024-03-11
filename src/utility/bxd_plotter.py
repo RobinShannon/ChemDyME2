@@ -189,7 +189,7 @@ class bxd_plotter_2d:
 class bxd_plotter_3d:
 
     def __init__(self, path_data, path_colour="tomato", point_colour="teal", bound_colour="orange",
-                 bound_size = 1, double_bounds = False):
+                 bound_size = 1.25, double_bounds = False):
         plt.ion()
         self.path_colour = path_colour
         self.point_colour = point_colour
