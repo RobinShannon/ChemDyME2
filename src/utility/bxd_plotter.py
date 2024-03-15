@@ -217,7 +217,7 @@ class bxd_plotter_3d:
             boundList.append(bo)
         self.plot_update(np.array(points), boundList)
 
-    def plot_update(self, points, bounds):
+    def plot_update(self, points, bounds, save_root=os.getcwd()):
         self.scatter._offsets3d = (points[:,0], points[:,1], points[:,2])
         self.ax.set_xlim([min(points[:,0])-1, max(points[:,0])+1])
         self.ax.set_ylim([min(points[:,1])-1, max(points[:,1])+1])
@@ -226,7 +226,11 @@ class bxd_plotter_3d:
         for i in range(0,len(bounds)):
             xx,yy,zz = bounds[i].getPlane(self.bound_size)
             self.ax.plot_surface(xx, yy, zz, color=self.bound_colour, alpha=0.5)
-        self.fig.canvas.draw()
+        try:
+            self.fig.canvas.draw()
+        except:
+            pass
+        self.fig.savefig(str(save_root)+'/fig.png')
         plt.pause(7)
 
     def plot_bxd_from_file(self, point_file, bound_file):
