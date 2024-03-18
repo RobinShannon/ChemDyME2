@@ -428,7 +428,7 @@ class Adaptive(BXD):
             self.all_data += data
             for i in self.box_list:
                 self.all_bounds.append(i.upper.get_bound_array3D())
-            fig.plot_bxd_from_array(self.all_data, self.all_bounds)
+            fig.plot_bxd_from_array(self.all_data, self.all_bounds, save_root = direct)
         else:
             fig = plt.bxd_plotter_2d(self.progress_metric.path.s)
             self.all_bounds = []
