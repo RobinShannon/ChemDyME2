@@ -233,9 +233,9 @@ class bxd_plotter_3d:
         self.fig.savefig(str(save_root)+'/fig.png')
         plt.pause(7)
 
-    def plot_bxd_from_file(self, point_file, bound_file):
+    def plot_bxd_from_file(self, point_file, bound_file, save_root=os.getcwd()):
         points, bounds = self.read_file(point_file, bound_file)
-        self.plot_update(points, bounds)
+        self.plot_update(points, bounds, save_root)
 
     def read_file(self, point, bound):
         point_file = open(point,'r')
