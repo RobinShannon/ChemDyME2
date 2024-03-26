@@ -116,7 +116,7 @@ class DimensionalityReduction:
             i = 0
             for atom in atoms_list[0]:
                 if atom.index in new_indicies:
-                    if not (i % self.keep_frequency != 0):
+                    if not (i % self.keep_frequency == 0):
                         new_indicies.remove(atom.index)
                     i += 1
 
