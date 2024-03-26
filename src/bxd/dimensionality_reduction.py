@@ -24,7 +24,7 @@ def read_pcs(file_root_name='PC', number=2):
 
 
 class DimensionalityReduction:
-    def __init__(self, trajectory, number=3, ignore_h=False, subset=False, c_only = False, prune_frequency = 1, start_ind=[], end_ind=[], file_prefix="PC"):
+    def __init__(self, trajectory, number=3, ignore_h=False, subset=False, c_only = False, prune_frequency = 1, keep_frequency=1, start_ind=[], end_ind=[], file_prefix="PC"):
         """
         Class which interfaces with the pathreducer code in order. This class alters the geometry based upon a number
         of flags, sends xyz files to pathreducer for dimensionality reduction and then reads the results into a list of
@@ -54,6 +54,7 @@ class DimensionalityReduction:
         """
         self.pc_list = []
         self.prune_frequency = prune_frequency
+        self.keep_frequency = keep_frequency
         self.trajectory = trajectory
         self.ignore_h = ignore_h
         self.subset = subset
@@ -108,6 +109,14 @@ class DimensionalityReduction:
             for atom in atoms_list[0]:
                 if atom.index in new_indicies:
                     if i % self.prune_frequency != 0:
+                        new_indicies.remove(atom.index)
+                    i += 1
+
+        if self.prune_frequency == 1 and self.keep_frequency > 1:
+            i = 0
+            for atom in atoms_list[0]:
+                if atom.index in new_indicies:
+                    if not (i % self.keep_frequency != 0):
                         new_indicies.remove(atom.index)
                     i += 1
 
