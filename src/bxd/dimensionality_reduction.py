@@ -137,6 +137,8 @@ class DimensionalityReduction:
                 del atoms2[[atom.index for atom in atoms if atom.symbol == 'H']]
             if self.prune_frequency > 1:
                 del atoms2[[atom.index for atom in atoms2 if atom.index % self.prune_frequency != 0]]
+            if self.prune_frequency==1 and self.keep_frequency > 1:
+                del atoms2[[atom.index for atom in atoms2 if (atom.index % self.keep_frequency != 0)]]
             new_atoms_list.append(atoms2)
         # create a list of the same length as new_indicies with consecutive number e.g 0,1,2,3 .....
         # old_indicies and new_indicies can then be used to create a dictionary converting from atom index in the full
