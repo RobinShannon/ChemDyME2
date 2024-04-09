@@ -19,6 +19,7 @@ class MDLogger:
             log_msg = self.log(args[0])
             if self.outfile is not None:
                 self.outfile.write(str(log_msg))
+                self.outfile.flush()
             elif self.write_to_list:
                 self.lst.append(log_msg)
             else:
