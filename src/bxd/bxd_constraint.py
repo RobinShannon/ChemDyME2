@@ -141,7 +141,7 @@ class Adaptive(BXD):
                           direction
     """
 
-    def __init__(self, progress_metric, fix_to_path=True, adaptive_steps=10000, epsilon=0.95, reassign_rate=5,
+    def __init__(self, progress_metric, fix_to_path=True, adaptive_steps=10000, epsilon=0.95, reassign_rate=2.5,
                  one_direction=False, connected_BXD = None):
         # call the base class init function to set up general parameters
         super(Adaptive, self).__init__(progress_metric, connected_BXD=connected_BXD)
@@ -391,6 +391,7 @@ class Adaptive(BXD):
                 self.print_snapshot()
                 self.box_list[self.box].data = []
                 self.box += 1
+                self.reassign_rate = 2.5
                 self.new_box = True
                 self.box_list[self.box].data = []
                 return False
@@ -403,6 +404,7 @@ class Adaptive(BXD):
                 self.box_list[self.box].data = []
                 self.box_list[self.box].data = []
                 self.box -= 1
+                self.reassign_rate = 2.5
                 self.box_list[self.box].data = []
                 self.new_box = True
                 self.box_list[self.box].type = 'adap'
