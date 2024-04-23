@@ -217,14 +217,16 @@ class Curve(ProgressMetric):
         """
         if self.countdown >= 10:
             self.path.max_distance[self.path_segment] = self.distance_from_path + 0.2
+            self.path.max_distance[self.path_segment+1] = self.distance_from_path + 0.2
+            self.path.max_distance[self.path_segment-1] = self.distance_from_path + 0.2
             print("expanding path distance")
         if self.distance_from_path > self.path_bound_distance_at_point() and  self.distance_from_path < self.old_distance_from_path:
             self.old_distance_from_path = self.distance_from_path
-            self.count_down = 0
+            self.countdown = 0
             return True
         else:
             self.old_distance_from_path = self.distance_from_path
-            self.count_down += 1
+            self.countdown += 1
             return False
 
 
