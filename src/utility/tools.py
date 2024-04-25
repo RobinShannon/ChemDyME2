@@ -311,6 +311,7 @@ def read_mod_redundant2d(file):
     with open(file,'r') as f:
         lines = f.readlines()
         last_line = lines[-5]
+        print('last line = ' + str(last_line))
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')
         last_line.pop(0)

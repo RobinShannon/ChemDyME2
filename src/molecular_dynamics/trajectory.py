@@ -120,7 +120,12 @@ class Trajectory:
             # 1. md_step_pos: Get the half step velocity v(t + 1/2 * delta_t) and then new positions x(t + delta_t)
             # 2. Get forces at new positions
             # 3. md_step_vel : Get the  new velocities v(t + delta_t)
-            self.md_integrator.md_step_pos(forces, self.mol)
+
+            if len(del_phi) > 0:
+                self.md_integrator.md_small_step_pos(forces, self.mol)
+            else:
+                self.md_integrator.md_step_pos(forces, self.mol)
+
 
             try:
                 forces = self.mol.get_forces()

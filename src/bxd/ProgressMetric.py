@@ -216,17 +216,20 @@ class Curve(ProgressMetric):
         :return: Boolean
         """
         if self.countdown >= 10:
-            self.path.max_distance[self.path_segment] = self.distance_from_path + 0.2
-            self.path.max_distance[self.path_segment+1] = self.distance_from_path + 0.2
-            self.path.max_distance[self.path_segment-1] = self.distance_from_path + 0.2
+            self.path.max_distance[self.path_segment] = self.distance_from_path + (0.5 * self.distance_from_path)
+            try:
+                self.path.max_distance[self.path_segment+1] = self.distance_from_path + (0.5 * self.distance_from_path)
+                self.path.max_distance[self.path_segment-1] = self.distance_from_path + (0.5 * self.distance_from_path)
+            except:
+                pass
             print("expanding path distance")
-        if self.distance_from_path > self.path_bound_distance_at_point() and  self.distance_from_path < self.old_distance_from_path:
+        if self.distance_from_path > self.path_bound_distance_at_point():
             self.old_distance_from_path = self.distance_from_path
-            self.countdown = 0
+            self.countdown +=1
             return True
         else:
             self.old_distance_from_path = self.distance_from_path
-            self.countdown += 1
+            self.countdown = 0
             return False
 
 
