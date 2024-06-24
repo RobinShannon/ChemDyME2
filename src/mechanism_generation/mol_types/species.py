@@ -511,8 +511,8 @@ class species:
                 angle_arr_1D.append(a)
                 traj.append(hmol.copy())
                 if i==int(steps)-1:
-                    ene = ene_arr_1D[0].copy()
-                    a =  angle_arr_1D[0].copy()
+                    ene = ene_arr_1D[0]
+                    a =  angle_arr_1D[0]
                     angle.append(a)
                     angle_arr_1D.append(a)
                     arr.append(ene)
