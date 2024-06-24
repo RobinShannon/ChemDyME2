@@ -292,7 +292,7 @@ def getCML(ASEmol, name):
 def read_mod_redundant(file):
     with open(file,'r') as f:
         lines = f.readlines()
-        last_line = lines[-4]
+        last_line = lines[-5]
         last_line=last_line.strip("FD\n")
         last_line=last_line.split(' ')
         last_line.pop(0)

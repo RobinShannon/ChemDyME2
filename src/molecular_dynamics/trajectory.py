@@ -104,7 +104,7 @@ class Trajectory:
                         if bxd.progress_metric.reflect_back_to_path():
                             del_phi.append(bxd.path_del_constraint(self.mol))
                         self.md_integrator.constrain(del_phi)
-                        inverted_previously = True
+                        #inverted_previously = True
                     else:
                         inverted_previously = False
                     if bxd.inversion and first_run and not inverted_previously:
@@ -121,10 +121,7 @@ class Trajectory:
             # 2. Get forces at new positions
             # 3. md_step_vel : Get the  new velocities v(t + delta_t)
 
-            if len(del_phi) > 0:
-                self.md_integrator.md_small_step_pos(forces, self.mol)
-            else:
-                self.md_integrator.md_step_pos(forces, self.mol)
+            self.md_integrator.md_step_pos(forces, self.mol)
 
 
             try:
