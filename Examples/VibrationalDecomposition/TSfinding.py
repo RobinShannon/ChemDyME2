@@ -235,7 +235,7 @@ def get_rot_tran(coord_true, coord_pred):
 
 TS=True
 complex=False
-dir = 'Formaldehyde'
+dir = 'MethylFormate'
 prefix = 'TS'
 if not complex:
     mol = read(str(dir)+'/'+str(prefix)+'_NN.xyz')
@@ -243,7 +243,7 @@ else:
     mol = read(str(dir)+'/'+str(prefix)+'.xyz')
 if not TS and not complex:
     mol2= read(str(dir)+'/'+str(prefix)+'proj.xyz')
-mol.set_calculator(NNCalculator(checkpoint='Gen8_27', atoms=mol))
+mol.set_calculator(NNCalculator(checkpoint='best_model.ckpt-540000', atoms=mol))
 
 
 # Set up a Sella Dynamics object
@@ -268,7 +268,7 @@ if TS:
         dyn.run(1e-4, 1000)
     except:
        pass
-    ts_ene = mol.get_potential_energy()*96.58
+
 elif complex:
     vec =mol.get_positions()[3]-mol.get_positions()[0]
     pos = mol.get_positions()
@@ -293,6 +293,7 @@ else:
     pos = superimpose_points(mol.get_positions(),mol2.get_positions())
     mol.set_positions(pos)
 #del mol.constraints
+print(str(mol.get_potential_energy()*96.58))
 write(str(dir)+'/'+str(prefix)+'_NN.xyz', mol)
 vib = Vibrations(mol)
 vib.clean()

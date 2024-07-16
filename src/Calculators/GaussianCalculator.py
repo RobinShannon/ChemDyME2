@@ -192,7 +192,7 @@ class Gaussian(FileIOCalculator):
             if rigid:
                 write(str(title) + '.com', atoms, format='gaussian-in', addsec=str(mod), **self.parameters)
             else:
-                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant, loose)',addsec=str(mod), **self.parameters)
+                write(str(title) + '.com', atoms, format='gaussian-in', extra='opt=(calcall, modredundant, tight) int=ultrafine',addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')
             lines = f.readlines()
             pop_point = -3 - len(dihedral)
@@ -226,7 +226,7 @@ class Gaussian(FileIOCalculator):
             if not rigid and fixed_bonds != None:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in',extra='opt=(calcall,modredundant)', addsec=str(mod), **self.parameters)
             elif not rigid:
-                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,loose)', addsec=str(mod), **self.parameters)
+                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,tight) int=ultrafine', addsec=str(mod), **self.parameters)
             else:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', addsec=str(mod), **self.parameters)
             f=open(str(title) + '.com','r')

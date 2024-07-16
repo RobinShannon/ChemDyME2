@@ -177,14 +177,14 @@ for i in range(0,9):
 total = w_sum+h_sum+trans_sum
 
 
-TS_hess = np.load('Formaldehyde/TSconverted.npy').T
-HCOCO_hess = np.load('Formaldehyde/HCOconverted.npy').T
-water_hess = np.load('Formaldehyde/waterconverted.npy').T
+TS_hess = np.load('Formaldehyde/TS2.npy')
+HCOCO_hess = np.load('Formaldehyde/Fomaldehyde2.npy').T
+water_hess = np.load('Formaldehyde/water2.npy').T
 imag = [0.28,0.17,0,0.65,0.02,0,0.35,0.52,0,-0.02,-0.06,0,-0.25,-0.09,0,-0.04,-0.07,0]
 imag=np.asarray(imag)
-imag = TS_hess[:,-1]
+imag = TS_hess[-1,:]
 
-imag_h = imag[[0,1,2,3,4,5,9,10,11]]
+imag_h = imag[[0,1,2,3,4,5,6,7,8,9,10,11]]
 imag_w = imag[[6,7,8,12,13,14,15,16,17]]
 
 h_sum=0
@@ -193,8 +193,8 @@ w_sum = 0
 h_arr = []
 w_arr = []
 
-for i in range(0,9):
-    vec = HCOCO_hess[:,i]
+for i in range(0,12):
+    vec = HCOCO_hess[i,:]
     proj = abs(np.dot(imag_h,vec) / np.dot(imag_h,imag_h))
     h_arr.append(proj)
     if i >2:
@@ -210,13 +210,7 @@ for i in range(0,9):
     if i >2:
         w_sum += proj
     else:
-        proj_h = abs(np.dot(imag_w[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
-        proj_oh = abs(np.dot(imag_w[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
-        sum = proj_h + proj_oh
-        proj_h *= proj / sum
-        proj_oh *= proj / sum
-        w_sum += 1 * proj_oh
-        w_sum += 1 * proj_h
+        w_sum +=proj
 
 
 total = w_sum+h_sum+trans_sum
@@ -345,15 +339,15 @@ for i in range(6,len(HCO2inv)):
 #print(str((HCO2sum/ (HCO2sum+H2sum))))
 #print(str((H2sum/ (HCO2sum+H2sum))))
 
-TS_hess = np.load('FormH/ts2.npy').T
-HCO_hess = np.load('FormH/HCO2.npy').T
-h2_hess = np.load('FormH/H22.npy').T
+TS_hess = np.load('FormH/tscorrected.npy')
+HCO_hess = np.load('FormH/Formaldehydecorrected.npy')
+h2_hess = np.load('FormH/H22.npy')
 
 #imag = [-0.02,0.01,0,0.02,0,0,0.07,0,-0.01,0.58,0.36,0,-0.62,-0.38,0]
 #imag=np.asarray(imag)
 imag = TS_hess[:,-1]
 
-imag_hco = imag[[0,1,2,3,4,5,6,7,8]]
+imag_hco = imag[[0,1,2,3,4,5,6,7,8,9,10,11]]
 imag_h = imag[[9,10,11,12,13,14]]
 
 h_sum=0
@@ -362,20 +356,14 @@ w_sum = 0
 h_arr = []
 w_arr = []
 
-for i in range(0,9):
+for i in range(0,12):
     vec = HCO_hess[:,i]
     proj = abs(np.dot(imag_hco,vec) / np.dot(vec,vec))
     h_arr.append(proj)
     if i >2:
         h_sum += proj
     else:
-        proj_h = abs(np.dot(imag_hco[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
-        proj_oh = abs(np.dot(imag_hco[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
-        sum = proj_h + proj_oh
-        proj_h *= proj / sum
-        proj_oh *= proj / sum
-        trans_sum += 1 * proj_oh
-        h_sum += 1 * proj_h
+        trans_sum += proj
 
 
 for i in range(0,6):
@@ -385,13 +373,7 @@ for i in range(0,6):
     if i > 2:
         w_sum += proj
     else:
-        proj_h = abs(np.dot(imag_h[:3], vec[:3]) / np.sqrt(np.dot(vec[:3], vec[:3])))
-        proj_oh = abs(np.dot(imag_h[3:], vec[3:]) / np.sqrt(np.dot(vec[3:], vec[3:])))
-        sum = proj_h + proj_oh
-        proj_h *= proj / sum
-        proj_oh *= proj / sum
-        trans_sum += 1 * proj_oh
-        h_sum += 1 * proj_h
+        w_sum += proj
 
 
 total = w_sum+h_sum+trans_sum
