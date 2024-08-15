@@ -393,9 +393,10 @@ class Gaussian(FileIOCalculator):
             for b in bonds:
                 string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
         elif bonds != None:
-            string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n"
+            string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n\n"
 
-        string += '--Link1--\n%Chk='+str(title)+'\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(ts, calcall,noeigentest)\n\n'
-        string += 'Title\n\n0 1\n'
+        string += '--Link1--'
+        string += '\n%Chk='+str(title)+'\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(ts, calcall,noeigentest)\n\n'
+        string += 'Title\n\n0 2\n'
 
         return string
