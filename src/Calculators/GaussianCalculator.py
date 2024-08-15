@@ -238,7 +238,7 @@ class Gaussian(FileIOCalculator):
                 pop_point = -4 - len(dihedral)
                 print('pop point = ' + str(pop_point))
             if fixed_bonds != None:
-                pop_point -= 8
+                pop_point -= 11
             lines.pop(pop_point)
             f.close()
             f=open(str(title) + '.com','w')
@@ -400,7 +400,7 @@ class Gaussian(FileIOCalculator):
         string += '\n--Link1--\n'
         string += '%Chk='+str(title)
         string += '\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(modredundant, ts, calcall,noeigentest)\n\n'
-        string += 'Title\n\n0 2\n'
+        string += 'Title\n\n0 2\n\n'
         if isinstance(dihedral[0], list):
             for d in dihedral:
                 string += 'D ' + str(d[0] + 1) + " " + str(d[1] + 1) + " " + str(d[2] + 1) + " " + str(
