@@ -239,9 +239,7 @@ class Gaussian(FileIOCalculator):
                 print('pop point = ' + str(pop_point))
             if fixed_bonds != None:
                 pop_point -= 8
-                pop_point2 = -4 - len(dihedral)
             lines.pop(pop_point)
-            lines.pop(pop_point2)
             f.close()
             f=open(str(title) + '.com','w')
             f.writelines(lines)
