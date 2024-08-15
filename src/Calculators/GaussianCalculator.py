@@ -237,6 +237,8 @@ class Gaussian(FileIOCalculator):
             except:
                 pop_point = -4 - len(dihedral)
                 print('pop point = ' + str(pop_point))
+            if fixed_bonds != None:
+                pop_point -= 7
             lines.pop(pop_point)
             f.close()
             f=open(str(title) + '.com','w')
@@ -396,7 +398,6 @@ class Gaussian(FileIOCalculator):
             string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n"
 
         string += '\n--Link1--\n'
-        print('%Chk='+str(title))
         string += '%Chk='+str(title)
         string += '\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(ts, calcall,noeigentest)\n\n'
         string += 'Title\n\n0 2\n'
