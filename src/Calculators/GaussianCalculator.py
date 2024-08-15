@@ -222,9 +222,9 @@ class Gaussian(FileIOCalculator):
         print(str(rigid))
 
         if dihedral != None:
-            mod = self.get_modred_lines(dihedral,fixed_bonds)
+            mod = self.get_modred_lines(dihedral,fixed_bonds,title)
             if not rigid and fixed_bonds != None:
-                write(str(title) + '.com', atoms, parallel=False, format='gaussian-in',extra='opt=(calcall,modredundant)', addsec=str(mod), **self.parameters)
+                write(str(title) + '.com', atoms, chk=str(title)+'.chk', parallel=False, format='gaussian-in',extra='opt=(calcall,modredundant)', addsec=str(mod), **self.parameters)
             elif not rigid:
                 write(str(title) + '.com', atoms, parallel=False, format='gaussian-in', extra='opt=(calcall,ts,noeigentest, modredundant,tight) int=ultrafine', addsec=str(mod), **self.parameters)
             else:
@@ -377,7 +377,7 @@ class Gaussian(FileIOCalculator):
         xyz2 = tl.convertMolToGauss(ts)
         return string1+xyz1+string2+xyz2
 
-    def get_modred_lines(self,dihedral,bonds):
+    def get_modred_lines(self,dihedral,bonds,title):
         string = ""
         print(str(bonds))
         if isinstance(dihedral[0], list):
@@ -394,5 +394,8 @@ class Gaussian(FileIOCalculator):
                 string += 'B ' + str(b[0] + 1) + " " + str(b[1] + 1) + " F\n"
         elif bonds != None:
             string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n"
+
+        string += '--Link1--\n%Chk='+str(title)+'\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(ts, calcall,noeigentest)\n\n'
+        string += 'Title\n\n0 1\n'
 
         return string
