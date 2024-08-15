@@ -395,8 +395,9 @@ class Gaussian(FileIOCalculator):
         elif bonds != None:
             string += 'B ' + str(bonds[0][0] + 1) + " " + str(bonds[0][1] + 1) +  " F\n"
 
-        string += '\n--Link1--'
-        string += '\n%Chk='
+        string += '\n--Link1--\n'
+        print('%Chk='+str(title))
+        string += '%Chk='+str(title)
         string += '\n%NoSave\n# M062X/6-31+G** Geom=Check Guess=Read opt=(ts, calcall,noeigentest)\n\n'
         string += 'Title\n\n0 2\n'
 
