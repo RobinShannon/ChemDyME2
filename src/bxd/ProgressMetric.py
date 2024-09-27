@@ -215,8 +215,9 @@ class Curve(ProgressMetric):
         If we are outside the path, but moving closer to the path then return False instead of True
         :return: Boolean
         """
-        if self.countdown >= 10:
+        if self.countdown >= 50:
             self.path.max_distance[self.path_segment] = self.distance_from_path + (0.5 * self.distance_from_path)
+            print(str(self.distance_from_path))
             try:
                 self.path.max_distance[self.path_segment+1] = self.distance_from_path + (0.5 * self.distance_from_path)
                 self.path.max_distance[self.path_segment-1] = self.distance_from_path + (0.5 * self.distance_from_path)
